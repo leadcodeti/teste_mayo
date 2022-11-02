@@ -1,34 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">Video Editor</h1>
+<p align="center">Aplicativo de edição de videos do youtube - video editor.</p>
+<img src="https://img.shields.io/badge/REACTJS-WORK-blue">
 
-## Getting Started
+# Lista de conteúdos
 
-First, run the development server:
+<!--ts-->
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- [Sobre](#sobre)
+- [Features](#features)
+- [Tecnologias](#tecnologias)
+- [Autores](#autores)
+<!--te-->
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### 💻 Sobre
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+A aplicação é desenvolvida em ReactJs + NextJs e faz uso de typescript.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+---
 
-## Learn More
+### Features
 
-To learn more about Next.js, take a look at the following resources:
+##### Telas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [] Tela de login
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+##### Componentes
 
-## Deploy on Vercel
+- [] Header
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🛠 Tecnologias
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [Next.js](https://nextjs.org)
+- [React Icons](https://react-icons.github.io/react-icons)
+- [React js](https://pt-br.reactjs.org)
+- [Sass](https://sass-lang.com/)
+- [Styled-components](https://styled-components.com/)
+- [vsCode](https://code.visualstudio.com/)
+
+---
+
+### Autores
+
+[Jhony Monteiro](http://linkedin.com/in/joao-sebastiao)
+
+[Leonardo Costa](https://www.linkedin.com/in/leonardo-da-silva-costa/)
+
+[Henrique Pereira](https://www.linkedin.com/in/henriquee-pereira/)
+
+Em busca do próximo nível 🚀 - Never stop learning. 🧑‍🎓
+
+<h4 align="center"> 
+	🧑‍🔧 Em construção! 🚧
+</h4>
