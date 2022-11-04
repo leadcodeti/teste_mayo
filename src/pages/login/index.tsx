@@ -18,7 +18,7 @@ export default function Login() {
         <div className={styles.knowPlans}>
           <p className={styles.haveNoAccountYet}>Não tem conta ainda?</p>
           <p>Conheça nossos planos</p>
-          <Link href="plans">Conhecer plano</Link>
+          <Link href="plans">Conhecer planos</Link>
         </div>
       </div>
     </div>

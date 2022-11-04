@@ -17,6 +17,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
+        <title>Mayo Player</title>
         <body>
           <Main />
           <NextScript />

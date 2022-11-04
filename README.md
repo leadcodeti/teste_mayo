@@ -1,4 +1,5 @@
-<h1 align="center">Player Editor</h1>
+<h1 align="center">Mayo Player</h1>
+
 <p align="center">Aplicativo de edição de videos do youtube - video editor.</p>
 <img src="https://img.shields.io/badge/REACTJS-WORK-blue">
 
