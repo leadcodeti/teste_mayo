@@ -1,0 +1,129 @@
+.backgroundLogin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 50px;
+
+  .containerLogin {
+    background: linear-gradient(
+      156deg,
+      rgba(47, 240, 241, 1) 0%,
+      rgba(30, 246, 200, 1) 12%,
+      rgba(36, 156, 244, 1) 24%,
+      rgba(176, 78, 255, 1) 36%,
+      rgba(227, 16, 212, 1) 47%,
+      rgba(255, 22, 97, 1) 63%,
+      rgba(255, 92, 61, 1) 77%,
+      rgba(255, 83, 41, 1) 87%,
+      rgba(255, 0, 0, 1) 100%
+    );
+    width: 880px;
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+      width: 500px;
+    }
+
+    .formLogin {
+      width: 50%;
+      background: var(--white);
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+      padding: 35px 35px 50px;
+
+      @media (max-width: 768px) {
+        width: 100%;
+        border-top-right-radius: 0px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 0px;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      p {
+        font-size: 1rem;
+        color: var(--gray-100);
+        margin: 1rem 0 1.5rem;
+      }
+
+      input {
+        width: 100%;
+        background: var(--gray-200);
+        padding: 18px;
+        border-radius: 5px;
+        border: 0;
+        margin-bottom: 0.5rem;
+
+        &::placeholder {
+          color: var(--gray-100);
+          font-size: 1rem;
+        }
+      }
+
+      button {
+        background: var(--pink-800);
+        width: 100%;
+        border-radius: 5px;
+        color: var(--white);
+        padding: 18px;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+
+      .forgotKey {
+        color: var(--pink-800);
+        font-size: 1rem;
+        margin-top: 1rem;
+        text-decoration: underline;
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    .knowPlans {
+      width: 50%;
+      background: var(--black-800);
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      color: var(--white);
+      padding: 35px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+
+      .haveNoAccountYet {
+        font-size: 2rem;
+        line-height: 4rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      a {
+        margin-top: 2rem;
+        background: var(--white);
+        color: var(--black-800);
+        font-weight: bold;
+        width: 100%;
+        border-radius: 5px;
+        padding: 18px;
+      }
+
+      @media (max-width: 768px) {
+        width: 100%;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+    }
+  }
+}

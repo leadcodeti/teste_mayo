@@ -11,13 +11,13 @@ const GlobalStyle = createGlobalStyle`
   
   // COLOR PALETTE : //
 
-  --colorName1:#060606;
-  --colorName2:#ffffff;
-  --colorName3:#ffffff;
-  --colorName4:#ffffff;
-
+  --gray-100: rgba(44, 56, 74, 0.681);
+  --gray-200:#ececec;
+  --pink-800: #ff003c;
+  --black-800: #191919;
+  --white: #ffffff;
     // Fonts : //
-    --fontFamily1:'set your fonts';
+    --fontFamily1: Epilogue, sans-serif;
     --fontFamily2:'set your fonts';
 
 }
@@ -35,7 +35,7 @@ const GlobalStyle = createGlobalStyle`
 }
 
 body{
- background: var(--colorName1);  
+ background: var(--gray-200);  
  color: var(--colorName2);
 }
 
