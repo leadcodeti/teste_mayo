@@ -2,7 +2,7 @@ Projeto MayoPlayer - TASKS - 04/11/2022
 
 - FRONTEND
 Pages
-[] Login
+[x] Login
 link para modelo -> https://drive.google.com/file/d/1bnvP1T989eCVSzVYoe0ynrEh-DKXTRXE/view?usp=share_link
 
 [] ForgotPasswordScreen - forgot password 
