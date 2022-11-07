@@ -1,0 +1,54 @@
+.cardVideo {
+  background: #ddd;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem;
+
+  + .cardVideo {
+    margin-top: 0.6rem;
+  }
+
+  .videoInfos {
+    display: flex;
+    gap: 0.7rem;
+
+    .name {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+
+      .views {
+        font-weight: normal;
+        font-size: 0.875rem;
+        color: #10568f;
+        background: #bcc0e8;
+        border-radius: 5px;
+        padding: 0.2rem 0.3rem;
+      }
+    }
+
+    img {
+      max-width: 100px;
+      border-radius: 5px;
+    }
+  }
+
+  .dateAndTime {
+    margin-top: 0.4rem;
+  }
+
+  .changes {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 45px 45px;
+    button {
+      background: #303030;
+      color: var(--white);
+      border-radius: 5px;
+      height: 34px;
+      width: 40px;
+      font-weight: bold;
+    }
+  }
+}
