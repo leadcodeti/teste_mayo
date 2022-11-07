@@ -1,11 +1,122 @@
-.backgroundRecoverAccount {
+.wrapper {
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 50px;
 
-  img {
-    width: 500px;
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+
+    .formContainer {
+      max-width: 400px;
+      width: 100%;
+      padding: 1rem;
+
+      img {
+        position: relative;
+        top: 25px;
+      }
+
+      strong,
+      span {
+        display: block;
+        text-align: center;
+      }
+
+      strong {
+        font-size: 1.1rem;
+      }
+
+      span {
+        font-size: 0.8rem;
+        padding: 0.5rem 0 0 0;
+        color: var(--gray-100);
+      }
+
+      .description {
+        padding: 1rem 0;
+        font-size: 0.8rem;
+        color: var(--black-800);
+      }
+
+      label {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+
+        .required {
+          display: inline-block;
+          color: var(--pink-800);
+          font-size: 1.4rem;
+        }
+      }
+
+      .inputBox {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0.5rem;
+        border: 1px solid var(--gray-50);
+        border-radius: 3px;
+        background: var(--white);
+        width: 100%;
+
+        svg {
+          font-size: 1.3rem;
+        }
+
+        input {
+          width: 100%;
+          padding: 0.1rem 0 0 0.5rem;
+          border: none;
+          outline: none;
+          font-size: 0.9rem;
+        }
+      }
+
+      button {
+        width: 100%;
+        border: none;
+        background: var(--pink-800);
+        color: var(--white);
+        margin: 1rem 0;
+        padding: 0.7rem;
+        border-radius: 3px;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+          filter: brightness(0.8);
+        }
+      }
+
+      .formFooter {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        p {
+          display: flex;
+          align-items: center;
+          font-size: 0.8rem;
+          color: var(--gray-100);
+
+          svg {
+            margin-right: 0.2rem;
+          }
+        }
+      }
+
+      .backLink {
+        cursor: pointer;
+        color: var(--pink-800);
+        font-size: 0.8rem;
+
+        &:hover {
+          filter: brightness(0.8);
+        }
+      }
+    }
   }
 }

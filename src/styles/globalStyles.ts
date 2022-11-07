@@ -16,6 +16,8 @@ const GlobalStyle = createGlobalStyle`
   --pink-800: #ff003c;
   --black-800: #191919;
   --white: #ffffff;
+  --blue: #3692e7;
+  --gray-50:#cccc;
     // Fonts : //
     --fontFamily1: Epilogue, sans-serif;
     --fontFamily2:'set your fonts';
@@ -36,7 +38,7 @@ const GlobalStyle = createGlobalStyle`
 
 body{
  background: var(--gray-200);  
- color: var(--colorName2);
+ color: var(--black-800);
 }
 
 body, input, textarea,select, button {
