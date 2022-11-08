@@ -26,6 +26,7 @@ A aplicação é desenvolvida em ReactJs + NextJs e faz uso de typescript.
 ##### Telas
 
 - [] Tela de login
+- [] Dashboard
 
 ##### Componentes
 

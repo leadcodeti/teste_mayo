@@ -1,0 +1,81 @@
+.container {
+  margin: 0 auto;
+  max-width: 45%;
+  padding-top: 2rem;
+
+  h1 {
+    color: var(--black-200);
+    font-weight: normal;
+    color: #2c384af2;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+
+    svg {
+      color: var(--pink-800);
+      margin-right: 0.5rem;
+      margin-bottom: 0.3rem;
+    }
+  }
+
+  .domains {
+    border: 1px solid #ccc;
+    margin: 1.5rem 0;
+    padding: 20px;
+    border-radius: 4px;
+
+    h2 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--black-200);
+      margin-bottom: 1rem;
+    }
+
+    p {
+      line-height: 150%;
+      color: #2c384af2;
+      font-size: 0.875rem;
+
+      span {
+        border: 1px solid #ccc;
+        padding: 0.2rem 0.2rem 0;
+        background: #f4f4f4;
+        border-radius: 3px;
+      }
+    }
+
+    .addNewDomain {
+      margin-top: 1.5rem;
+      color: var(--black-800);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px dashed #ccc;
+      border-radius: 4px;
+      padding: 0.5rem 0;
+      width: 70%;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      svg {
+        font-weight: bold;
+      }
+    }
+
+    .divisor {
+      margin: 2rem 0;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .saveChanges {
+      color: var(--white);
+      background: var(--pink-800);
+      padding: 0.8rem;
+      font-size: 0.875rem;
+      border-radius: 5px;
+
+      &:hover {
+        filter: brightness(0.95);
+      }
+    }
+  }
+}

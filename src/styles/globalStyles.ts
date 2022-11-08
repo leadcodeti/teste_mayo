@@ -18,6 +18,19 @@ const GlobalStyle = createGlobalStyle`
   --white: #ffffff;
   --blue: #3692e7;
   --gray-50:#cccc;
+
+  --background-gradient: linear-gradient(
+      156deg,
+      rgba(47, 240, 241, 1) 0%,
+      rgba(30, 246, 200, 1) 12%,
+      rgba(36, 156, 244, 1) 24%,
+      rgba(176, 78, 255, 1) 36%,
+      rgba(227, 16, 212, 1) 47%,
+      rgba(255, 22, 97, 1) 63%,
+      rgba(255, 92, 61, 1) 77%,
+      rgba(255, 83, 41, 1) 87%,
+      rgba(255, 0, 0, 1) 100%
+    );
     // Fonts : //
     --fontFamily1: Epilogue, sans-serif;
     --fontFamily2:'set your fonts';
