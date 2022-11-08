@@ -12,7 +12,7 @@ export default function RecoverAccount() {
          <form className={styles.formContainer}>
             <Image src={Logo}  alt="Logo"/>
 
-            <strong>Esquici a senha</strong>
+            <strong>Esqueci a senha</strong>
             <span>Leia as instruções</span>
 
             <p className={styles.description}>
