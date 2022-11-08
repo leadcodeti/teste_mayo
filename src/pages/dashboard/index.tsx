@@ -38,7 +38,11 @@ export default function Dashboard() {
               <BsLock />
               Segurança
             </Link>
-            <Link className={styles.help} target="_blank" href="#">
+            <Link
+              className={styles.help}
+              target="_blank"
+              href="https://mayoplayer.com/tutoriais"
+            >
               <BsInfoLg />
               Ajuda e tutoriais
             </Link>
