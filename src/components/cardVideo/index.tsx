@@ -1,7 +1,14 @@
 import styles from "./styles.module.scss";
 import { BsEye } from "react-icons/bs";
+import { useState } from "react";
+import Link from "next/link";
 
 export function CardVideo() {
+  const [videoOptions, setVideoOptions] = useState(false);
+  function openVideoOptions() {
+    setVideoOptions(!videoOptions);
+  }
+
   return (
     <div className={styles.cardVideo}>
       <div className={styles.videoInfos}>
@@ -22,7 +29,19 @@ export function CardVideo() {
       </div>
       <div className={styles.changes}>
         <button>{"</>"}</button>
-        <button>{"..."}</button>
+        <button onClick={openVideoOptions}>{"..."}</button>
+        <div className={styles.videoOptions}>
+          {/* <p>incorporar</p> */}
+          <Link href="/editVideo">editar</Link>
+        </div>
+        {/* {videoOptions ? (
+          <div className={videoOptions ? styles.videoOptions : ""}>
+            <p>incorporar</p>
+            <p>editar</p>
+          </div>
+        ) : (
+          ""
+        )} */}
       </div>
     </div>
   );

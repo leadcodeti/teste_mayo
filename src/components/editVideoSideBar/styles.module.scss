@@ -1,0 +1,213 @@
+.aside {
+  border-radius: 5px;
+  border: 3px solid #ccc;
+  overflow: hidden;
+  position: relative;
+
+  .containerSidebar {
+    overflow: auto;
+    max-height: 100%;
+    position: relative;
+
+    &::-webkit-scrollbar {
+      background: transparent;
+      width: 5px;
+      padding-bottom: 60px;
+      display: block;
+      position: absolute;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #6f6f6f !important;
+      visibility: hidden;
+      border-radius: 10px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+      visibility: visible;
+    }
+
+    &::-webkit-scrollbar-button {
+    }
+
+    &::-webkit-scrollbar-track {
+    }
+
+    &::-webkit-scrollbar-track-piece {
+    }
+
+    &::-webkit-resizer {
+    }
+
+    &::-webkit-scrollbar-corner {
+    }
+  }
+
+  .logoApp {
+    padding: 15px;
+    background: #efefef;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 85%;
+    }
+  }
+  .newVideo {
+    background: var(--background-gradient);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button {
+      background: var(--black-800);
+      width: 100%;
+      height: 50px;
+      color: var(--white);
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.3rem;
+      svg {
+        margin-bottom: 0.3rem;
+      }
+    }
+  }
+
+  .backToDashboard {
+    padding: 0.8rem 0.5rem 0.8rem;
+    border-bottom: 2px dashed #ccc;
+    display: flex;
+    gap: 0.3rem;
+    color: var(--pink-800);
+  }
+
+  .userOptions {
+    padding: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+
+    .design {
+      color: var(--black-800);
+      background: #ddd;
+
+      span {
+        padding: 10px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &:nth-child(1) {
+          padding-bottom: 0 !important;
+        }
+
+        &:nth-last-child(1) {
+          border-bottom: 2px dashed #b6b3b3;
+          padding-top: 0;
+        }
+        .colors {
+          width: 25px !important;
+          height: 25px;
+          background: none;
+          border: none;
+        }
+
+        .colors::-webkit-color-swatch {
+          border-radius: 50%;
+          border: 2px solid var(--black-800);
+        }
+      }
+    }
+    .controls {
+      padding: 10px;
+      background: #dddc;
+      margin-bottom: 0.5rem;
+      p {
+        font-size: 16px;
+        margin-top: 0.5rem;
+        font-weight: bold;
+        color: #191919;
+      }
+
+      span {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+
+        input:before {
+          background: var(--pink-800);
+          color: red;
+          border: 2px solid red !important;
+        }
+      }
+    }
+
+    button {
+      background: var(--gray-200);
+      border-radius: 5px;
+      padding: 1rem;
+      display: flex;
+      width: 100%;
+      gap: 0.5rem;
+      color: #191919;
+      font-size: 1rem;
+      border: 1px solid transparent;
+      font-weight: bold;
+
+      + button {
+        margin-top: 0.3rem;
+      }
+
+      &:hover {
+        font-weight: bold;
+      }
+
+      svg {
+        color: var(--pink-800);
+        font-size: 1rem;
+      }
+    }
+
+    .help {
+      &:active,
+      &:focus {
+        border: 1px solid transparent;
+      }
+    }
+  }
+
+  .myAccount {
+    background: var(--gray-200);
+    border-radius: 5px;
+    width: 100%;
+    height: 60px;
+    padding: 0.3rem;
+    position: absolute;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 68% 1fr;
+    gap: 0.3rem;
+
+    button {
+      background: var(--white);
+      border-radius: 5px;
+      color: var(--black-800);
+      font-size: 1rem;
+    }
+
+    .exit {
+      background: #aaaaaa;
+      color: var(--white);
+      border-radius: 5px;
+      padding: 0.9rem;
+      font-size: 1rem;
+    }
+  }
+}

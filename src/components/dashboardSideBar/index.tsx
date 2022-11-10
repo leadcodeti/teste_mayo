@@ -13,6 +13,10 @@ export function DashboardSideBar({ setUserOption }: UserOptionProps) {
     setUserOption("security");
   }
 
+  function activeUserAccount() {
+    setUserOption("account");
+  }
+
   return (
     <aside className={styles.aside}>
       <div className={styles.logoApp}>
@@ -42,7 +46,9 @@ export function DashboardSideBar({ setUserOption }: UserOptionProps) {
         </Link>
       </div>
       <div className={styles.myAccount}>
-        <button>Minha conta</button>
+        <Link onClick={activeUserAccount} href="#/account">
+          Minha conta
+        </Link>
         <button className={styles.exit}>Sair</button>
       </div>
     </aside>
