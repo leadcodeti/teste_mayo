@@ -3,12 +3,19 @@ import { MyVideos } from "../../components/myVideos";
 import { useState } from "react";
 import { Security } from "../../components/security";
 import { DashboardSideBar } from "../../components/dashboardSideBar";
+import MyAccount from "../../components/myAccount";
 
 export default function Dashboard() {
   const [userOption, setUserOption] = useState("");
 
   return (
-    <div className={styles.backgroundDashboard}>
+    <div
+      className={
+        userOption == "account"
+          ? styles.backgroundDashboardDimanicHeight
+          : styles.backgroundDashboard
+      }
+    >
       <div className={styles.container}>
         <DashboardSideBar setUserOption={setUserOption} />
         <main>
@@ -18,6 +25,8 @@ export default function Dashboard() {
                 return <MyVideos />;
               case "security":
                 return <Security />;
+              case "account":
+                return <MyAccount />;
               default:
                 return <MyVideos />;
             }

@@ -91,11 +91,14 @@
     grid-template-columns: 68% 1fr;
     gap: 0.3rem;
 
-    button {
+    a {
       background: var(--white);
       border-radius: 5px;
       color: var(--black-800);
       font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .exit {
