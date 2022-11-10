@@ -5,3 +5,10 @@ export interface ExempleProps {
 export interface UserOptionProps {
   setUserOption: (setUserOption: string) => void;
 }
+
+export interface InputsProps {
+  name:string;
+  type:string;
+  placeholder:string;
+  requiredInput:string;
+}

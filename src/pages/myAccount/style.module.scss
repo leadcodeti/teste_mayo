@@ -1,0 +1,182 @@
+.wrapper {
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+
+    h1{
+      font-size: 1.5rem;
+    }
+
+    .userData {
+      display: flex;
+      padding: 3rem 0 1rem 0;
+   
+      aside {
+        flex: 1.2;
+        margin-right: 2rem;
+        h1 {
+          font-size: 1.2rem;
+          color: var(--black-800);
+        }
+
+        span {
+          font-size: 0.9rem;
+          display: block;
+          padding: 0.5rem 0;
+          color: var(--gray-100);
+        }
+
+      }
+
+      .formContent {
+        background: var(--white);
+        border: 1.5px solid var(--gray-50);
+        border-radius: 4px;
+        padding: 1rem;
+        flex: 2;
+
+        .imageContainer {
+          strong {
+            font-size: 0.8rem;
+            display: block;
+            padding: 1rem 0;
+          }
+
+          .imageProfile {
+            max-width: 190px;
+            max-height: 190px;
+            border-radius: 100%;
+          }
+
+          .buttonsContainer {
+            max-width: 100px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0.7rem 0;
+
+            button {
+              border: 2px solid var(--pink-800);
+              color: var(--pink-800);
+              background: none;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding: 0.5rem 0.4rem;
+              border-radius: 4px;
+              font-size: 0.9rem;
+
+              svg {
+                margin-right: 0.5rem;
+              }
+
+              &:nth-child(1) {
+                margin-right: 0.5rem;
+                color: rgb(26, 207, 19);
+                border: 2px solid rgb(26, 207, 19);
+              }
+            }
+          }
+        }
+
+        .userInfo {
+          width: 100%;
+
+          .userName {
+            width: 100%;
+            display: flex;
+            align-items: center;
+
+            .spacing {
+              width: 10%;
+            }
+          } 
+        }
+
+        .formBtnContainer {
+          padding: 1rem 0;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          button {
+            width: 100%;
+            border: none;
+            background: var(--pink-800);
+            color: var(--white);
+            padding: 0.7rem;
+            border-radius: 3px;
+            transition: all 0.3s ease-in-out;
+    
+            &:hover {
+              filter: brightness(0.8);
+            }
+          }
+        }
+      }
+    }
+
+    .userPlan {
+      display: flex;
+      padding: 3rem 0;
+
+      aside {
+        flex: 1.2;
+        margin-right: 2rem;
+        h1 {
+          font-size: 1.2rem;
+          color: var(--black-800);
+        }
+
+        span {
+          font-size: 0.9rem;
+          display: block;
+          padding: 0.5rem 0;
+          color: var(--gray-100);
+        }
+
+      }
+
+      .plain {
+        background: var(--white);
+        border: 1.5px solid var(--gray-50);
+        border-radius: 4px;
+        padding: 2rem 1rem;
+        flex: 2;
+
+        strong {
+          font-size: 0.9rem;
+        }
+        p{
+          padding: 0.5rem 0;
+          font-size: 0.8rem;
+        }
+
+        label {
+          display: block;
+          font-size: 0.9rem;
+          text-align: right;
+          font-weight: 500;
+        }
+
+        input[type=range] {
+          width: 100%;
+          color: var(--pink-800);
+          background: var(--pink-800);
+        }
+
+        button {
+          display: flex;
+          align-items: center;
+          font-size: 0.8rem;
+          margin-top: 0.5rem;
+          cursor: pointer;
+          background: none;
+        }
+      }
+    }
+  }
+}
