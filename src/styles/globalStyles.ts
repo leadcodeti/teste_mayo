@@ -81,6 +81,29 @@ a{
   color: inherit;
   text-decoration: none;
 }
+.accordion-button::after {
+  display: none !important;
+}
+
+.accordion {
+  --bs-accordion-border-width: none !important;
+
+  --bs-accordion-btn-focus-box-shadow: none !important;
+
+  .accordion-item {
+    margin-top: 0.35rem;
+  }
+
+
+
+  /* .accordion-button {
+    border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+  } */
+
+}
+
+
 `;
 
 export default GlobalStyle;

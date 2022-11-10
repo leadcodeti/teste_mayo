@@ -5,12 +5,12 @@ import { Security } from "../../components/security";
 import { DashboardSideBar } from "../../components/dashboardSideBar";
 
 export default function Dashboard() {
-  const [userOption, setUserOpction] = useState("");
+  const [userOption, setUserOption] = useState("");
 
   return (
     <div className={styles.backgroundDashboard}>
       <div className={styles.container}>
-        <DashboardSideBar setUserOption={setUserOpction} />
+        <DashboardSideBar setUserOption={setUserOption} />
         <main>
           {(() => {
             switch (userOption) {

@@ -8,7 +8,7 @@ link para modelo -> https://drive.google.com/file/d/1bnvP1T989eCVSzVYoe0ynrEh-DK
 [X] ForgotPasswordScreen - forgot password 
 link para modelo -> https://drive.google.com/file/d/1ZKrlW4HooUa0lIIwiVcTA6wgvKzcVJzp/view?usp=share_link
 
-[] Dashboard
+[x] Dashboard
 link para modelo -> https://drive.google.com/file/d/1_7V1esXv1i6Bx_HXergAFbYaDALsxFlm/view?usp=share_link
 
 [] UserAccountAdmin -> https://drive.google.com/file/d/1Hy_uKQm9Hcksxf-1rCvUtXIlPvw56ZK7/view?usp=share_link
