@@ -59,3 +59,9 @@ link para modelo -> https://drive.google.com/file/d/1Avo2JROD9EYOtlsX8gKVEjU_BCz
 not included in the contract
 Pages
 [] plans
+
+
+editar
+duplicar
+incorporar
+excluir
