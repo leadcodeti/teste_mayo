@@ -18,10 +18,14 @@ import Link from "next/link";
 import styles from "./styles.module.scss";
 import { useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
+import { Design } from "./components/design";
+import { Thumbnails } from "./components/thumbnails";
+import { AutoPlay } from "./components/autoPlay";
+import { FakeBar } from "./components/fakeBar";
+import { WatchAgain } from "./components/continuar";
+import { Botoes } from "./components/botoes";
 
 export function EditVideoSideBar() {
-  const [design, setDesign] = useState(false);
-
   return (
     <aside className={styles.aside}>
       <div className={styles.logoApp}>
@@ -45,73 +49,7 @@ export function EditVideoSideBar() {
                   Design
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  <div className={styles.design}>
-                    <span>
-                      <label htmlFor="corPrincipal">Cor principal</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corPrincipal"
-                        value="#ffffff"
-                      />
-                    </span>
-                    <br />
-                    <span>
-                      <label htmlFor="corBackground">Cor background</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corBackground"
-                        // value="#ff003c"
-                      />
-                    </span>
-                  </div>
-                  <div className={styles.controls}>
-                    <p>Controles</p>
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Botão play grande</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">
-                        Botão play pequeno
-                      </label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">
-                        Barra de progresso
-                      </label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Tempo de vídeo</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Voltar 10s</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Avançar 10s</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Volume</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Fullscreen</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-                  </div>
+                  <Design />
                 </Accordion.Body>
               </Accordion.Item>
 
@@ -121,53 +59,7 @@ export function EditVideoSideBar() {
                   Thumbnails
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  <div className={styles.thumbnails}>
-                    <p className={styles.whatsThumbnails}>
-                      <AiOutlineExclamationCircle /> O que são Thumbnails
-                    </p>
-                    <div className={styles.startThumbnail}>
-                      <p>Thumbnail de início</p>
-                      <label
-                        className={styles.thumbnailsBox}
-                        htmlFor="startThumbnail"
-                      >
-                        <AiOutlineFileImage />
-                        Upload de imagem
-                        <p>Clique ou arraste uma imagem</p>
-                      </label>
-                      <input id="startThumbnail" type="file" />
-                      <hr />
-                    </div>
-                    <div className={styles.pauseThumbnail}>
-                      <p>Thumbnail de Pause</p>
-                      <label
-                        className={styles.thumbnailsBox}
-                        htmlFor="pauseThumbnail"
-                      >
-                        <AiOutlineFileImage />
-                        Upload de imagem
-                        <p>Clique ou arraste uma imagem</p>
-                      </label>
-                      <input id="pauseThumbnail" type="file" />
-                      <hr />
-                    </div>
-                    <div className={styles.finalThumbnail}>
-                      <p>Thumbnail de Final</p>
-                      <label
-                        className={styles.thumbnailsBox}
-                        htmlFor="finalThumbnail"
-                      >
-                        <AiOutlineFileImage />
-                        Upload de imagem
-                        <p>Clique ou arraste uma imagem</p>
-                      </label>
-                      <input id="finalThumbnail" type="file" />
-                    </div>
-                    <div className={styles.saveOrCancel}>
-                      <button>Cancelar</button>
-                      <button>Salvar</button>
-                    </div>
-                  </div>
+                  <Thumbnails />
                 </Accordion.Body>
               </Accordion.Item>
 
@@ -177,44 +69,7 @@ export function EditVideoSideBar() {
                   Autoplay
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  <div className={styles.autoPLay}>
-                    <p className={styles.whatsAutoPlay}>
-                      <AiOutlineExclamationCircle /> O que é AutoPlay
-                    </p>
-                    <span>
-                      <label htmlFor="corDoTexto">Cor do Texto</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corDoTexto"
-                        value="#ffffff"
-                      />
-                    </span>
-                    <br />
-                    <span>
-                      <label htmlFor="corDobackground">Cor do background</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corDobackground"
-                        // value="#ff003c"
-                      />
-                    </span>
-
-                    <hr />
-                    <div className={styles.textStyles}>
-                      <p>Texto Superior</p>
-                      <textarea></textarea>
-                      <hr />
-
-                      <p>Texto Inferior</p>
-                      <textarea></textarea>
-                    </div>
-                    <div className={styles.saveOrCancel}>
-                      <button>Cancelar</button>
-                      <button>Salvar</button>
-                    </div>
-                  </div>
+                  <AutoPlay />
                 </Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="3">
@@ -223,34 +78,7 @@ export function EditVideoSideBar() {
                   Fakebar
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  <div className={styles.fakeBar}>
-                    <p className={styles.whatsFakeBar}>
-                      <AiOutlineExclamationCircle /> O que é fakeBar
-                    </p>
-                    <div className={styles.fakeBarRange}>
-                      <label htmlFor="">Altura</label>
-                      <input type="range" />
-                      <p>
-                        Variaveis de teste <AiOutlineExclamationCircle />
-                      </p>
-                      <span>
-                        <input type="checkbox" />{" "}
-                        <label htmlFor="">
-                          Altura <AiOutlineQuestionCircle />
-                        </label>
-                      </span>
-                      <span>
-                        <input type="checkbox" />{" "}
-                        <label htmlFor="">
-                          Término <AiOutlineQuestionCircle />
-                        </label>
-                      </span>
-                    </div>
-                    <div className={styles.saveOrCancel}>
-                      <button>Cancelar</button>
-                      <button>Salvar</button>
-                    </div>
-                  </div>
+                  <FakeBar />
                 </Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="4">
@@ -259,46 +87,7 @@ export function EditVideoSideBar() {
                   Continuar
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  <div className={styles.watchAgain}>
-                    <div className={styles.textStyles}>
-                      <p>Mensagem</p>
-                      <textarea></textarea>
-                      <hr />
-
-                      <p>Botão continuar</p>
-                      <input type="text" />
-
-                      <hr />
-
-                      <p>Botão Recomeçar</p>
-                      <input type="text" />
-                      <hr />
-                    </div>
-
-                    <span>
-                      <label htmlFor="corDoTexto">Cor do Texto</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corDoTexto"
-                        value="#ffffff"
-                      />
-                    </span>
-                    <br />
-                    <span>
-                      <label htmlFor="corDobackground">Cor do background</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corDobackground"
-                        // value="#ff003c"
-                      />
-                    </span>
-                    <div className={styles.saveOrCancel}>
-                      <button>Cancelar</button>
-                      <button>Salvar</button>
-                    </div>
-                  </div>
+                  <WatchAgain />
                 </Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="5">
@@ -307,9 +96,7 @@ export function EditVideoSideBar() {
                   Botões
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  <div className={styles.buttons}>
-                    <button>Adicionar novo botão</button>
-                  </div>
+                  <Botoes />
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
