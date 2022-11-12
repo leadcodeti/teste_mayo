@@ -14,8 +14,6 @@ export function MyVideos() {
       </div>
       <div className={styles.divisor}></div>
       <CardVideo />
-      <CardVideo />
-      <CardVideo />
     </div>
   );
 }

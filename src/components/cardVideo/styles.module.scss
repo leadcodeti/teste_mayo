@@ -1,5 +1,5 @@
 .cardVideo {
-  background: #ddd;
+  background: none;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
@@ -9,62 +9,96 @@
     margin-top: 0.6rem;
   }
 
-  .videoInfos {
-    display: flex;
-    gap: 0.7rem;
+  .video {
+    width: 100%;
 
-    .name {
-      font-weight: bold;
-      font-size: 1rem;
-      margin-top: 0.5rem;
+    .videoContent {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ddd;
+      padding: 0.8rem 0.6rem;
+      border-radius: 8px;
+      margin-bottom: 0.6rem;
 
-      .views {
-        font-weight: normal;
-        font-size: 0.875rem;
-        color: #10568f;
-        background: #bcc0e8;
-        border-radius: 5px;
-        padding: 0.2rem 0.3rem;
-      }
-    }
+      .videoInfos {
+        display: flex;
+        align-items: center;
 
-    img {
-      max-width: 100px;
-      border-radius: 5px;
-    }
-  }
+        img {
+          max-width: 100px;
+          border-radius: 5px;
+          margin-right: 0.8rem;
+        }
 
-  .dateAndTime {
-    margin-top: 0.4rem;
-  }
+        .dateAndTime {
+          margin-top: 0.4rem;
+        }
+        .nameContent {
+          display: flex;
+          align-items: center;
+          font-weight: bold;
+          font-size: 1rem;
+          margin-top: 0.5rem;
+      
+          .views {
+            font-weight: normal;
+            font-size: 0.875rem;
+            color: #10568f;
+            background: #bcc0e8;
+            border-radius: 5px;
+            padding: 0.2rem 0.3rem;
+            margin-left: 0.8rem;
 
-  .changes {
-    display: grid;
-    align-items: center;
-    grid-template-columns: 45px 45px;
-    button {
-      background: #303030;
-      color: var(--white);
-      border-radius: 5px;
-      height: 34px;
-      width: 40px;
-      font-weight: bold;
-
-      &:focus {
-        .videoOptions {
-          display: none;
+            svg {
+              margin-right: 0.3rem;
+            }
+          }
         }
       }
-    }
 
-    .videoOptions {
-      background: red;
-      width: 100px;
-      height: 100px;
-      position: absolute;
-      margin: 1rem;
-      border-radius: 5px;
-      display: block;
+      .changes {
+        display: grid;
+        align-items: center;
+        grid-template-columns: 45px 45px;
+        button {
+          background: #303030;
+          color: var(--white);
+          border-radius: 5px;
+          height: 34px;
+          width: 40px;
+          font-weight: bold;
+
+          &:focus {
+            .videoOptions {
+              display: none;
+            }
+          }
+        }
+
+        .options {
+          background: var(--white);
+          width: 100px;
+          height: 100px;
+          position: absolute;
+          margin: 1rem;
+          border-radius: 5px;
+          transform: translate(-30px,70px);
+          box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+          display: flex;
+          z-index: 1000;
+         
+          flex-direction: column;
+          padding: 0.4rem;
+          margin-bottom: 0.5rem;
+
+  
+          .links {
+            display: block;
+            font-size: 0.8rem;
+          }
+        }
+      }
     }
   }
 }
