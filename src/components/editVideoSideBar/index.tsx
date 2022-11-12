@@ -1,5 +1,11 @@
 import { IoMdAddCircleOutline } from "react-icons/io";
 import {
+  AiOutlineFileImage,
+  AiOutlineExclamationCircle,
+  AiOutlineQuestionCircle,
+} from "react-icons/ai";
+
+import {
   BsCardImage,
   BsPlayCircle,
   BsArrowLeft,
@@ -12,10 +18,14 @@ import Link from "next/link";
 import styles from "./styles.module.scss";
 import { useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
+import { Design } from "./components/design";
+import { Thumbnails } from "./components/thumbnails";
+import { AutoPlay } from "./components/autoPlay";
+import { FakeBar } from "./components/fakeBar";
+import { WatchAgain } from "./components/continuar";
+import { Botoes } from "./components/botoes";
 
 export function EditVideoSideBar() {
-  const [design, setDesign] = useState(false);
-
   return (
     <aside className={styles.aside}>
       <div className={styles.logoApp}>
@@ -39,73 +49,7 @@ export function EditVideoSideBar() {
                   Design
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  <div className={styles.design}>
-                    <span>
-                      <label htmlFor="corPrincipal">Cor principal</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corPrincipal"
-                        value="#ffffff"
-                      />
-                    </span>
-                    <br />
-                    <span>
-                      <label htmlFor="corBackground">Cor background</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corBackground"
-                        // value="#ff003c"
-                      />
-                    </span>
-                  </div>
-                  <div className={styles.controls}>
-                    <p>Controles</p>
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Botão play grande</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">
-                        Botão play pequeno
-                      </label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">
-                        Barra de progresso
-                      </label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Tempo de vídeo</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Voltar 10s</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Avançar 10s</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Volume</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Fullscreen</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-                  </div>
+                  <Design />
                 </Accordion.Body>
               </Accordion.Item>
 
@@ -115,73 +59,7 @@ export function EditVideoSideBar() {
                   Thumbnails
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  <div className={styles.design}>
-                    <span>
-                      <label htmlFor="corPrincipal">Cor principal</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corPrincipal"
-                        value="#ffffff"
-                      />
-                    </span>
-                    <br />
-                    <span>
-                      <label htmlFor="corBackground">Cor background</label>{" "}
-                      <input
-                        className={styles.colors}
-                        type="color"
-                        id="corBackground"
-                        // value="#ff003c"
-                      />
-                    </span>
-                  </div>
-                  <div className={styles.controls}>
-                    <p>Controles</p>
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Botão play grande</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">
-                        Botão play pequeno
-                      </label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">
-                        Barra de progresso
-                      </label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Tempo de vídeo</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Voltar 10s</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Avançar 10s</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Volume</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-
-                    <span>
-                      <label htmlFor="botaoPlayGrande">Fullscreen</label>
-                      <input id="botaoPlayGrande" type="checkbox" />
-                    </span>
-                  </div>
+                  <Thumbnails />
                 </Accordion.Body>
               </Accordion.Item>
 
@@ -191,10 +69,7 @@ export function EditVideoSideBar() {
                   Autoplay
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Quisquam harum accusantium veniam tempore error consequatur
-                  quaerat, cumque expedita, iusto optio quo, molestiae atque
-                  ratione sint minus repudiandae? Repellendus, esse suscipit!
+                  <AutoPlay />
                 </Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="3">
@@ -203,10 +78,7 @@ export function EditVideoSideBar() {
                   Fakebar
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Quisquam harum accusantium veniam tempore error consequatur
-                  quaerat, cumque expedita, iusto optio quo, molestiae atque
-                  ratione sint minus repudiandae? Repellendus, esse suscipit!
+                  <FakeBar />
                 </Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="4">
@@ -215,10 +87,7 @@ export function EditVideoSideBar() {
                   Continuar
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Quisquam harum accusantium veniam tempore error consequatur
-                  quaerat, cumque expedita, iusto optio quo, molestiae atque
-                  ratione sint minus repudiandae? Repellendus, esse suscipit!
+                  <WatchAgain />
                 </Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="5">
@@ -227,10 +96,7 @@ export function EditVideoSideBar() {
                   Botões
                 </Accordion.Header>
                 <Accordion.Body className="p-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Quisquam harum accusantium veniam tempore error consequatur
-                  quaerat, cumque expedita, iusto optio quo, molestiae atque
-                  ratione sint minus repudiandae? Repellendus, esse suscipit!
+                  <Botoes />
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>

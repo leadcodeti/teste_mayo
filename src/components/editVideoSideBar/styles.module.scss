@@ -84,6 +84,10 @@
     display: flex;
     gap: 0.3rem;
     color: var(--pink-800);
+    svg {
+      position: relative;
+      top: 3px;
+    }
   }
 
   .userOptions {
@@ -92,62 +96,6 @@
     flex-direction: column;
     flex: 1;
     overflow-y: auto;
-
-    .design {
-      color: var(--black-800);
-      background: #ddd;
-
-      span {
-        padding: 10px;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        &:nth-child(1) {
-          padding-bottom: 0 !important;
-        }
-
-        &:nth-last-child(1) {
-          border-bottom: 2px dashed #b6b3b3;
-          padding-top: 0;
-        }
-        .colors {
-          width: 25px !important;
-          height: 25px;
-          background: none;
-          border: none;
-        }
-
-        .colors::-webkit-color-swatch {
-          border-radius: 50%;
-          border: 2px solid var(--black-800);
-        }
-      }
-    }
-    .controls {
-      padding: 10px;
-      background: #dddc;
-      margin-bottom: 0.5rem;
-      p {
-        font-size: 16px;
-        margin-top: 0.5rem;
-        font-weight: bold;
-        color: #191919;
-      }
-
-      span {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 1.5rem;
-
-        input:before {
-          background: var(--pink-800);
-          color: red;
-          border: 2px solid red !important;
-        }
-      }
-    }
 
     button {
       background: var(--gray-200);
@@ -163,10 +111,6 @@
 
       + button {
         margin-top: 0.3rem;
-      }
-
-      &:hover {
-        font-weight: bold;
       }
 
       svg {
