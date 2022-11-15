@@ -1,8 +1,8 @@
 import { EditVideoSideBar } from "../../components/editVideoSideBar";
-import { MyVideos } from "../../components/myVideos";
 import { useState } from "react";
 import styles from "./styles.module.scss";
 import MyAccount from "../../components/myAccount";
+import { VideoSelected } from "../../components/videoSelected";
 
 export default function EditVideo() {
   const [userOption, setUserOption] = useState("");
@@ -17,11 +17,11 @@ export default function EditVideo() {
           {(() => {
             switch (userOption) {
               case "videos":
-                return <MyVideos />;
+                return <VideoSelected />;
               case "account":
                 return <MyAccount />;
               default:
-                return <MyVideos />;
+                return <VideoSelected />;
             }
           })()}
         </main>
