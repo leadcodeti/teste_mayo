@@ -45,11 +45,13 @@ export function DashboardSideBar({ setUserOption }: UserOptionProps) {
           Ajuda e tutoriais
         </Link>
       </div>
-      <div className={styles.myAccount}>
-        <Link onClick={activeUserAccount} href="#/account">
-          Minha conta
-        </Link>
-        <button className={styles.exit}>Sair</button>
+      <div>
+        <div className={styles.myAccount}>
+          <Link onClick={activeUserAccount} href="#/account">
+            Minha conta
+          </Link>
+          <button className={styles.exit}>Sair</button>
+        </div>
       </div>
     </aside>
   );

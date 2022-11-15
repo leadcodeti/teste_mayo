@@ -50,7 +50,7 @@ const GlobalStyle = createGlobalStyle`
 }
 
 body{
- background: var(--gray-200);  
+ background: #fff;  
  color: var(--black-800);
 }
 

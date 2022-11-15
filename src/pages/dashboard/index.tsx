@@ -9,30 +9,26 @@ export default function Dashboard() {
   const [userOption, setUserOption] = useState("");
 
   return (
-    <div
-      className={
-        userOption == "account"
-          ? styles.backgroundDashboardDimanicHeight
-          : styles.backgroundDashboard
-      }
-    >
-      <div className={styles.container}>
-        <DashboardSideBar setUserOption={setUserOption} />
-        <main>
-          {(() => {
-            switch (userOption) {
-              case "videos":
-                return <MyVideos />;
-              case "security":
-                return <Security />;
-              case "account":
-                return <MyAccount />;
-              default:
-                return <MyVideos />;
-            }
-          })()}
-        </main>
+    <>
+      <div className={styles.sideBar}>
+        <div className={styles.container}>
+          <DashboardSideBar setUserOption={setUserOption} />
+        </div>
       </div>
-    </div>
+      <main className={styles.main}>
+        {(() => {
+          switch (userOption) {
+            case "videos":
+              return <MyVideos />;
+            case "security":
+              return <Security />;
+            case "account":
+              return <MyAccount />;
+            default:
+              return <MyVideos />;
+          }
+        })()}
+      </main>
+    </>
   );
 }
