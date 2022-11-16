@@ -78,24 +78,45 @@
 
         .options {
           background: var(--white);
-          width: 100px;
-          height: 100px;
+          width: 150px;
           position: absolute;
           margin: 1rem;
           border-radius: 5px;
-          transform: translate(-30px,70px);
+          transform: translate(-80px,130px);
           box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
           display: flex;
           z-index: 1000;
          
           flex-direction: column;
-          padding: 0.4rem;
+          padding: 0.6rem 0.5rem;
           margin-bottom: 0.5rem;
 
-  
           .links {
-            display: block;
-            font-size: 0.8rem;
+            display: flex;
+            font-size: 0.9rem;
+            margin: 0.1rem 0;
+            padding: 0.6rem 0.4rem 0.3rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 400;
+            color: var(--black-800);
+    
+            &:hover { 
+              background: var(--gray-50);
+            }
+
+            svg {
+              margin-right: 0.4rem;
+              font-size: 1rem;
+            }
+            span {
+              display: block;
+            }
+
+            .youtubeIcon {
+              color: red;
+              font-size: 1.3rem;
+              margin-left: 0.4rem;
+            }
           }
         }
       }
