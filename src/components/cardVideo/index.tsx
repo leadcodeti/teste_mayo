@@ -1,16 +1,27 @@
 import Image from "next/image";
 import { BsEye } from "react-icons/bs";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { fakedataVideo } from "./fakeDataVideo";
 import { OptionsMenu } from "./optionsMenu";
+import { useClickOutside } from "@react-hooks-library/core";
 
 export function CardVideo() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeOption, setActiveOption] = useState(0);
+
+  console.log(activeOption);
+
+  const ref = useRef(null);
+  
+  useClickOutside(ref, () => {
+    setIsOpen(false);
+  });
   
 
-  function openOptions() {
+  function openOptions(index: number) {
     setIsOpen(true);
+    setActiveOption(index);
   }
 
   function closeOptions() {
@@ -19,10 +30,10 @@ export function CardVideo() {
 
 
   return (
-    <div className={styles.cardVideo} >
+    <div className={styles.cardVideo} ref={ref} >
       <div className={styles.video}>
-        {fakedataVideo.map((video) => (
-          <div key={video.id} className={styles.videoContent} >
+        {fakedataVideo.map((video, index) => (
+          <div key={video.id} className={styles.videoContent}>
             <div className={styles.videoInfos}>
               <Image
                 src={video.image}
@@ -49,12 +60,12 @@ export function CardVideo() {
             <div className={styles.changes}>
               <button>{"</>"}</button>
               {isOpen ? (
-                <button onClick={closeOptions}>{"..."}</button>
+                <button onClick={closeOptions} >{"..."}</button>
               ):(
-                <button onClick={openOptions}>{"..."}</button>
+                <button onClick={() =>openOptions(video.id)}>{"..."}</button>
               )}
 
-              <OptionsMenu  isOpen={isOpen} setIsOpen={setIsOpen} />
+               {activeOption === index ? <OptionsMenu videoId={activeOption}  isOpen={isOpen} /> : null}
             </div>
           </div>
         ))}
