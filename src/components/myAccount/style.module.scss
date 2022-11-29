@@ -1,18 +1,17 @@
 .wrapper {
-
   .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 3rem 1rem;
 
-    h1{
+    h1 {
       font-size: 1.5rem;
     }
 
     .userData {
       display: flex;
       padding: 3rem 0 1rem 0;
-   
+
       aside {
         flex: 1.2;
         margin-right: 2rem;
@@ -27,7 +26,6 @@
           padding: 0.5rem 0;
           color: var(--gray-100);
         }
-
       }
 
       .formContent {
@@ -92,7 +90,7 @@
             .spacing {
               width: 10%;
             }
-          } 
+          }
         }
 
         .formBtnContainer {
@@ -110,7 +108,7 @@
             padding: 0.7rem;
             border-radius: 3px;
             transition: all 0.3s ease-in-out;
-    
+
             &:hover {
               filter: brightness(0.8);
             }
@@ -137,7 +135,6 @@
           padding: 0.5rem 0;
           color: var(--gray-100);
         }
-
       }
 
       .plain {
@@ -150,7 +147,7 @@
         strong {
           font-size: 0.9rem;
         }
-        p{
+        p {
           padding: 0.5rem 0;
           font-size: 0.8rem;
         }
@@ -162,7 +159,7 @@
           font-weight: 500;
         }
 
-        input[type=range] {
+        input[type="range"] {
           width: 100%;
           color: var(--pink-800);
           background: var(--pink-800);
@@ -177,6 +174,37 @@
           background: none;
         }
       }
+    }
+  }
+}
+
+.inputContainer {
+  width: 100%;
+
+  label {
+    font-size: 0.9rem;
+
+    span {
+      display: inline-block;
+      color: var(--pink-800);
+      transform: translateY(6px);
+      font-size: 1.3rem;
+    }
+  }
+
+  input {
+    width: 100%;
+    margin: 0.6rem 0;
+    padding: 0.5rem 0.5rem;
+    border: 1px solid var(--gray-50);
+    border-radius: 4px;
+
+    &::placeholder {
+      color: var(--gray-50);
+    }
+
+    &:focus {
+      outline: 1px solid var(--pink-800);
     }
   }
 }

@@ -1,3 +1,214 @@
+.modal {
+  // position: relative;
+  width: 30%;
+  background: var(--white);
+  height: auto;
+  position: relative;
+  padding: 1rem;
+  .closeModal {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    cursor: pointer;
+    color: var(--black-800);
+    opacity: 0.5;
+    transition: 0.5s;
+    font-size: 1.5rem;
+    background: transparent;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .positionButton {
+    margin-bottom: 1rem;
+    p {
+      margin-bottom: 0.5rem;
+    }
+
+    div {
+      max-width: 80px;
+      display: grid;
+      gap: 0.2rem;
+      grid-template-columns: 1fr 1fr 1fr;
+
+      button {
+        width: 20px;
+        height: 20px;
+        border: 1px solid var(--gray-200);
+        border-radius: 3px;
+        background: transparent;
+
+        &:focus,
+        &:active {
+          background: var(--pink-800);
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
+  .typeButton {
+    margin-bottom: 2rem;
+    p {
+      font-size: 0.875rem;
+      color: var(--gray-100);
+    }
+
+    div {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1rem 0;
+
+      button {
+        font-weight: 500;
+        color: var(--black-800);
+        background: none;
+        border-bottom: 3px solid transparent;
+        padding-bottom: 0.5rem;
+
+        &:hover {
+          color: var(--pink-800);
+        }
+
+        &:focus {
+          border-bottom: 3px solid var(--pink-800);
+          color: var(--pink-800);
+        }
+      }
+    }
+  }
+
+  .propsButton {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    gap: 1rem;
+
+    div {
+      input,
+      select {
+        width: 100% !important;
+        outline: none;
+        height: 2rem;
+        border: 1px solid #d9d9d9;
+        border-radius: 5px;
+        padding-left: 0.5rem;
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .linkButton {
+    margin-top: 1rem;
+    input {
+      width: 100% !important;
+      outline: none;
+      height: 2rem;
+      border: 1px solid #d9d9d9;
+      border-radius: 5px;
+      padding-left: 0.5rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  .divisor {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    margin: 2.5rem 0 1.5rem;
+  }
+
+  .timerButton {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    gap: 1rem;
+
+    div {
+      input {
+        width: 100% !important;
+        outline: none;
+        height: 2rem;
+        border: 1px solid #d9d9d9;
+        border-radius: 5px;
+        padding-left: 0.5rem;
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .colorsButton {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    div {
+      justify-content: center;
+      display: flex;
+      gap: 1rem;
+
+      input[type="color"] {
+        width: 25px;
+        height: 25px;
+        border-radius: 5px;
+        border: 2px solid transparent;
+      }
+    }
+  }
+
+  .previewButton {
+    p {
+      color: var(--black-800);
+    }
+    div {
+      display: grid;
+      justify-content: center;
+    }
+    button {
+      width: 200px;
+    }
+
+    .belowVideo {
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+    }
+  }
+
+  .saveOrCancel {
+    display: grid;
+    grid-template-columns: 100px 100px;
+    gap: 1rem;
+    justify-content: end;
+    button {
+      font-size: 0.875rem;
+      padding: 0.2rem 0 0 0;
+      margin: 0;
+      font-weight: normal;
+      justify-content: center;
+      border-radius: 5px;
+      color: #fff;
+      background: var(--pink-800);
+
+      &:hover {
+        filter: brightness(0.9);
+        transition: 0.2s;
+      }
+
+      &:first-child {
+        background: transparent;
+        border: 1px solid #191919;
+        color: #191919;
+
+        &:hover {
+          color: var(--pink-800);
+          border: 1px solid var(--pink-800);
+          transition: 0.2s;
+        }
+      }
+    }
+  }
+}
+
 .buttons {
   background: #ddd;
   padding: 10px;

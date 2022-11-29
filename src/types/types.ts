@@ -7,8 +7,18 @@ export interface UserOptionProps {
 }
 
 export interface InputsProps {
-  name:string;
-  type:string;
-  placeholder:string;
-  requiredInput:string;
+  name: string;
+  lastname?: string;
+  phone?: string;
+  type: string;
+  placeholder: string;
+  requiredInput: string;
+}
+
+export interface newUserDataProps {
+  name?: string;
+  lastname?: string;
+  phone?: string;
+  password?: string;
+  avatar?: string;
 }

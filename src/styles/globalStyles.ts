@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import "react-toastify/dist/ReactToastify.css";
 
 const GlobalStyle = createGlobalStyle`
   *{
@@ -34,7 +35,6 @@ const GlobalStyle = createGlobalStyle`
     // Fonts : //
     --fontFamily1: Epilogue, sans-serif;
     --fontFamily2:'set your fonts';
-
 }
 
 @media (max-width :1080px){

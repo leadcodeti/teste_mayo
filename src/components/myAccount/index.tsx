@@ -1,12 +1,40 @@
 import { FiUpload, FiTrash } from "react-icons/fi";
 import Image from "next/image";
 import ImageProfile from "../../../public/images/thumbVideo.jpg";
-import { Inputs } from "../inputs/inputs";
 import style from "./style.module.scss";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/useContext";
+import { useForm } from "react-hook-form";
+import { newUserDataProps } from "../../types/types";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function MyAccount() {
+  const { user, updateUser } = useContext(AuthContext);
+  const { register, handleSubmit, reset, setValue, watch } =
+    useForm<newUserDataProps>();
+
+  function submitUpdate(data: newUserDataProps) {
+    const dataUser = {
+      name: data.name,
+      lastname: data.lastname,
+      phone: data.phone,
+      password: data.password,
+      avatar: data.avatar,
+    };
+
+    // if (data.password == "") {
+    //   data.password = user?.password;
+    // }
+
+    updateUser(dataUser);
+    console.log(dataUser);
+    toast.success("Seus dados Foram atualizados!");
+    reset();
+  }
+
   return (
     <div className={style.wrapper}>
+      <ToastContainer />
       <div className={style.container}>
         <h1>Meu Perfil</h1>
         <div className={style.userData}>
@@ -15,7 +43,10 @@ export default function MyAccount() {
             <span>Informações sobre a sua conta</span>
           </aside>
 
-          <form className={style.formContent}>
+          <form
+            onSubmit={handleSubmit(submitUpdate)}
+            className={style.formContent}
+          >
             <div className={style.imageContainer}>
               <strong>Foto de Perfil</strong>
               <Image
@@ -24,6 +55,7 @@ export default function MyAccount() {
                 className={style.imageProfile}
               />
 
+              <input type="file" {...register("avatar")} />
               <div className={style.buttonsContainer}>
                 <button>
                   <FiUpload />
@@ -38,39 +70,62 @@ export default function MyAccount() {
             </div>
 
             <div className={style.userInfo}>
+              <br />
+
               <div className={style.userName}>
-                <Inputs
-                  name="Nome"
-                  placeholder="Nome"
-                  type="text"
-                  requiredInput="*"
-                />
+                <div className={style.inputContainer}>
+                  <label htmlFor="name">Nome:</label>
+                  <input
+                    required
+                    {...register("name")}
+                    defaultValue={user?.name}
+                    id="name"
+                  />
+                </div>
                 <div className={style.spacing} />
-                <Inputs
-                  name="Sobrenome"
-                  placeholder="Sobrenome"
-                  type="text"
-                  requiredInput="*"
+                <div className={style.inputContainer}>
+                  <label htmlFor="lastname">Sobrenome:</label>
+                  <input
+                    required
+                    {...register("lastname")}
+                    defaultValue={user?.lastname}
+                    id="lastname"
+                  />
+                </div>
+              </div>
+              <div className={style.inputContainer}>
+                <label>E-mail:</label>
+                <input
+                  style={{
+                    background: "#ccc",
+                    opacity: ".5",
+                    cursor: "not-allowed",
+                  }}
+                  disabled
+                  defaultValue={user?.email}
+                  id="email"
                 />
               </div>
-              <Inputs
-                name="E-mail"
-                placeholder="E-mail"
-                type="email"
-                requiredInput="*"
-              />
-              <Inputs
-                name="Telefone"
-                placeholder="(00) 0 0000.0000"
-                type="text"
-                requiredInput=""
-              />
-              <Inputs
-                name="Atualizar senha"
-                placeholder="Atualizar senha"
-                type="text"
-                requiredInput=""
-              />
+
+              <div className={style.inputContainer}>
+                <label htmlFor="phone">Telefone:</label>
+                <input
+                  placeholder="(00) 0 0000.0000"
+                  {...register("phone")}
+                  defaultValue={user?.phone}
+                  id="phone"
+                />
+              </div>
+
+              <div className={style.inputContainer}>
+                <label htmlFor="password">Senha:</label>
+                <input
+                  placeholder="***"
+                  {...register("password")}
+                  id="password"
+                  type="password"
+                />
+              </div>
             </div>
 
             <div className={style.formBtnContainer}>
@@ -103,7 +158,7 @@ export default function MyAccount() {
           </div>
         </div>
 
-        <div className={style.userMethodPay}>
+        {/* <div className={style.userMethodPay}>
           <aside>
             <h1>Método de Pagamento</h1>
             <span>Informações do método de pagamento</span>
@@ -116,7 +171,7 @@ export default function MyAccount() {
 
             <button>Cadastrar Cartão</button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
