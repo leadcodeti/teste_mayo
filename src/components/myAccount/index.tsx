@@ -2,14 +2,14 @@ import { FiUpload, FiTrash } from "react-icons/fi";
 import Image from "next/image";
 import defaultProfileImage from "../../../public/images/avatar.png";
 import style from "./style.module.scss";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../contexts/useContext";
+import { useState } from "react";
+import { useVideoContext } from "../../contexts/useContext";
 import { useForm } from "react-hook-form";
 import { newUserDataProps } from "../../types/types";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function MyAccount() {
-  const { user, updateUser } = useContext(AuthContext);
+  const { user, updateUser } = useVideoContext();
   const [avatarUser, setAvatarUser] = useState(defaultProfileImage);
   const { register, handleSubmit, reset, setValue, watch } =
     useForm<newUserDataProps>();

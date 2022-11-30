@@ -1,8 +1,17 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+  useContext,
+} from "react";
 import { api } from "../services/api";
 import Router from "next/router";
 import { setCookie, parseCookies } from "nookies";
 import { newUserDataProps } from "../types/types";
+import { embedVideo } from "../components/embedVideo/embed";
 
 type User = {
   email: string;
@@ -26,22 +35,34 @@ type newDataUser = {
   avatar?: string;
 };
 
-type AuthContextData = {
+interface AuthContextProps {
   signIn(credentials: SignInCredentials): Promise<void>;
   updateUser(newData: newDataUser): Promise<void>;
   user: User | undefined;
   isAuthenticated: boolean;
-};
+  modalOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
+}
 
 type AuthProviderProps = {
   children: ReactNode;
 };
 
-export const AuthContext = createContext({} as AuthContextData);
+export const AuthContext = createContext({} as AuthContextProps);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
   const isAuthenticated = !!user;
+  const [modalOpen, setModalOpen] = useState(false);
+
+  function openModal() {
+    setModalOpen(true);
+  }
+
+  function closeModal() {
+    setModalOpen(false);
+  }
 
   const { "mayoPLayer.token": token } = parseCookies();
 
@@ -102,8 +123,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, isAuthenticated, user, updateUser }}>
+    <AuthContext.Provider
+      value={{
+        signIn,
+        isAuthenticated,
+        user,
+        updateUser,
+        modalOpen,
+        closeModal,
+        openModal,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
+}
+
+export function useVideoContext() {
+  const new_context = useContext(AuthContext);
+  return new_context;
 }

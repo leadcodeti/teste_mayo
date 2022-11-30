@@ -19,6 +19,7 @@ const GlobalStyle = createGlobalStyle`
   --white: #ffffff;
   --blue: #3692e7;
   --gray-50:#cccc;
+  --gray-300:#909090;
 
   --background-gradient: linear-gradient(
       156deg,
@@ -94,8 +95,6 @@ a{
     margin-top: 0.35rem;
   }
 
-
-
   /* .accordion-button {
     border-bottom-left-radius: 0 !important;
       border-bottom-right-radius: 0 !important;
@@ -103,6 +102,7 @@ a{
 
 }
 
+//VIDEO CUSTIMIZATION 
 
 `;
 
