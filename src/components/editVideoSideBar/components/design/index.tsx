@@ -1,84 +1,65 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useVideoContext } from "../../../../contexts/useContext";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
+import { api } from "../../../../services/api";
+import { videoPrppertyTypes } from "../../../../types/types";
+import { DesignFunction } from "../../../../utils/designFunctions";
 import styles from "./styles.module.scss";
 
 export function Design() {
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<videoPrppertyTypes>();
+  const { backgroundColor,setBackgroundColor} = usePlayeContext();
   const {
-    backgroundColor,
-    setBackgroundColor,
-    setBigPlay,
-    setFullScrean,
-    setPlayTime,
-    setSmalPlay,
-    setVolume,
-    setNextBtn,
-    setPrevBtn,
-    setProgessBar
-  } = usePlayeContext();
+    activeSmalPlay,
+    activeVolume,
+    activePlayTime,
+    activeFullScrean,
+    activeProgressBar,
+    activeNextBtn,
+    activePrevBtn,
+    activeBigPlay,
+  
+    activeBigPlaygroung,
+    activeSmalPlayground,
+    displayVolume,
+    displayFullScrean,
+    displayProgressBar,
+    displayPlayTime,
+    displayNextBtn,
+    displayPrevBtn
+  } = DesignFunction();
+  const { currentVideo } = useVideoContext();
 
-  const[activeBigPlaygroung,setActivePlayground] = useState(false);
-  const[activSmalPlayground,setActiveSmalPlayground] = useState(false);
-  const[displayVolume,setDisplayVolume] = useState(false);
-  const[displayFullScrean,setDisplayFullScrean] = useState(false);
-  const[displayProgressBar,setDisplayProgressBar] = useState(false);
-  const[displayPlayTime,setDisplayPlayTime] = useState(false);
-  const[displayNextBtn,setDisplayNextBtn] = useState(false);
-  const[displayPrevBtn,setDisplayPrevBtn] = useState(false);
+  const onSubmit: SubmitHandler<videoPrppertyTypes> = data => {
+      console.log(data);
+      if (data) {
 
-  function activeBigPlay() {
-    setActivePlayground(!activeBigPlaygroung);
-    setBigPlay(activeBigPlaygroung ? true : false);
-  }
+        const newDesignData = {
+          background_color: data.backgroundColor,
+        }
 
-  function activeSmalPlay() {
-    setActiveSmalPlayground(!activSmalPlayground);
-    setSmalPlay(activSmalPlayground ? true : false);
-  }
+        const newControlersData = {
+          has_big_play_button: data.activeBigPlaygroung,
+          has_small_play_button: data.activeSmalPlayground,
+          has_progress_bar: data.displayProgressBar,
+          has_video_duration: data.displayPlayTime,
+          has_back_10_seconds: data.displayPrevBtn,
+          has_foward_10_seconds: data.displayNextBtn,
+          has_volume: data.displayVolume,
+          has_fullscreen: data.displayFullScrean,
+        }
 
-  function activeVolume() {
-    setDisplayVolume(!displayVolume);
-    setVolume(displayVolume ? true : false);
-  }
+       const response = api.put(`/designs/${currentVideo.currentVideoId}`,newDesignData)
+       const response2 = api.put(`/controls/${currentVideo.currentVideoId}`,newControlersData)
 
-  function activePlayTime() {
-    setDisplayPlayTime(!displayPlayTime);
-    setPlayTime(displayPlayTime ? true : false);
-  }
-
-  function activeFullScrean() {
-    setDisplayFullScrean(!displayFullScrean);
-    setFullScrean(displayFullScrean ? true : false);
-  }
-
-  function activeProgressBar() {
-    setDisplayProgressBar(!displayProgressBar);
-    setProgessBar(displayProgressBar ? true : false);
-  }
-
-  function activeNextBtn() {
-    setDisplayNextBtn(!displayNextBtn);
-    setNextBtn(displayNextBtn ? true : false);
-  }
-
-  function activePrevBtn() {
-    setDisplayPrevBtn(!displayPrevBtn);
-    setPrevBtn(displayPrevBtn ? true : false);
-  }
-
+       console.log(response2);
+      }
+  };
 
   return (
-    <>
+    <form  onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.design}>
-        <span>
-          <label htmlFor="corPrincipal">Cor principal</label>{" "}
-          <input
-            className={styles.colors}
-            type="color"
-            id="corPrincipal"
-            value="#ffffff"
-          />
-        </span>
-        <br />
         <span>
           <label htmlFor="corBackground">Cor background</label>{" "}
           <input
@@ -86,6 +67,7 @@ export function Design() {
             type="color"
             id="corBackground"
             value={backgroundColor}
+            {...register("backgroundColor")}
             onChange={(e) => setBackgroundColor(e.target.value)}
           />
         </span>
@@ -96,6 +78,7 @@ export function Design() {
           <label htmlFor="botaoPlayGrande">Botão play grande</label>
           <input
             id="botaoPlayGrande"
+            {...register("activeBigPlaygroung")}
             checked={!activeBigPlaygroung}
             type="checkbox"
            onClick={activeBigPlay}
@@ -105,7 +88,8 @@ export function Design() {
         <span>
           <label htmlFor="botaoPlayPequeno">Botão play pequeno</label>
           <input id="botaoPlayPequeno"  
-            checked={!activSmalPlayground}
+             {...register("activeSmalPlayground")}
+            checked={!activeSmalPlayground}
             type="checkbox"
             onClick={activeSmalPlay}  />
         </span>
@@ -113,6 +97,7 @@ export function Design() {
         <span>
           <label htmlFor="botaoPlayGrande">Barra de progresso</label>
           <input id="botaoPlayGrande"
+            {...register("displayProgressBar")}
              checked={!displayProgressBar}
              type="checkbox"
              onClick={activeProgressBar}
@@ -122,6 +107,7 @@ export function Design() {
         <span>
           <label htmlFor="botaoPlayGrande">Tempo de vídeo</label>
           <input id="botaoPlayGrande" 
+           {...register("displayPlayTime")}
              checked={!displayPlayTime}
              type="checkbox"
              onClick={activePlayTime}
@@ -131,6 +117,7 @@ export function Design() {
         <span>
           <label htmlFor="botaoPlayGrande">Voltar 10s</label>
           <input id="botaoPlayGrande" 
+           {...register("displayPrevBtn")}
             checked={!displayPrevBtn}
             type="checkbox"
             onClick={activePrevBtn}
@@ -148,7 +135,8 @@ export function Design() {
 
         <span>
           <label htmlFor="botaoPlayGrande">Volume</label>
-          <input id="botaoPlayGrande"   
+          <input id="botaoPlayGrande" 
+            {...register("displayVolume")}  
             checked={!displayVolume}
             type="checkbox"
             onClick={activeVolume}
@@ -158,6 +146,7 @@ export function Design() {
         <span>
           <label htmlFor="botaoPlayGrande">Fullscreen</label>
           <input id="botaoPlayGrande" 
+            {...register("displayFullScrean")}  
              checked={!displayFullScrean}
              type="checkbox"
              onClick={activeFullScrean}
@@ -165,9 +154,9 @@ export function Design() {
         </span>
         <div className={styles.saveOrCancel}>
           <button>Cancelar</button>
-          <button>Salvar</button>
+          <button type="submit">Salvar</button>
         </div>
       </div>
-    </>
+    </form>
   );
 }

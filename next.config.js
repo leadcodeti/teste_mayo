@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+<<<<<<< HEAD
   experimental: {
     images: {
       remotePatterns: [
@@ -17,3 +18,18 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+=======
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        port: '',
+        // pathname: '/vi/eRYjhOpLd_s/',
+      },
+    ],
+  },
+}
+module.exports = nextConfig
+>>>>>>> player
