@@ -20,5 +20,5 @@ export interface newUserDataProps {
   lastname?: string;
   phone?: string;
   password?: string;
-  avatar?: string;
+  avatar?: FormData | any;
 }

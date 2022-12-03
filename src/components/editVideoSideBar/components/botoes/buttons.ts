@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 interface ButtonStyles {
   background: string;
-  hover: string;
-  color: string;
+  background_hover: string;
+  text_color?: string;
   sizeWidth: string;
   sizeHeight: string;
   sizeFont: string;
@@ -12,7 +12,7 @@ interface ButtonStyles {
 export const ButtonBelowVideo = styled.a<ButtonStyles>`
   margin-top: 0.3rem;
   background: ${(props) => props.background};
-  color: ${(props) => props.color};
+  color: ${(props) => props.text_color};
   width: ${(props) => props.sizeWidth};
   height: ${(props) => props.sizeHeight};
   font-size: ${(props) => props.sizeFont};
@@ -32,7 +32,7 @@ export const ButtonBelowVideo = styled.a<ButtonStyles>`
   box-shadow: 0px 0px 46px -18px rgba(0, 0, 0, 0.75);
 
   &:hover {
-    background: ${(props) => props.hover};
+    background: ${(props) => props.background_hover};
     color: ${(props) => props.color};
   }
 `;

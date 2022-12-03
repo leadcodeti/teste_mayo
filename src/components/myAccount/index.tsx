@@ -1,6 +1,6 @@
 import { FiUpload, FiTrash } from "react-icons/fi";
 import Image from "next/image";
-import defaultProfileImage from "../../../public/images/avatar.png";
+import defaultProfileImage from "../../../public/images/avatarDefault.png";
 import style from "./style.module.scss";
 import { useState } from "react";
 import { useVideoContext } from "../../contexts/useContext";
@@ -15,12 +15,15 @@ export default function MyAccount() {
     useForm<newUserDataProps>();
 
   function submitUpdate(data: newUserDataProps) {
+    const formData = new FormData();
+    formData.append("avatar", data.avatar[0]);
+
     const dataUser = {
       name: data.name,
       lastname: data.lastname,
       phone: data.phone,
       password: data.password,
-      avatar: data.avatar,
+      avatar: formData,
     };
 
     updateUser(dataUser);
@@ -48,14 +51,13 @@ export default function MyAccount() {
             <div className={style.imageContainer}>
               <strong>Foto de Perfil</strong>
               <Image
-                // src={user?.avatar ? "https://" + user.avatar : avatarUser}
-                src={defaultProfileImage}
+                src={user?.avatar ? "/" + user.avatar : defaultProfileImage}
+                // src={defaultProfileImage}
                 alt="profile"
                 height={180}
                 width={200}
                 className={style.imageProfile}
               />
-              <img src={"../../../public/images/avatar.png"} alt="" />
               {/* <input type="file" {...register("avatar")} /> */}
 
               <div className={style.buttonsContainer}>
@@ -159,21 +161,6 @@ export default function MyAccount() {
             <button>+ Detalhes do consumo</button>
           </div>
         </div>
-
-        {/* <div className={style.userMethodPay}>
-          <aside>
-            <h1>Método de Pagamento</h1>
-            <span>Informações do método de pagamento</span>
-          </aside>
-
-          <div className={style.plain}>
-            <strong>Basic - R$ 197,00</strong>
-            <p>Reiniciar em 13 dias</p>
-            <input type="range" id="vol" name="vol" min="0" max="100" />
-
-            <button>Cadastrar Cartão</button>
-          </div>
-        </div> */}
       </div>
     </div>
   );

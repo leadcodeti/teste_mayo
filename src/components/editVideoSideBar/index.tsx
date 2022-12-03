@@ -18,11 +18,15 @@ import { FakeBar } from "./components/fakeBar";
 import { WatchAgain } from "./components/continuar";
 import { Botoes } from "./components/botoes";
 import { UserOptionProps } from "../../types/types";
+import { NewVideo } from "../newVideoModal";
+import { useVideoContext } from "../../contexts/useContext";
 
 export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
   function activeUserAccount() {
     setUserOption("account");
   }
+
+  const { openModalNewVideo } = useVideoContext();
 
   return (
     <>
@@ -34,10 +38,11 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
             </div>
             <div className={styles.containerSidebar}>
               <div className={styles.newVideo}>
-                <button>
+                <button onClick={openModalNewVideo}>
                   <IoMdAddCircleOutline size={20} /> Novo vídeo
                 </button>
               </div>
+              <NewVideo />
               <Link className={styles.backToDashboard} href="/dashboard">
                 <BsArrowLeft /> Voltar
               </Link>

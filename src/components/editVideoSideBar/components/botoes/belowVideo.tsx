@@ -1,42 +1,53 @@
 import styles from "./styles.module.scss";
 import { ButtonBelowVideo } from "./buttons";
 import { useForm } from "react-hook-form";
+import { api } from "../../../../services/api";
 
-interface ButtonTypes {
+interface ButtonUpdateProps {
   text: string;
-  color: string;
+  size?: string;
   background: string;
-  link: string;
-  size: string;
-  hover: string;
+  background_hover: string;
+  position?: string;
+  video_id: string;
+  start?: string;
+  end?: string;
+  text_color?: string;
 }
 
 export function BelowVideo() {
   const { register, handleSubmit, reset, setValue, watch } =
-    useForm<ButtonTypes>();
+    useForm<ButtonUpdateProps>();
 
-  async function onSubmit(data: ButtonTypes) {
-    if (data.text != "" && data.link != "") {
-      let values = {
-        text: data.text,
-        color: data.color,
-        background: data.background,
-        hover: data.hover,
-        link: data.link,
-        size: data.size,
-      };
-      console.log(values);
-      // localStorage.setItem("@buttonData", JSON.stringify(teste));
-    }
+  async function updateButton({
+    text,
+    size,
+    background,
+    background_hover,
+    position,
+    video_id,
+    start,
+    end,
+    text_color,
+  }: ButtonUpdateProps) {
+    api
+      .put(`/cta_buttons/e9546851-7281-4d1a-9a45-87ef48e2b45c?type=below`, {
+        text,
+        size,
+        background,
+        background_hover,
+        position,
+        start,
+        end,
+        text_color,
+        video_id: "e9546851-7281-4d1a-9a45-87ef48e2b45c",
+      })
+      .then((res) => console.log(res.data));
   }
-
-  // const buttonData = localStorage.getItem("@buttonData");
-  // const newButtonData = buttonData;
-  // console.log(newButtonData);
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(updateButton)}>
         <div className={styles.propsButton}>
           <div>
             <label htmlFor="text">Texto</label>
@@ -51,10 +62,10 @@ export function BelowVideo() {
             </select>
           </div>
         </div>
-        <div className={styles.linkButton}>
+        {/* <div className={styles.linkButton}>
           <label htmlFor="link">Link</label>
           <input {...register("link")} type="text" id="link" />
-        </div>
+        </div> */}
         <div className={styles.divisor} />
         <div className={styles.timerButton}>
           <div>
@@ -71,10 +82,10 @@ export function BelowVideo() {
           <div>
             <label htmlFor="color">Cor do texto</label>
             <input
-              value={watch("color") ? watch("color") : "#ffffff"}
+              value={watch("text_color") ? watch("text_color") : "#ffffff"}
               type="color"
               id="color"
-              {...register("color")}
+              {...register("text_color")}
             />
           </div>
           <div>
@@ -88,7 +99,7 @@ export function BelowVideo() {
           </div>
           <div>
             <label htmlFor="hover">Background hover</label>
-            <input type="color" id="hover" {...register("hover")} />
+            <input type="color" id="hover" {...register("background_hover")} />
           </div>
         </div>
         <div className={styles.divisor} />
@@ -96,11 +107,11 @@ export function BelowVideo() {
           <p>Pré-visualização</p>
           <div>
             <ButtonBelowVideo
-              href={watch("link") ? watch("link") : "#"}
+              href={"#"}
               target="_blank"
               background={watch("background")}
-              hover={watch("hover")}
-              color={watch("color")}
+              background_hover={watch("background_hover")}
+              text_color={watch("text_color")}
               sizeWidth={
                 watch("size") === "100"
                   ? "100%"

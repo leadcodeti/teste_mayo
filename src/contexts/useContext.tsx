@@ -32,7 +32,7 @@ type newDataUser = {
   lastname?: string;
   phone?: string;
   password?: string;
-  avatar?: string;
+  avatar?: FormData;
 };
 
 interface AuthContextProps {
@@ -43,6 +43,9 @@ interface AuthContextProps {
   modalOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
+  modalNewVideoOpen: boolean;
+  openModalNewVideo: () => void;
+  closeModalNewVideo: () => void;
 }
 
 type AuthProviderProps = {
@@ -55,6 +58,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
   const isAuthenticated = !!user;
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalNewVideoOpen, setModalNewVideoOpen] = useState(false);
 
   function openModal() {
     setModalOpen(true);
@@ -62,6 +66,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function closeModal() {
     setModalOpen(false);
+  }
+
+  function openModalNewVideo() {
+    setModalNewVideoOpen(true);
+  }
+
+  function closeModalNewVideo() {
+    setModalNewVideoOpen(false);
   }
 
   const { "mayoPLayer.token": token } = parseCookies();
@@ -90,7 +102,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         path: "/",
       });
 
-      api.defaults.headers["Authorization"] = `Baerer ${token}`;
+      api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
       if (token) {
         api("/me").then((response) => {
@@ -132,6 +144,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         modalOpen,
         closeModal,
         openModal,
+        modalNewVideoOpen,
+        openModalNewVideo,
+        closeModalNewVideo,
       }}
     >
       {children}

@@ -1,9 +1,9 @@
-import Dashboard from "./dashboard";
+import Login from "./login";
 
 export default function Home() {
   return (
     <div>
-      <Dashboard />
+      <Login />
     </div>
   );
 }
