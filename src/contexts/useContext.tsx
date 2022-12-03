@@ -3,15 +3,17 @@ import {
   ReactNode,
   useEffect,
   useState,
+  useContext,
   Dispatch,
   SetStateAction,
-  useContext,
 } from "react";
 import { api } from "../services/api";
 import Router from "next/router";
 import { setCookie, parseCookies } from "nookies";
-import { newUserDataProps } from "../types/types";
-import { embedVideo } from "../components/embedVideo/embed";
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { newUserDataProps, VideoTypes } from "../types/types";
+
 
 type User = {
   email: string;
@@ -35,14 +37,23 @@ type newDataUser = {
   avatar?: string;
 };
 
+interface CurrentVideoType {
+  currentVideoId: string;  
+  currentPlayerId:string;
+}
+
 interface AuthContextProps {
   signIn(credentials: SignInCredentials): Promise<void>;
   updateUser(newData: newDataUser): Promise<void>;
-  user: User | undefined;
-  isAuthenticated: boolean;
-  modalOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
+  user: User | undefined;
+  isAuthenticated: boolean;
+  setCurrentVideo: Dispatch<SetStateAction<CurrentVideoType>>;
+  modalOpen: boolean;
+  allVideo:VideoTypes[];
+  currentVideo: CurrentVideoType;
+ 
 }
 
 type AuthProviderProps = {
@@ -55,6 +66,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
   const isAuthenticated = !!user;
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentVideo, setCurrentVideo] = useState<CurrentVideoType >({} as CurrentVideoType );
+  const [allVideo,setAllVideo] = useState<VideoTypes[]>([])
+
+  console.log(currentVideo)
 
   function openModal() {
     setModalOpen(true);
@@ -71,13 +86,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
       api("/me").then((response) => {
         const { email, name, phone, avatar, lastname } = response.data;
 
-        setUser({ email, name, phone, avatar, lastname });
+        setUser({email, name, phone, avatar, lastname});
       });
     }
   }, [token]);
 
   async function signIn({ email, password }: SignInCredentials) {
-    try {
+    
+    const base64TokenPayload = token.split(".")[1];
+    const payload = Buffer.from(
+      String(base64TokenPayload),
+      "base64"
+     ).toString();
+     const id = JSON.parse(payload).sub;
+
+     try {
       const response = await api.post("/sessions", {
         email,
         password,
@@ -95,7 +118,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (token) {
         api("/me").then((response) => {
           const { email, name, phone, avatar, lastname } = response.data;
-          setUser({ email, name, phone, avatar, lastname });
+          setUser({ email, name, phone, avatar, lastname,...id});
         });
       }
 
@@ -121,13 +144,54 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     await api("/me").then((res) => setUser(res.data));
   }
+  
 
+  useEffect(() => {
+   async function getAllVideos() {
+
+    const base64TokenPayload = token.split(".")[1];
+    const payload = Buffer.from(
+      String(base64TokenPayload),
+      "base64"
+    ).toString();
+    const id = JSON.parse(payload).sub;
+
+    console.log(id)
+
+     const response = await api.get(`/videos/${id}`);
+     const data = response.data.map((res:VideoTypes) => {
+      return {
+        id: res.id,
+        name: res.name,
+        view_count: res.view_count,
+        youtube_video_id: res.youtube_video_id,
+        cover_image: res.cover_image,
+        date:  format(
+          new Date(res.date),
+          'dd/MM/yyyy',
+          {
+            locale: ptBR,
+          }
+        ),
+        duration: res.duration,
+      }
+     })
+     setAllVideo(data);
+   }
+   
+   getAllVideos()
+
+  },[token])
+ 
   return (
     <AuthContext.Provider
       value={{
         signIn,
         isAuthenticated,
+        setCurrentVideo,
         user,
+        allVideo,
+        currentVideo,
         updateUser,
         modalOpen,
         closeModal,

@@ -24,6 +24,7 @@ import "@vime/core/themes/default.css";
 import { useEffect, useRef } from "react";
 import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import { ButtonsContainer, NextButton, PrevButton } from "./nextAndPrevButtons";
+import { useVideoContext } from "../../contexts/useContext";
 
 export default function PlayerVideo() {
   const {
@@ -45,9 +46,10 @@ export default function PlayerVideo() {
   );
 
   const [duration] = usePlayerContext(player, "duration", -1);
+  const { currentVideo } = useVideoContext();
 
   console.log("tempo", duration);
-
+ 
   const onSeekBackward = () => {
     if (currentTime < 5) return;
     setCurrentTime(currentTime - 10);
@@ -81,7 +83,7 @@ export default function PlayerVideo() {
   return (
     <div className={styles.player}>
       <Player theme="dark" style={playerTheme} ref={player}>
-        <Youtube videoId="DyTCOwB0DVw" />
+        <Youtube videoId={currentVideo.currentPlayerId} />
 
         <Ui>
           <ClickToPlay />
