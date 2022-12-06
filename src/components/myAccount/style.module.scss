@@ -124,7 +124,7 @@
       padding: 3rem 0;
 
       aside {
-        flex: 1.2;
+        flex:1.2;
         margin-right: 2rem;
         h1 {
           font-size: 1.2rem;
@@ -140,40 +140,27 @@
       }
 
       .plain {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         background: var(--white);
         border: 1.5px solid var(--gray-50);
         border-radius: 4px;
         padding: 2rem 1rem;
-        flex: 2;
+        flex: 2.5;
 
         strong {
           font-size: 0.9rem;
+          text-transform: capitalize;
         }
-        p {
-          padding: 0.5rem 0;
-          font-size: 0.8rem;
-        }
-
-        label {
-          display: block;
-          font-size: 0.9rem;
-          text-align: right;
-          font-weight: 500;
-        }
-
-        input[type="range"] {
-          width: 100%;
-          color: var(--pink-800);
-          background: var(--pink-800);
-        }
-
-        button {
-          display: flex;
-          align-items: center;
-          font-size: 0.8rem;
-          margin-top: 0.5rem;
-          cursor: pointer;
-          background: none;
+        
+        .statusPlan {
+          text-align: center;
+          p{
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+          }
         }
       }
     }

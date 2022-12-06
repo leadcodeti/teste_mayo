@@ -42,5 +42,5 @@ export interface VideoTypes {
   youtube_video_id: string;
   cover_image: string;
   date: string;
-  duration: string;
+  duration: number;
 }

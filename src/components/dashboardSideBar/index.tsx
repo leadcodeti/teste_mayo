@@ -3,6 +3,10 @@ import { BsCameraVideo, BsLock, BsInfoLg } from "react-icons/bs";
 import Link from "next/link";
 import styles from "./styles.module.scss";
 import { UserOptionProps } from "../../types/types";
+import { NewVideo } from "../newVideoModal";
+import { useVideoContext } from "../../contexts/useContext";
+import { signOut } from "../../contexts/useContext";
+import { sign } from "crypto";
 
 export function DashboardSideBar({ setUserOption }: UserOptionProps) {
   function activeUserVideos() {
@@ -17,16 +21,19 @@ export function DashboardSideBar({ setUserOption }: UserOptionProps) {
     setUserOption("account");
   }
 
+  const { openModalNewVideo } = useVideoContext();
+
   return (
     <aside className={styles.aside}>
       <div className={styles.logoApp}>
         <img src="/images/logo-1.svg" alt="Logo MayoPlayer" />
       </div>
       <div className={styles.newVideo}>
-        <button>
+        <button onClick={openModalNewVideo}>
           <IoMdAddCircleOutline size={20} /> Novo vídeo
         </button>
       </div>
+      <NewVideo />
       <div className={styles.userOptions}>
         <Link href="#/videos" onClick={activeUserVideos}>
           <BsCameraVideo />
@@ -50,7 +57,7 @@ export function DashboardSideBar({ setUserOption }: UserOptionProps) {
           <Link onClick={activeUserAccount} href="#/account">
             Minha conta
           </Link>
-          <button className={styles.exit}>Sair</button>
+          <button onClick={() => signOut()} className={styles.exit}>Sair</button>
         </div>
       </div>
     </aside>

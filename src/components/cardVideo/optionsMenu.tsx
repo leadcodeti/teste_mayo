@@ -6,6 +6,9 @@ import{ FiTrash } from "react-icons/fi";
 import styles from "./styles.module.scss";
 import Link from "next/link";
 import { useVideoContext } from "../../contexts/useContext";
+import { api } from "../../services/api";
+import { toast } from "react-toastify";
+
 
 interface OptionsProps {
   isOpen: boolean;
@@ -15,11 +18,20 @@ interface OptionsProps {
 
 export function OptionsMenu({ isOpen,videoId, currentVideoPlayerId }: OptionsProps) {
 
-  const { setCurrentVideo} = useVideoContext();
+  const { setCurrentVideo , user , getAllVideos} = useVideoContext();
   if (!isOpen) return null;
 
   function handleClick(currentVideoId:string, currentPlayerId: string) {
     setCurrentVideo({currentVideoId,currentPlayerId});
+    localStorage.setItem("@myVideoPlayerId", currentPlayerId);
+  }
+
+  async function deleteCurrentVideo(currentVideoId:string){
+    if(user){
+      await api.delete(`/videos/${currentVideoId}`)
+    }
+    toast.success("Video Removido!");
+    getAllVideos()
   }
 
   return (
@@ -30,23 +42,23 @@ export function OptionsMenu({ isOpen,videoId, currentVideoPlayerId }: OptionsPro
             <FaRegEdit />
             <span>Editar</span>
           </Link>
-          <Link href="" className={styles.links}>
+          <button className={styles.links}>
             <HiCodeBracket />
             <span>Incorporar</span>
-          </Link>
-          <Link href="" className={styles.links}>
+          </button>
+          <button className={styles.links}>
             <MdContentCopy />
             <span>Duplicar</span>
-          </Link>
+          </button>
           <Link href="" className={styles.links}>
             <BsGraphUp />
             <span>Analytics</span>
             <BsYoutube  className={styles.youtubeIcon}/>
           </Link>
-          <Link href="" className={styles.links}>
+          <button onClick={() => deleteCurrentVideo(videoId)} className={styles.links}>
             <FiTrash />
             <span>Excluir</span>
-          </Link>
+          </button>
         </div>
       ) : (
         ""

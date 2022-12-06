@@ -1,4 +1,6 @@
 import { FiUpload, FiTrash } from "react-icons/fi";
+import { BsCheck2Circle} from "react-icons/bs";
+import { SlClose } from "react-icons/sl";
 import Image from "next/image";
 import defaultProfileImage from "../../../public/images/avatar.png";
 import style from "./style.module.scss";
@@ -13,6 +15,8 @@ export default function MyAccount() {
   const [avatarUser, setAvatarUser] = useState(defaultProfileImage);
   const { register, handleSubmit, reset, setValue, watch } =
     useForm<newUserDataProps>();
+
+  console.log(user);
 
   function submitUpdate(data: newUserDataProps) {
     const dataUser = {
@@ -143,37 +147,23 @@ export default function MyAccount() {
           </aside>
 
           <div className={style.plain}>
-            <strong>Basic - R$ 197,00</strong>
-            <p>Reiniciar em 13 dias</p>
-
-            <label htmlFor="vol">145MB/4GB</label>
-            <input
-              type="range"
-              id="vol"
-              name="vol"
-              min="0"
-              max="100"
-              className={style.inputRange}
-            />
-
-            <button>+ Detalhes do consumo</button>
+            <strong>{user?.subscription.subscription_plan} - R$ 197,00</strong>
+             
+             <div className={style.statusPlan}>
+              {user?.subscription.subscription_status === "ACTIVE" ?(
+                <>
+                  <BsCheck2Circle color="#3EB880"  size={40}/>
+                  <p>{user?.subscription.subscription_status}</p>
+                </>
+              ) :(
+                <>
+                   <SlClose color="#FD365A"  size={40}/>
+                  <p>{user?.subscription.subscription_status}</p>
+                </>
+              )}
+             </div>
           </div>
         </div>
-
-        {/* <div className={style.userMethodPay}>
-          <aside>
-            <h1>Método de Pagamento</h1>
-            <span>Informações do método de pagamento</span>
-          </aside>
-
-          <div className={style.plain}>
-            <strong>Basic - R$ 197,00</strong>
-            <p>Reiniciar em 13 dias</p>
-            <input type="range" id="vol" name="vol" min="0" max="100" />
-
-            <button>Cadastrar Cartão</button>
-          </div>
-        </div> */}
       </div>
     </div>
   );

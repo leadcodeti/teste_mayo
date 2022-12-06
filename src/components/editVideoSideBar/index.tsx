@@ -18,6 +18,7 @@ import { FakeBar } from "./components/fakeBar";
 import { WatchAgain } from "./components/continuar";
 import { Botoes } from "./components/botoes";
 import { UserOptionProps } from "../../types/types";
+import { signOut } from "../../contexts/useContext";
 
 export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
   function activeUserAccount() {
@@ -107,7 +108,7 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
 
             <div className={styles.myAccount}>
               <button onClick={activeUserAccount}>Minha conta</button>
-              <button className={styles.exit}>Sair</button>
+              <button onClick={() => signOut()} className={styles.exit}>Sair</button>
             </div>
           </aside>
         </div>
