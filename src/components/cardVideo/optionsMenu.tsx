@@ -1,8 +1,8 @@
 import { FaRegEdit } from "react-icons/fa";
-import{ MdContentCopy } from "react-icons/md";
+import { MdContentCopy } from "react-icons/md";
 import { HiCodeBracket } from "react-icons/hi2";
-import { BsGraphUp, BsYoutube} from "react-icons/bs";
-import{ FiTrash } from "react-icons/fi";
+import { BsGraphUp, BsYoutube } from "react-icons/bs";
+import { FiTrash } from "react-icons/fi";
 import styles from "./styles.module.scss";
 import Link from "next/link";
 import { useVideoContext } from "../../contexts/useContext";
@@ -10,23 +10,30 @@ import { useVideoContext } from "../../contexts/useContext";
 interface OptionsProps {
   isOpen: boolean;
   videoId: string;
-  currentVideoPlayerId:string
+  currentVideoPlayerId: string;
 }
 
-export function OptionsMenu({ isOpen,videoId, currentVideoPlayerId }: OptionsProps) {
-
-  const { setCurrentVideo} = useVideoContext();
+export function OptionsMenu({
+  isOpen,
+  videoId,
+  currentVideoPlayerId,
+}: OptionsProps) {
+  const { setCurrentVideo } = useVideoContext();
   if (!isOpen) return null;
 
-  function handleClick(currentVideoId:string, currentPlayerId: string) {
-    setCurrentVideo({currentVideoId,currentPlayerId});
+  function handleClick(currentVideoId: string, currentPlayerId: string) {
+    setCurrentVideo({ currentVideoId, currentPlayerId });
   }
 
   return (
     <>
       {isOpen ? (
         <div className={styles.options}>
-          <Link href="/editVideo" className={styles.links} onClick={() => handleClick(videoId,currentVideoPlayerId)}>
+          <Link
+            href="/editVideo"
+            className={styles.links}
+            onClick={() => handleClick(videoId, currentVideoPlayerId)}
+          >
             <FaRegEdit />
             <span>Editar</span>
           </Link>
@@ -41,7 +48,7 @@ export function OptionsMenu({ isOpen,videoId, currentVideoPlayerId }: OptionsPro
           <Link href="" className={styles.links}>
             <BsGraphUp />
             <span>Analytics</span>
-            <BsYoutube  className={styles.youtubeIcon}/>
+            <BsYoutube className={styles.youtubeIcon} />
           </Link>
           <Link href="" className={styles.links}>
             <FiTrash />

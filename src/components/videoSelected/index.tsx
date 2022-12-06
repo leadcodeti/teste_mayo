@@ -7,6 +7,7 @@ import { EmbedModal } from "../embedModalVideo/embedModal";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { ButtonBelowVideo } from "../editVideoSideBar/components/botoes/buttons";
+import { useVideoContext } from "../../contexts/useContext";
 
 const PlayerVideo = dynamic(() => import("./player"), {
   ssr: false,
@@ -14,27 +15,31 @@ const PlayerVideo = dynamic(() => import("./player"), {
 
 export function VideoSelected() {
   const { onGenerate } = usePlayeContext();
+  const { currentVideo } = useVideoContext();
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
-    bacgrkound_hover: "",
+    background_hover: "",
     size: "",
     text: "",
     text_color: "",
+    link: "",
   });
 
   useEffect(() => {
-    api("/cta_buttons/e9546851-7281-4d1a-9a45-87ef48e2b45c").then((res) => {
+    api(`/cta_buttons/${currentVideo.currentVideoId}`).then((res) => {
       const data = res.data[0];
-      console.log(res.data[0]);
+      console.log("data aqui" + res.data);
       setButtonProps({
         background_color: data.background_color,
-        bacgrkound_hover: data.background_hover,
+        background_hover: data.background_hover,
         size: data.size,
         text: data.text,
         text_color: data.text_color,
+        link: data.link,
       });
     });
-  }, []);
+  }, [currentVideo.currentVideoId]);
+
   return (
     <div className={styles.container}>
       <EmbedModal />
@@ -47,54 +52,36 @@ export function VideoSelected() {
       <div className={styles.divisor}></div>
       <div className={styles.embedVideo}>
         <PlayerVideo />
-        {/* <div className={styles.buttonVideo}>
-          <a
-            href="#"
-            style={{
-              background: buttonProps.background_color,
-              width: buttonProps.size,
-              color: buttonProps.text_color,
-            }}
+
+        <div className={styles.buttonVideo}>
+          <ButtonBelowVideo
+            href={"#"}
+            target="_blank"
+            background={buttonProps.background_color}
+            background_hover={buttonProps.background_hover}
+            text_color={buttonProps.text_color}
+            sizeWidth={
+              buttonProps.size === "125"
+                ? "180px"
+                : buttonProps.size === "150"
+                ? "250px"
+                : buttonProps.size === "250"
+                ? "350px"
+                : ""
+            }
+            sizeFont={
+              buttonProps.size === "125"
+                ? "100%"
+                : buttonProps.size === "150"
+                ? "150%"
+                : buttonProps.size === "250"
+                ? "200%"
+                : ""
+            }
           >
-            {buttonProps.text}
-          </a>
-        </div> */}
-        <ButtonBelowVideo
-          href={"#"}
-          target="_blank"
-          background={buttonProps.background_color}
-          background_hover={buttonProps.bacgrkound_hover}
-          text_color={buttonProps.text_color}
-          sizeWidth={
-            buttonProps.size === "100"
-              ? "100%"
-              : buttonProps.size === "125"
-              ? "125%"
-              : buttonProps.size === "150"
-              ? "150%"
-              : ""
-          }
-          sizeHeight={
-            buttonProps.size === "100"
-              ? "40px"
-              : buttonProps.size === "125"
-              ? "50px"
-              : buttonProps.size === "150"
-              ? "55px"
-              : ""
-          }
-          sizeFont={
-            buttonProps.size === "100"
-              ? "100%"
-              : buttonProps.size === "125"
-              ? "125%"
-              : buttonProps.size === "150"
-              ? "150%"
-              : ""
-          }
-        >
-          {buttonProps.text}
-        </ButtonBelowVideo>
+            {buttonProps.text == "" ? "Saiba mais" : buttonProps.text}
+          </ButtonBelowVideo>
+        </div>
       </div>
     </div>
   );

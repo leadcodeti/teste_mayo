@@ -43,9 +43,12 @@
           }
 
           .imageProfile {
-            max-width: 190px;
-            max-height: 190px;
+            max-width: 180px;
+            max-height: 180px;
             border-radius: 100%;
+            border: 1px dashed #eee;
+            padding: 2px;
+            object-fit: contain;
           }
 
           .buttonsContainer {
@@ -138,8 +141,7 @@
           color: var(--gray-100);
         }
       }
-
-      .plain {
+      imageProfile .plain {
         background: var(--white);
         border: 1.5px solid var(--gray-50);
         border-radius: 4px;

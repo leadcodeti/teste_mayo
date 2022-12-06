@@ -50,16 +50,15 @@ export default function MyAccount() {
           >
             <div className={style.imageContainer}>
               <strong>Foto de Perfil</strong>
-              <Image
-                src={user?.avatar ? "/" + user.avatar : defaultProfileImage}
-                // src={defaultProfileImage}
-                alt="profile"
-                height={180}
-                width={200}
-                className={style.imageProfile}
-              />
-              {/* <input type="file" {...register("avatar")} /> */}
-
+              <div className={style.imageContainer}>
+                <Image
+                  src={user?.avatar ? user.avatar : defaultProfileImage}
+                  alt="profile"
+                  height={180}
+                  width={200}
+                  className={style.imageProfile}
+                />
+              </div>
               <div className={style.buttonsContainer}>
                 <label htmlFor="uploadAvatar">
                   <FiUpload />

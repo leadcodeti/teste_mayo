@@ -2,6 +2,9 @@ import styles from "./styles.module.scss";
 import { ButtonBelowVideo } from "./buttons";
 import { useForm } from "react-hook-form";
 import { api } from "../../../../services/api";
+import { useVideoContext } from "../../../../contexts/useContext";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 interface ButtonUpdateProps {
   text: string;
@@ -13,11 +16,18 @@ interface ButtonUpdateProps {
   start?: string;
   end?: string;
   text_color?: string;
+  link?: string;
 }
 
 export function BelowVideo() {
-  const { register, handleSubmit, reset, setValue, watch } =
-    useForm<ButtonUpdateProps>();
+  const { register, handleSubmit, watch } = useForm<ButtonUpdateProps>();
+  const { buttonOption, currentVideo, closeModalNewButton, setButtonProps } =
+    useVideoContext();
+  console.log("current video aqui" + currentVideo.currentVideoId);
+
+  useEffect(() => {
+    currentVideo.currentVideoId;
+  }, [currentVideo.currentVideoId]);
 
   async function updateButton({
     text,
@@ -25,13 +35,13 @@ export function BelowVideo() {
     background,
     background_hover,
     position,
-    video_id,
     start,
     end,
     text_color,
+    link,
   }: ButtonUpdateProps) {
     api
-      .put(`/cta_buttons/e9546851-7281-4d1a-9a45-87ef48e2b45c?type=below`, {
+      .put(`/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`, {
         text,
         size,
         background,
@@ -40,9 +50,13 @@ export function BelowVideo() {
         start,
         end,
         text_color,
-        video_id: "e9546851-7281-4d1a-9a45-87ef48e2b45c",
+        link,
+        video_id: currentVideo.currentVideoId,
       })
       .then((res) => console.log(res.data));
+
+    closeModalNewButton();
+    toast.success("Botão salvo");
   }
 
   return (
@@ -56,16 +70,16 @@ export function BelowVideo() {
           <div>
             <label htmlFor="tamanho">Tamanho</label>
             <select id="tamanho" value={watch("size")} {...register("size")}>
-              <option value={"250"}>Pequeno</option>
-              <option value={"125"}>Médio</option>
-              <option value={"150"}>Grande</option>
+              <option value={"125"}>Pequeno</option>
+              <option value={"150"}>Médio</option>
+              <option value={"250"}>Grande</option>
             </select>
           </div>
         </div>
-        {/* <div className={styles.linkButton}>
+        <div className={styles.linkButton}>
           <label htmlFor="link">Link</label>
           <input {...register("link")} type="text" id="link" />
-        </div> */}
+        </div>
         <div className={styles.divisor} />
         <div className={styles.timerButton}>
           <div>
@@ -113,30 +127,21 @@ export function BelowVideo() {
               background_hover={watch("background_hover")}
               text_color={watch("text_color")}
               sizeWidth={
-                watch("size") === "100"
-                  ? "100%"
-                  : watch("size") === "125"
-                  ? "125%"
+                watch("size") === "125"
+                  ? "180px"
                   : watch("size") === "150"
-                  ? "150%"
-                  : ""
-              }
-              sizeHeight={
-                watch("size") === "100"
-                  ? "40px"
-                  : watch("size") === "125"
-                  ? "50px"
-                  : watch("size") === "150"
-                  ? "55px"
+                  ? "250px"
+                  : watch("size") === "250"
+                  ? "350px"
                   : ""
               }
               sizeFont={
-                watch("size") === "100"
+                watch("size") === "125"
                   ? "100%"
-                  : watch("size") === "125"
-                  ? "125%"
                   : watch("size") === "150"
                   ? "150%"
+                  : watch("size") === "250"
+                  ? "200%"
                   : ""
               }
             >

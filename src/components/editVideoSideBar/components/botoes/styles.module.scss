@@ -33,18 +33,18 @@
       gap: 0.2rem;
       grid-template-columns: 1fr 1fr 1fr;
 
-      button {
+      span {
         width: 20px;
         height: 20px;
         border: 1px solid var(--gray-200);
         border-radius: 3px;
         background: transparent;
+        cursor: pointer;
+      }
 
-        &:focus,
-        &:active {
-          background: var(--pink-800);
-          opacity: 0.5;
-        }
+      .active {
+        background: var(--pink-800);
+        opacity: 0.5;
       }
     }
   }
@@ -72,12 +72,11 @@
         &:hover {
           color: var(--pink-800);
         }
-
-        &:focus {
-          border-bottom: 3px solid var(--pink-800);
-          color: var(--pink-800);
-        }
       }
+    }
+    .activeButton {
+      border-bottom: 3px solid var(--pink-800);
+      color: var(--pink-800);
     }
   }
 

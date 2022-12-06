@@ -10,10 +10,9 @@ import {
 import { api } from "../services/api";
 import Router from "next/router";
 import { setCookie, parseCookies } from "nookies";
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { newUserDataProps, VideoTypes } from "../types/types";
-
 
 type User = {
   email: string;
@@ -38,8 +37,8 @@ type newDataUser = {
 };
 
 interface CurrentVideoType {
-  currentVideoId: string;  
-  currentPlayerId:string;
+  currentVideoId: string;
+  currentPlayerId: string;
 }
 
 interface AuthContextProps {
@@ -54,9 +53,19 @@ interface AuthContextProps {
   isAuthenticated: boolean;
   setCurrentVideo: Dispatch<SetStateAction<CurrentVideoType>>;
   modalOpen: boolean;
-  allVideo:VideoTypes[];
+  allVideo: VideoTypes[];
   currentVideo: CurrentVideoType;
-
+  buttonOption: string;
+  setButtonOption: (value: string) => void;
+  buttoBelowVideo: () => void;
+  buttonInsideVideo: () => void;
+  modalNewButtonOpen: boolean;
+  openModalNewButton: () => void;
+  closeModalNewButton: () => void;
+  buttonPosition: string;
+  setButtonPosition: (value: string) => void;
+  buttonProps: any;
+  setButtonProps: any;
 }
 
 type AuthProviderProps = {
@@ -69,9 +78,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
   const isAuthenticated = !!user;
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalNewButtonOpen, setModalNewButtonOpen] = useState(false);
   const [modalNewVideoOpen, setModalNewVideoOpen] = useState(false);
-  const [currentVideo, setCurrentVideo] = useState<CurrentVideoType >({} as CurrentVideoType );
-  const [allVideo,setAllVideo] = useState<VideoTypes[]>([])
+  const [buttonPosition, setButtonPosition] = useState("center-center");
+  const [currentVideo, setCurrentVideo] = useState<CurrentVideoType>(
+    {} as CurrentVideoType
+  );
+
+  const [allVideo, setAllVideo] = useState<VideoTypes[]>([]);
+  const [buttonOption, setButtonOption] = useState("below");
+  const [buttonProps, setButtonProps] = useState({
+    background_color: "",
+    background_hover: "",
+    size: "",
+    text: "",
+    text_color: "",
+    link: "",
+  });
 
   function openModal() {
     setModalOpen(true);
@@ -89,6 +112,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setModalNewVideoOpen(false);
   }
 
+  function buttoBelowVideo() {
+    setButtonOption("below");
+  }
+
+  function buttonInsideVideo() {
+    setButtonOption("inside");
+  }
+
+  function openModalNewButton() {
+    setModalNewButtonOpen(true);
+  }
+
+  function closeModalNewButton() {
+    setModalNewButtonOpen(false);
+  }
+
   const { "mayoPLayer.token": token } = parseCookies();
 
   useEffect(() => {
@@ -96,21 +135,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
       api("/me").then((response) => {
         const { email, name, phone, avatar, lastname } = response.data;
 
-        setUser({email, name, phone, avatar, lastname});
+        setUser({ email, name, phone, avatar, lastname });
       });
     }
   }, [token]);
 
   async function signIn({ email, password }: SignInCredentials) {
-    
-    const base64TokenPayload = token.split(".")[1];
+    const base64TokenPayload =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzAxMTU2NzQsImV4cCI6MTY3MDIwMjA3NCwic3ViIjoiYTc5N2U5YmEtNmU4My00ZTVlLTg0ZmMtNzM2MzMxN2IxMTRmIn0.qmF5mdP1b3PqBL4ycq2YHFjEqyFBv92B2isQB2coXwE".split(
+        "."
+      )[1];
     const payload = Buffer.from(
       String(base64TokenPayload),
       "base64"
-     ).toString();
-     const id = JSON.parse(payload).sub;
+    ).toString();
+    const id = JSON.parse(payload).sub;
 
-     try {
+    try {
       const response = await api.post("/sessions", {
         email,
         password,
@@ -128,7 +169,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (token) {
         api("/me").then((response) => {
           const { email, name, phone, avatar, lastname } = response.data;
-          setUser({ email, name, phone, avatar, lastname,...id});
+          setUser({ email, name, phone, avatar, lastname, ...id });
         });
       }
 
@@ -139,7 +180,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function updateUser(newDataUser: newUserDataProps) {
-    const base64TokenPayload = token.split(".")[1];
+    const base64TokenPayload =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzAxMTU2NzQsImV4cCI6MTY3MDIwMjA3NCwic3ViIjoiYTc5N2U5YmEtNmU4My00ZTVlLTg0ZmMtNzM2MzMxN2IxMTRmIn0.qmF5mdP1b3PqBL4ycq2YHFjEqyFBv92B2isQB2coXwE".split(
+        "."
+      )[1];
     const payload = Buffer.from(
       String(base64TokenPayload),
       "base64"
@@ -154,45 +198,41 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     await api("/me").then((res) => setUser(res.data));
   }
-  
 
   useEffect(() => {
-   async function getAllVideos() {
+    async function getAllVideos() {
+      const base64TokenPayload =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzAxMTU2NzQsImV4cCI6MTY3MDIwMjA3NCwic3ViIjoiYTc5N2U5YmEtNmU4My00ZTVlLTg0ZmMtNzM2MzMxN2IxMTRmIn0.qmF5mdP1b3PqBL4ycq2YHFjEqyFBv92B2isQB2coXwE".split(
+          "."
+        )[1];
+      const payload = Buffer.from(
+        String(base64TokenPayload),
+        "base64"
+      ).toString();
+      const id = JSON.parse(payload).sub;
 
-    const base64TokenPayload = token.split(".")[1];
-    const payload = Buffer.from(
-      String(base64TokenPayload),
-      "base64"
-    ).toString();
-    const id = JSON.parse(payload).sub;
+      console.log(id);
 
-    console.log(id)
-
-     const response = await api.get(`/videos/${id}`);
-     const data = response.data.map((res:VideoTypes) => {
-      return {
-        id: res.id,
-        name: res.name,
-        view_count: res.view_count,
-        youtube_video_id: res.youtube_video_id,
-        cover_image: res.cover_image,
-        date:  format(
-          new Date(res.date),
-          'dd/MM/yyyy',
-          {
+      const response = await api.get(`/videos/${id}`);
+      const data = response.data.map((res: VideoTypes) => {
+        return {
+          id: res.id,
+          name: res.name,
+          view_count: res.view_count,
+          youtube_video_id: res.youtube_video_id,
+          cover_image: res.cover_image,
+          date: format(new Date(res.date), "dd/MM/yyyy", {
             locale: ptBR,
-          }
-        ),
-        duration: res.duration,
-      }
-     })
-     setAllVideo(data);
-   }
-   
-   getAllVideos()
+          }),
+          duration: res.duration,
+        };
+      });
+      setAllVideo(data);
+    }
 
-  },[token])
- 
+    getAllVideos();
+  }, [token]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -209,6 +249,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
         modalNewVideoOpen,
         openModalNewVideo,
         closeModalNewVideo,
+        buttonOption,
+        setButtonOption,
+        buttoBelowVideo,
+        buttonInsideVideo,
+        modalNewButtonOpen,
+        openModalNewButton,
+        closeModalNewButton,
+        buttonPosition,
+        setButtonPosition,
+        buttonProps,
+        setButtonProps,
       }}
     >
       {children}

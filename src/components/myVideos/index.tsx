@@ -1,10 +1,8 @@
 import { BsCameraVideo } from "react-icons/bs";
-import { useVideoContext } from "../../contexts/useContext";
 import { CardVideo } from "../cardVideo";
 import styles from "./styles.module.scss";
 
 export function MyVideos() {
-
   return (
     <div className={styles.container}>
       <div className={styles.searchVideo}>

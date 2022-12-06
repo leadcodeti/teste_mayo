@@ -21,10 +21,12 @@ import {
 import { usePlayeContext } from "../../contexts/usePlayerContext";
 import styles from "./styles.module.scss";
 import "@vime/core/themes/default.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import { ButtonsContainer, NextButton, PrevButton } from "./nextAndPrevButtons";
 import { useVideoContext } from "../../contexts/useContext";
+import { ButtonInsideVideo } from "../editVideoSideBar/components/botoes/buttons";
+import { api } from "../../services/api";
 
 export default function PlayerVideo() {
   const {
@@ -46,10 +48,11 @@ export default function PlayerVideo() {
   );
 
   const [duration] = usePlayerContext(player, "duration", -1);
-  const { currentVideo } = useVideoContext();
+  const { currentVideo, buttonPosition, buttonProps, setButtonProps } =
+    useVideoContext();
 
   console.log("tempo", duration);
- 
+
   const onSeekBackward = () => {
     if (currentTime < 5) return;
     setCurrentTime(currentTime - 10);
@@ -80,11 +83,91 @@ export default function PlayerVideo() {
     "--vm-control-scale": "1.6",
   };
 
+  // const [buttonProps, setButtonProps] = useState({
+  //   background_color: "",
+  //   bacgrkound_hover: "",
+  //   size: "",
+  //   text: "",
+  //   text_color: "",
+  //   link: "",
+  // });
+
+  useEffect(() => {
+    api(`/cta_buttons/${currentVideo.currentVideoId}`).then((res) => {
+      const data = res.data[1];
+      console.log(res.data);
+      console.log("data aqui" + res.data);
+      setButtonProps({
+        background_color: data.background_color,
+        bacgrkound_hover: data.background_hover,
+        size: data.size,
+        text: data.text,
+        text_color: data.text_color,
+        link: data.link,
+      });
+    });
+  }, [currentVideo.currentVideoId]);
+
   return (
     <div className={styles.player}>
       <Player theme="dark" style={playerTheme} ref={player}>
+        <div
+          className={`${styles.insideVideoButton}
+              ${
+                buttonPosition == "start-top"
+                  ? styles.startTop
+                  : buttonPosition == "center-top"
+                  ? styles.centerTop
+                  : buttonPosition == "end-top"
+                  ? styles.endTop
+                  : buttonPosition == "start-center"
+                  ? styles.startCenter
+                  : buttonPosition == "center-center"
+                  ? styles.centerCenter
+                  : buttonPosition == "end-center"
+                  ? styles.endCenter
+                  : buttonPosition == "start-bottom"
+                  ? styles.startBottom
+                  : buttonPosition == "center-bottom"
+                  ? styles.centerBottom
+                  : buttonPosition == "end-bottom"
+                  ? styles.endBottom
+                  : styles.centerCenter
+              }
+            `}
+        >
+          <ButtonInsideVideo
+            href={"#"}
+            target="_blank"
+            background={buttonProps.background_color}
+            background_hover={buttonProps.bacgrkound_hover}
+            text_color={buttonProps.text_color}
+            sizeWidth={
+              buttonProps.size === "125"
+                ? "180px"
+                : buttonProps.size === "150"
+                ? "250px"
+                : buttonProps.size === "250"
+                ? "350px"
+                : ""
+            }
+            sizeFont={
+              buttonProps.size === "125"
+                ? "100%"
+                : buttonProps.size === "150"
+                ? "150%"
+                : buttonProps.size === "250"
+                ? "200%"
+                : ""
+            }
+            className={`${buttonProps.text == "" ? styles.button : ""} ${
+              styles.buttonSize
+            }`}
+          >
+            {buttonProps.text}
+          </ButtonInsideVideo>
+        </div>
         <Youtube videoId={currentVideo.currentPlayerId} />
-
         <Ui>
           <ClickToPlay />
           <DblClickFullscreen />

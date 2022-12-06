@@ -2,34 +2,22 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-<<<<<<< HEAD
-  experimental: {
-    images: {
-      remotePatterns: [
-        {
-          protocol: "https",
-          hostname: "i.scdn.co",
-          port: "",
-          pathname: "/image/**",
-        },
-      ],
-    },
-  },
-};
-
-module.exports = nextConfig;
-=======
 
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'i.ytimg.com',
-        port: '',
-        // pathname: '/vi/eRYjhOpLd_s/',
+        protocol: "https",
+        hostname: "i.ytimg.com",
+        port: "",
+        // pathname: "/image/**",
+      },
+      {
+        protocol: "https",
+        hostname: "mayo-player-backend-production.up.railway.app",
+        port: "",
+        pathname: "/avatar/**",
       },
     ],
   },
-}
-module.exports = nextConfig
->>>>>>> player
+};
+module.exports = nextConfig;

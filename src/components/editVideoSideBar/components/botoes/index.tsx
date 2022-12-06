@@ -5,59 +5,50 @@ import { GrFormClose } from "react-icons/gr";
 import { RiTimer2Line } from "react-icons/ri";
 import { BelowVideo } from "./belowVideo";
 import { InsideVideo } from "./insideVideo";
-import { api } from "../../../../services/api";
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-};
-
-// 2f62829b-0bab-45b1-b6a4-92395c0ab0e7
+import { useVideoContext } from "../../../../contexts/useContext";
+import { customStyles } from "../../../../utils/modalConfig";
 
 Modal.setAppElement("body");
 
 export function Botoes() {
-  const [buttonOption, setButtonOption] = useState("");
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function buttoBelowVideo() {
-    setButtonOption("below");
-  }
-
-  function buttonInsideVideo() {
-    setButtonOption("inside");
-  }
+  const {
+    buttonOption,
+    buttonInsideVideo,
+    buttoBelowVideo,
+    openModalNewButton,
+    closeModalNewButton,
+    modalNewButtonOpen,
+  } = useVideoContext();
 
   return (
     <>
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        isOpen={modalNewButtonOpen}
+        onRequestClose={closeModalNewButton}
         style={customStyles}
         contentLabel="Example Modal"
         className={styles.modal}
       >
-        <GrFormClose onClick={closeModal} className={styles.closeModal} />
+        <GrFormClose
+          onClick={closeModalNewButton}
+          className={styles.closeModal}
+        />
 
         <div className={styles.typeButton}>
           <p>Selecione o tipo de botão que você quer</p>
           <div>
-            <button onClick={buttoBelowVideo}>Abaixo do vídeo</button>
-            <button onClick={buttonInsideVideo}>Dentro do vídeo</button>
+            <button
+              className={buttonOption == "below" ? styles.activeButton : ""}
+              onClick={buttoBelowVideo}
+            >
+              Abaixo do vídeo
+            </button>
+            <button
+              className={buttonOption == "inside" ? styles.activeButton : ""}
+              onClick={buttonInsideVideo}
+            >
+              Dentro do vídeo
+            </button>
           </div>
         </div>
         {(() => {
@@ -72,7 +63,7 @@ export function Botoes() {
         })()}
       </Modal>
       <div className={styles.buttons}>
-        <button onClick={openModal}>Adicionar novo botão</button>
+        <button onClick={openModalNewButton}>Adicionar novo botão</button>
       </div>
     </>
   );
