@@ -4,8 +4,9 @@ import styles from "./styles.module.scss";
 import { useForm } from "react-hook-form";
 import { api } from "../../services/api";
 import { parseCookies } from "nookies";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { IoClose } from "react-icons/io5";
+
 import { customStyles } from "../../utils/modalConfig";
 
 Modal.setAppElement("body");
@@ -16,13 +17,15 @@ interface VideoTypes {
 }
 
 export function NewVideo() {
-  const { modalNewVideoOpen, closeModalNewVideo } = useVideoContext();
+  const { modalNewVideoOpen, closeModalNewVideo, getAllVideos } =
+    useVideoContext();
   const { register, handleSubmit, reset } = useForm<VideoTypes>();
-  const { "mayoPLayer.token": token } = parseCookies();
+
   const base64TokenPayload =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzAxMTU2NzQsImV4cCI6MTY3MDIwMjA3NCwic3ViIjoiYTc5N2U5YmEtNmU4My00ZTVlLTg0ZmMtNzM2MzMxN2IxMTRmIn0.qmF5mdP1b3PqBL4ycq2YHFjEqyFBv92B2isQB2coXwE".split(
       "."
     )[1];
+
   const payload = Buffer.from(String(base64TokenPayload), "base64").toString();
   const id = JSON.parse(payload).sub;
 
@@ -39,6 +42,9 @@ export function NewVideo() {
         });
       toast.success("Novo video adicionado!");
       closeModalNewVideo();
+
+      getAllVideos();
+
       reset();
     } catch (err) {
       console.log(err);
@@ -47,7 +53,6 @@ export function NewVideo() {
 
   return (
     <>
-      <ToastContainer />
       <Modal
         isOpen={modalNewVideoOpen}
         onRequestClose={closeModalNewVideo}

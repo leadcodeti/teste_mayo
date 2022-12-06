@@ -48,10 +48,21 @@ export default function PlayerVideo() {
   );
 
   const [duration] = usePlayerContext(player, "duration", -1);
+
   const { currentVideo, buttonPosition, buttonProps, setButtonProps } =
     useVideoContext();
 
   console.log("tempo", duration);
+
+  const [currentPlayerId, setCurrentPlayerId] = useState("");
+
+  // console.log("tempo", duration);
+  useEffect(() => {
+    const playerId = localStorage.getItem("@myVideoPlayerId");
+    if (playerId !== null) {
+      setCurrentPlayerId(playerId);
+    }
+  }, []);
 
   const onSeekBackward = () => {
     if (currentTime < 5) return;
@@ -164,10 +175,12 @@ export default function PlayerVideo() {
               styles.buttonSize
             }`}
           >
+            {/* zindez do botão - ver no embed */}
             {buttonProps.text}
           </ButtonInsideVideo>
         </div>
-        <Youtube videoId={currentVideo.currentPlayerId} />
+        <Youtube videoId={currentPlayerId} />
+
         <Ui>
           <ClickToPlay />
           <DblClickFullscreen />

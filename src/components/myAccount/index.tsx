@@ -1,4 +1,6 @@
 import { FiUpload, FiTrash } from "react-icons/fi";
+import { BsCheck2Circle } from "react-icons/bs";
+import { SlClose } from "react-icons/sl";
 import Image from "next/image";
 import defaultProfileImage from "../../../public/images/avatarDefault.png";
 import style from "./style.module.scss";
@@ -6,13 +8,15 @@ import { useState } from "react";
 import { useVideoContext } from "../../contexts/useContext";
 import { useForm } from "react-hook-form";
 import { newUserDataProps } from "../../types/types";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function MyAccount() {
   const { user, updateUser } = useVideoContext();
   const [avatarUser, setAvatarUser] = useState(defaultProfileImage);
   const { register, handleSubmit, reset, setValue, watch } =
     useForm<newUserDataProps>();
+
+  console.log(user);
 
   function submitUpdate(data: newUserDataProps) {
     const formData = new FormData();
@@ -35,7 +39,6 @@ export default function MyAccount() {
 
   return (
     <div className={style.wrapper}>
-      <ToastContainer />
       <div className={style.container}>
         <h1>Meu Perfil</h1>
         <div className={style.userData}>
@@ -144,20 +147,21 @@ export default function MyAccount() {
           </aside>
 
           <div className={style.plain}>
-            <strong>Basic - R$ 197,00</strong>
-            <p>Reiniciar em 13 dias</p>
+            <strong>{user?.subscription.subscription_plan} - R$ 197,00</strong>
 
-            <label htmlFor="vol">145MB/4GB</label>
-            <input
-              type="range"
-              id="vol"
-              name="vol"
-              min="0"
-              max="100"
-              className={style.inputRange}
-            />
-
-            <button>+ Detalhes do consumo</button>
+            <div className={style.statusPlan}>
+              {user?.subscription.subscription_status === "ACTIVE" ? (
+                <>
+                  <BsCheck2Circle color="#3EB880" size={40} />
+                  <p>{user?.subscription.subscription_status}</p>
+                </>
+              ) : (
+                <>
+                  <SlClose color="#FD365A" size={40} />
+                  <p>{user?.subscription.subscription_status}</p>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

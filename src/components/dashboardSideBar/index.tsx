@@ -6,6 +6,9 @@ import { UserOptionProps } from "../../types/types";
 import { NewVideo } from "../newVideoModal";
 import { useVideoContext } from "../../contexts/useContext";
 
+import { signOut } from "../../contexts/useContext";
+import { sign } from "crypto";
+
 export function DashboardSideBar({ setUserOption }: UserOptionProps) {
   function activeUserVideos() {
     setUserOption("videos");
@@ -55,7 +58,9 @@ export function DashboardSideBar({ setUserOption }: UserOptionProps) {
           <Link onClick={activeUserAccount} href="#/account">
             Minha conta
           </Link>
-          <button className={styles.exit}>Sair</button>
+          <button onClick={() => signOut()} className={styles.exit}>
+            Sair
+          </button>
         </div>
       </div>
     </aside>

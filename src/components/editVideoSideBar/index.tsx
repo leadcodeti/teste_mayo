@@ -21,6 +21,8 @@ import { UserOptionProps } from "../../types/types";
 import { NewVideo } from "../newVideoModal";
 import { useVideoContext } from "../../contexts/useContext";
 
+import { signOut } from "../../contexts/useContext";
+
 export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
   function activeUserAccount() {
     setUserOption("account");
@@ -112,7 +114,9 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
 
             <div className={styles.myAccount}>
               <button onClick={activeUserAccount}>Minha conta</button>
-              <button className={styles.exit}>Sair</button>
+              <button onClick={() => signOut()} className={styles.exit}>
+                Sair
+              </button>
             </div>
           </aside>
         </div>

@@ -6,6 +6,7 @@ import { AuthProvider } from "../contexts/useContext";
 
 import { useEffect, useState } from "react";
 import { ContextPlayerProvider } from "../contexts/usePlayerContext";
+import { ToastContainer } from "react-toastify";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [showCild, setShowChild] = useState(false);
@@ -21,6 +22,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <AuthProvider>
+       <ToastContainer 
+         autoClose={2000}
+       />
         <ContextPlayerProvider>
           <GlobalStyle />
           <Component {...pageProps} />
