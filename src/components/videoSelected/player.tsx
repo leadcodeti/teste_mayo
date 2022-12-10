@@ -27,6 +27,8 @@ import { ButtonsContainer, NextButton, PrevButton } from "./nextAndPrevButtons";
 import { useVideoContext } from "../../contexts/useContext";
 import { ButtonInsideVideo } from "../editVideoSideBar/components/botoes/buttons";
 import { api } from "../../services/api";
+import { Continuar } from "./components/continuar";
+import { FakeBarInVideo } from "./components/fakeBar";
 
 export default function PlayerVideo() {
   const {
@@ -49,14 +51,19 @@ export default function PlayerVideo() {
 
   const [duration] = usePlayerContext(player, "duration", -1);
 
-  const { currentVideo, buttonPosition, buttonProps, setButtonProps } =
-    useVideoContext();
+  const {
+    currentVideo,
+    buttonProps,
+    setButtonProps,
+    continuarIsVisible,
+    fakeBarIsVisible,
+  } = useVideoContext();
 
   console.log("tempo", duration);
 
   const [currentPlayerId, setCurrentPlayerId] = useState("");
+  const [buttonPosition, setButtonPositon] = useState("");
 
-  // console.log("tempo", duration);
   useEffect(() => {
     const playerId = localStorage.getItem("@myVideoPlayerId");
     if (playerId !== null) {
@@ -94,30 +101,26 @@ export default function PlayerVideo() {
     "--vm-control-scale": "1.6",
   };
 
-  // const [buttonProps, setButtonProps] = useState({
-  //   background_color: "",
-  //   bacgrkound_hover: "",
-  //   size: "",
-  //   text: "",
-  //   text_color: "",
-  //   link: "",
-  // });
-
   useEffect(() => {
     api(`/cta_buttons/${currentVideo.currentVideoId}`).then((res) => {
-      const data = res.data[1];
-      console.log(res.data);
-      console.log("data aqui" + res.data);
+      const data = res.data;
+      console.log(data);
+      const insideFiltered = data.filter((e: any) => e.type === "inside");
+      const insideResult = insideFiltered[0];
+
       setButtonProps({
-        background_color: data.background_color,
-        bacgrkound_hover: data.background_hover,
-        size: data.size,
-        text: data.text,
-        text_color: data.text_color,
-        link: data.link,
+        background_color: insideResult.background_color,
+        bacgrkound_hover: insideResult.background_hover,
+        size: insideResult.size,
+        text: insideResult.text,
+        text_color: insideResult.text_color,
+        link: insideResult.link,
+        position: insideResult.position,
       });
+      setButtonPositon(insideResult.position);
     });
-  }, [currentVideo.currentVideoId]);
+  }, [currentVideo.currentVideoId, setButtonProps, buttonPosition]);
+  console.log(buttonPosition);
 
   return (
     <div className={styles.player}>
@@ -147,6 +150,10 @@ export default function PlayerVideo() {
               }
             `}
         >
+          {continuarIsVisible ? <Continuar /> : ""}
+          {fakeBarIsVisible ? <FakeBarInVideo /> : ""}
+
+          {/* <div className={styles.teste}></div> */}
           <ButtonInsideVideo
             href={"#"}
             target="_blank"

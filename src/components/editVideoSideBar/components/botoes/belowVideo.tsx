@@ -21,9 +21,12 @@ interface ButtonUpdateProps {
 
 export function BelowVideo() {
   const { register, handleSubmit, watch } = useForm<ButtonUpdateProps>();
-  const { buttonOption, currentVideo, closeModalNewButton, setButtonProps } =
-    useVideoContext();
-  console.log("current video aqui" + currentVideo.currentVideoId);
+  const {
+    buttonOption,
+    currentVideo,
+    closeModalNewButton,
+    setBelowButtonProps,
+  } = useVideoContext();
 
   useEffect(() => {
     currentVideo.currentVideoId;
@@ -40,8 +43,9 @@ export function BelowVideo() {
     text_color,
     link,
   }: ButtonUpdateProps) {
-    api
-      .put(`/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`, {
+    await api.put(
+      `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
+      {
         text,
         size,
         background,
@@ -52,8 +56,25 @@ export function BelowVideo() {
         text_color,
         link,
         video_id: currentVideo.currentVideoId,
-      })
-      .then((res) => console.log(res.data));
+      }
+    );
+
+    await api(
+      `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`
+    ).then((res) => {
+      const data = res.data;
+      const belowFiltered = data.filter((e: any) => e.type === "below");
+      const belowResult = belowFiltered[0];
+      setBelowButtonProps({
+        background_color: belowResult.background_color,
+        bacgrkound_hover: belowResult.background_hover,
+        size: belowResult.size,
+        text: belowResult.text,
+        text_color: belowResult.text_color,
+        link: belowResult.link,
+        is_visible: belowResult.is_visible,
+      });
+    });
 
     closeModalNewButton();
     toast.success("Botão salvo");

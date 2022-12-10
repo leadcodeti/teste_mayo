@@ -18,6 +18,8 @@ export function Botoes() {
     openModalNewButton,
     closeModalNewButton,
     modalNewButtonOpen,
+    isVisibleBelow,
+    isVisibleButtonBelow,
   } = useVideoContext();
 
   return (
@@ -64,6 +66,23 @@ export function Botoes() {
       </Modal>
       <div className={styles.buttons}>
         <button onClick={openModalNewButton}>Adicionar novo botão</button>
+        <div>
+          {isVisibleButtonBelow ? (
+            <label style={{ fontSize: "14px" }}>
+              Ocultar botão abaixo do vídeo &nbsp;
+            </label>
+          ) : (
+            <label style={{ fontSize: "14px" }}>
+              Mostrar botão abaixo do vídeo &nbsp;
+            </label>
+          )}
+          <input
+            // onChange={() => !isVisibleButtonBelow}
+            type="checkbox"
+            onClick={isVisibleBelow}
+            checked={isVisibleButtonBelow}
+          />
+        </div>
       </div>
     </>
   );
