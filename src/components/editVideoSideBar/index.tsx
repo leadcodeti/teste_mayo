@@ -20,6 +20,7 @@ import { Botoes } from "./components/botoes";
 import { UserOptionProps } from "../../types/types";
 import { NewVideo } from "../newVideoModal";
 import { useVideoContext } from "../../contexts/useContext";
+import stylesSwitch from "./switch.module.scss";
 
 import { signOut } from "../../contexts/useContext";
 
@@ -28,7 +29,13 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
     setUserOption("account");
   }
 
-  const { openModalNewVideo } = useVideoContext();
+  const {
+    openModalNewVideo,
+    continuarIsVisible,
+    setContinuarIsVisible,
+    fakeBarIsVisible,
+    setFakeBarIsVisible,
+  } = useVideoContext();
 
   return (
     <>
@@ -53,8 +60,18 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                   <Accordion>
                     <Accordion.Item eventKey="0">
                       <Accordion.Header>
-                        <BsPalette />
-                        Design
+                        <div className={stylesSwitch.container}>
+                          <span className={stylesSwitch.content}>
+                            <BsPalette />
+                            Design
+                          </span>
+                          <label className={stylesSwitch.switch}>
+                            <input type="checkbox" />
+                            <span
+                              className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
+                            ></span>
+                          </label>
+                        </div>
                       </Accordion.Header>
                       <Accordion.Body className="p-0">
                         <Design />
@@ -63,8 +80,18 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
 
                     <Accordion.Item eventKey="1">
                       <Accordion.Header>
-                        <BsCardImage />
-                        Thumbnails
+                        <div className={stylesSwitch.container}>
+                          <span className={stylesSwitch.content}>
+                            <BsCardImage />
+                            Thumbnails
+                          </span>
+                          <label className={stylesSwitch.switch}>
+                            <input type="checkbox" />
+                            <span
+                              className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
+                            ></span>
+                          </label>
+                        </div>
                       </Accordion.Header>
                       <Accordion.Body className="p-0">
                         <Thumbnails />
@@ -73,8 +100,18 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
 
                     <Accordion.Item eventKey="2">
                       <Accordion.Header>
-                        <BsPlayCircle />
-                        Autoplay
+                        <div className={stylesSwitch.container}>
+                          <span className={stylesSwitch.content}>
+                            <BsPlayCircle />
+                            Autoplay
+                          </span>
+                          <label className={stylesSwitch.switch}>
+                            <input type="checkbox" />
+                            <span
+                              className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
+                            ></span>
+                          </label>
+                        </div>
                       </Accordion.Header>
                       <Accordion.Body className="p-0">
                         <AutoPlay />
@@ -82,8 +119,23 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                     </Accordion.Item>
                     <Accordion.Item eventKey="3">
                       <Accordion.Header>
-                        <BsHourglass />
-                        Fakebar
+                        <div className={stylesSwitch.container}>
+                          <span className={stylesSwitch.content}>
+                            <BsHourglass />
+                            Fakebar
+                          </span>
+                          <label className={stylesSwitch.switch}>
+                            <input
+                              onClick={() =>
+                                setFakeBarIsVisible(!fakeBarIsVisible)
+                              }
+                              type="checkbox"
+                            />
+                            <span
+                              className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
+                            ></span>
+                          </label>
+                        </div>
                       </Accordion.Header>
                       <Accordion.Body className="p-0">
                         <FakeBar />
@@ -91,8 +143,24 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                     </Accordion.Item>
                     <Accordion.Item eventKey="4">
                       <Accordion.Header>
-                        <FiRepeat />
-                        Continuar
+                        <div className={stylesSwitch.container}>
+                          <span className={stylesSwitch.content}>
+                            <FiRepeat />
+                            Continuar
+                          </span>
+                          <label className={stylesSwitch.switch}>
+                            <input
+                              type="checkbox"
+                              onClick={() =>
+                                setContinuarIsVisible(!continuarIsVisible)
+                              }
+                              checked={continuarIsVisible}
+                            />
+                            <span
+                              className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
+                            ></span>
+                          </label>
+                        </div>
                       </Accordion.Header>
                       <Accordion.Body className="p-0">
                         <WatchAgain />
@@ -100,8 +168,18 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                     </Accordion.Item>
                     <Accordion.Item eventKey="5">
                       <Accordion.Header>
-                        <BsHandIndexThumb />
-                        Botões
+                        <div className={stylesSwitch.container}>
+                          <span className={stylesSwitch.content}>
+                            <BsHandIndexThumb />
+                            Botões
+                          </span>
+                          <label className={stylesSwitch.switch}>
+                            <input type="checkbox" />
+                            <span
+                              className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
+                            ></span>
+                          </label>
+                        </div>
                       </Accordion.Header>
                       <Accordion.Body className="p-0">
                         <Botoes />

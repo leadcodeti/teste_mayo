@@ -43,10 +43,12 @@ export function InsideVideo() {
     start,
     end,
     text_color,
+
     link,
   }: ButtonUpdateProps) {
-    api
-      .put(`/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`, {
+    await api.put(
+      `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
+      {
         text,
         size,
         background,
@@ -57,19 +59,24 @@ export function InsideVideo() {
         text_color,
         link,
         video_id: currentVideo.currentVideoId,
-      })
-      .then((res) => console.log(res.data));
+      }
+    );
+    // .then((res) => console.log(res.data));
 
-    api(
+    await api(
       `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`
     ).then((res) => {
+      const data = res.data;
+      const insideFiltered = data.filter((e: any) => e.type === "inside");
+      const insideResult = insideFiltered[0];
       setButtonProps({
-        background_color: res.data[1].background_color,
-        bacgrkound_hover: res.data[1].background_hover,
-        size: res.data[1].size,
-        text: res.data[1].text,
-        text_color: res.data[1].text_color,
-        link: res.data[1].link,
+        background_color: insideResult.background_color,
+        bacgrkound_hover: insideResult.background_hover,
+        size: insideResult.size,
+        text: insideResult.text,
+        text_color: insideResult.text_color,
+        link: insideResult.link,
+        position: insideResult.position,
       });
     });
     closeModalNewButton();

@@ -3,9 +3,9 @@ import { useVideoContext } from "../../contexts/useContext";
 import styles from "./styles.module.scss";
 import { useForm } from "react-hook-form";
 import { api } from "../../services/api";
-import { parseCookies } from "nookies";
 import { toast } from "react-toastify";
 import { IoClose } from "react-icons/io5";
+import { useState } from "react";
 
 import { customStyles } from "../../utils/modalConfig";
 
@@ -20,20 +20,17 @@ export function NewVideo() {
   const { modalNewVideoOpen, closeModalNewVideo, getAllVideos } =
     useVideoContext();
   const { register, handleSubmit, reset } = useForm<VideoTypes>();
+  const [userId, setUserId] = useState("");
 
-  const base64TokenPayload =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzAxMTU2NzQsImV4cCI6MTY3MDIwMjA3NCwic3ViIjoiYTc5N2U5YmEtNmU4My00ZTVlLTg0ZmMtNzM2MzMxN2IxMTRmIn0.qmF5mdP1b3PqBL4ycq2YHFjEqyFBv92B2isQB2coXwE".split(
-      "."
-    )[1];
-
-  const payload = Buffer.from(String(base64TokenPayload), "base64").toString();
-  const id = JSON.parse(payload).sub;
+  api("/me").then((res) => {
+    setUserId(res.data.id);
+  });
 
   async function onSubmit({ url, name }: VideoTypes) {
     try {
       const response = await api
         .post(`/videos`, {
-          user_id: id,
+          user_id: userId,
           url,
           name,
         })

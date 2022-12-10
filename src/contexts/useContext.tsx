@@ -84,12 +84,49 @@ interface AuthContextProps {
   buttonProps: any;
   setButtonProps: any;
   videosId: videosId
+  belowButtonProps: any;
+  setBelowButtonProps: any;
+  isVisibleBelow: () => void;
+  setIsVisibleButtonBelow: (value: boolean) => void;
+  isVisibleButtonBelow: boolean;
+  continuarProps: any;
+  setContinuarProps: any;
+  continuarIsVisible: boolean;
+  setContinuarIsVisible: (value: boolean) => void;
+  fakeBarIsVisible: boolean;
+  setFakeBarIsVisible: (value: boolean) => void;
+  heightFakeBar: string;
+  setHeightFakeBar: (value: string) => void;
+  fakeBarData: any;
+  setFakeBarData: any;
 }
 
 type AuthProviderProps = {
   children: ReactNode;
 };
 
+type belowButton = {
+  background_color: string;
+  background_hover: string;
+  size: string;
+  text: string;
+  text_color: string;
+  link: string;
+  is_visible: boolean;
+};
+
+type continuarButtonProps = {
+  background_color: string;
+  message: string;
+  continue_button_text: string;
+  restart_button_text: string;
+  text_color: string;
+};
+
+type TypesFakeBarData = {
+  height: string;
+  finish: boolean;
+};
 
 export const AuthContext = createContext({} as AuthContextProps);
 
@@ -112,6 +149,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [allVideo, setAllVideo] = useState<VideoTypes[]>([]);
   const [videosId, setVideosId] = useState<videosId>({} as videosId );
   const [buttonOption, setButtonOption] = useState("below");
+  const [isVisibleButtonBelow, setIsVisibleButtonBelow] = useState<any>(false);
+
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
     background_hover: "",
@@ -119,7 +158,47 @@ export function AuthProvider({ children }: AuthProviderProps) {
     text: "",
     text_color: "",
     link: "",
+    position: "",
   });
+  const [belowButtonProps, setBelowButtonProps] = useState<any>({
+    background_color: "",
+    background_hover: "",
+    size: "",
+    text: "",
+    text_color: "",
+    link: "",
+    is_visible: isVisibleButtonBelow,
+  });
+  const [continuarProps, setContinuarProps] = useState<continuarButtonProps>({
+    background_color: "",
+    message: "",
+    continue_button_text: "",
+    restart_button_text: "",
+    text_color: "",
+  });
+
+  const [continuarIsVisible, setContinuarIsVisible] = useState(false);
+  const [fakeBarIsVisible, setFakeBarIsVisible] = useState<boolean>(false);
+  const [heightFakeBar, setHeightFakeBar] = useState("");
+  const [fakeBarData, setFakeBarData] = useState<TypesFakeBarData>({
+    height: "",
+    finish: false,
+  });
+
+  async function isVisibleContinuar() {
+    await api(`/resume_video_options/${videosId.currentVideoId}`).then(
+      (res) => {
+        setContinuarProps({
+          message: res.data.message,
+          continue_button_text: res.data.continue_button_text,
+          restart_button_text: res.data.restart_button_text,
+          text_color: res.data.text_color,
+          background_color: res.data.background_color,
+        });
+      }
+    );
+    setContinuarIsVisible(!continuarIsVisible);
+  }
 
   function openModal() {
     setModalOpen(true);
@@ -153,6 +232,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setModalNewButtonOpen(false);
   }
 
+  async function isVisibleBelow() {
+    setIsVisibleButtonBelow(!isVisibleButtonBelow);
+    await api.put(
+      `/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`,
+      {
+        is_visible: isVisibleButtonBelow
+      }
+    );
+    // .then((res) => {
+    //   setBelowButtonProps({
+    //     is_visible: res.data.is_visible,
+    //     video_id: currentVideo.currentVideoId,
+    //   });
+    // });
+
+    await api(`/cta_buttons/${videosId.currentVideoId}`).then((res) => {
+      const belowFiltered = res.data.filter((e: any) => e.type === "below");
+      setBelowButtonProps({
+        is_visible: belowFiltered[0].is_visible,
+      });
+    });
+  }
+
   const { "mayoPLayer.token": token } = parseCookies();
 
   useEffect(() => {
@@ -175,16 +277,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [token]);
 
   async function signIn({ email, password }: SignInCredentials) {
-    const base64TokenPayload =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzAxMTU2NzQsImV4cCI6MTY3MDIwMjA3NCwic3ViIjoiYTc5N2U5YmEtNmU4My00ZTVlLTg0ZmMtNzM2MzMxN2IxMTRmIn0.qmF5mdP1b3PqBL4ycq2YHFjEqyFBv92B2isQB2coXwE".split(
-        "."
-      )[1];
-    const payload = Buffer.from(
-      String(base64TokenPayload),
-      "base64"
-    ).toString();
-    const id = JSON.parse(payload).sub;
-
     try {
       const response = await api.post("/sessions", {
         email,
@@ -215,17 +307,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function updateUser(newDataUser: newUserDataProps) {
-    const base64TokenPayload =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzAxMTU2NzQsImV4cCI6MTY3MDIwMjA3NCwic3ViIjoiYTc5N2U5YmEtNmU4My00ZTVlLTg0ZmMtNzM2MzMxN2IxMTRmIn0.qmF5mdP1b3PqBL4ycq2YHFjEqyFBv92B2isQB2coXwE".split(
-        "."
-      )[1];
-    const payload = Buffer.from(
-      String(base64TokenPayload),
-      "base64"
-    ).toString();
-    const id = JSON.parse(payload).sub;
-
-    await api.put(`/users/${id}`, newDataUser);
+    await api.put(`/users/${user?.id}`, newDataUser);
 
     const headers = { "Content-Type": "multipart/form-data" };
 
@@ -254,6 +336,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAllVideo(data);
     }
   }, [user]);
+
+  // useCallback(async () => {
+  //   if (currentVideo.currentVideoId) {
+  //     api(
+  //       `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`
+  //     ).then((res) => {
+  //       const data = res.data;
+  //       const insideFiltered = data.filter((e: any) => e.type === "inside");
+  //       const insideResult = insideFiltered[0];
+  //       setBelowButtonProps({
+  //         background_color: insideResult.background_color,
+  //         bacgrkound_hover: insideResult.background_hover,
+  //         size: insideResult.size,
+  //         text: insideResult.text,
+  //         text_color: insideResult.text_color,
+  //         link: insideResult.link,
+  //       });
+  //     });
+  //   }
+  // }, [buttonOption, currentVideo.currentVideoId]);
 
   useEffect(() => {
     getAllVideos();
@@ -300,6 +402,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setButtonPosition,
         buttonProps,
         setButtonProps,
+        belowButtonProps,
+        setBelowButtonProps,
+        isVisibleBelow,
+        setIsVisibleButtonBelow,
+        isVisibleButtonBelow,
+        continuarProps,
+        setContinuarProps,
+        continuarIsVisible,
+        setContinuarIsVisible,
+        fakeBarIsVisible,
+        setFakeBarIsVisible,
+        heightFakeBar,
+        setHeightFakeBar,
+        fakeBarData,
+        setFakeBarData,
       }}
     >
       {children}

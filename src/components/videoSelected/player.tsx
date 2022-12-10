@@ -27,6 +27,8 @@ import { ButtonsContainer, NextButton, PrevButton } from "./nextAndPrevButtons";
 import { useVideoContext } from "../../contexts/useContext";
 import { ButtonInsideVideo } from "../editVideoSideBar/components/botoes/buttons";
 import { api } from "../../services/api";
+import { Continuar } from "./components/continuar";
+import { FakeBarInVideo } from "./components/fakeBar";
 
 
 export default function PlayerVideo() {
@@ -50,8 +52,15 @@ export default function PlayerVideo() {
 
   const [duration] = usePlayerContext(player, "duration", -1);
 
-  const { currentVideo, buttonPosition, buttonProps,videosId, setButtonProps } =
+
+  const { currentVideo, setButtonPosition,
+     buttonPosition, buttonProps,videosId,
+      setButtonProps,fakeBarIsVisible, 
+      continuarIsVisible} =
     useVideoContext();
+
+
+  console.log("tempo", duration);
 
   const onSeekBackward = () => {
     if (currentTime < 5) return;
@@ -83,30 +92,28 @@ export default function PlayerVideo() {
     "--vm-control-scale": "1.6",
   };
 
-  // const [buttonProps, setButtonProps] = useState({
-  //   background_color: "",
-  //   bacgrkound_hover: "",
-  //   size: "",
-  //   text: "",
-  //   text_color: "",
-  //   link: "",
-  // });
-
   useEffect(() => {
-    api(`/cta_buttons/${currentVideo.currentVideoId}`).then((res) => {
-      const data = res.data[1];
-      console.log(res.data);
-      console.log("data aqui" + res.data);
+    api(`/cta_buttons/${videosId.currentVideoId}`).then((res) => {
+      const data = res.data;
+      console.log(data);
+      const insideFiltered = data.filter((e: any) => e.type === "inside");
+      const insideResult = insideFiltered[0];
+
       setButtonProps({
-        background_color: data.background_color,
-        bacgrkound_hover: data.background_hover,
-        size: data.size,
-        text: data.text,
-        text_color: data.text_color,
-        link: data.link,
+        background_color: insideResult.background_color,
+        bacgrkound_hover: insideResult.background_hover,
+        size: insideResult.size,
+        text: insideResult.text,
+        text_color: insideResult.text_color,
+        link: insideResult.link,
+        position: insideResult.position,
       });
+      setButtonPosition(insideResult.position);
     });
-  }, [currentVideo.currentVideoId, setButtonProps]);
+
+  }, [currentVideo.currentVideoId, setButtonProps, buttonPosition, setButtonPosition, videosId.currentVideoId]);
+  console.log(buttonPosition);
+
 
   return (
     <div className={styles.player}>
@@ -136,6 +143,10 @@ export default function PlayerVideo() {
               }
             `}
         >
+          {continuarIsVisible ? <Continuar /> : ""}
+          {fakeBarIsVisible ? <FakeBarInVideo /> : ""}
+
+          {/* <div className={styles.teste}></div> */}
           <ButtonInsideVideo
             href={"#"}
             target="_blank"

@@ -9,6 +9,7 @@ interface videoInfoTypes {
 }
 
 export function VideoInfo({ video }: videoInfoTypes) {
+  
   const duration = intervalToDuration({ start: 0, end: video.duration * 1 });
   const formated_time = `${duration.minutes} : ${duration.seconds}`;
 
