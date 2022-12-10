@@ -51,14 +51,17 @@ interface CurrentVideoType {
   currentPlayerId: string;
 }
 
+interface videosId {
+  currentVideoId:string,
+  currentPlayerId:string,
+}
+
 interface AuthContextProps {
   signIn(credentials: SignInCredentials): Promise<void>;
   updateUser: (newDataUser: newUserDataProps) => Promise<void>;
   openModal: () => void;
   closeModal: () => void;
-
   getAllVideos: () => Promise<void>;
-
   modalNewVideoOpen: boolean;
   openModalNewVideo: () => void;
   closeModalNewVideo: () => void;
@@ -80,11 +83,13 @@ interface AuthContextProps {
   setButtonPosition: (value: string) => void;
   buttonProps: any;
   setButtonProps: any;
+  videosId: videosId
 }
 
 type AuthProviderProps = {
   children: ReactNode;
 };
+
 
 export const AuthContext = createContext({} as AuthContextProps);
 
@@ -105,6 +110,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 
   const [allVideo, setAllVideo] = useState<VideoTypes[]>([]);
+  const [videosId, setVideosId] = useState<videosId>({} as videosId );
   const [buttonOption, setButtonOption] = useState("below");
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
@@ -236,7 +242,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           id: res.id,
           name: res.name,
           view_count: res.view_count,
-          youtube_video_id: res.youtube_video_id.slice(0, 11),
+          youtube_video_id: res.youtube_video_id,
           cover_image: res.cover_image,
           date: format(new Date(res.date), "dd/MM/yyyy", {
             locale: ptBR,
@@ -244,6 +250,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           duration: moment.duration(`${res.duration}`).asMilliseconds(),
         };
       });
+
       setAllVideo(data);
     }
   }, [user]);
@@ -251,6 +258,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     getAllVideos();
   }, [getAllVideos, user]);
+
+
+  useEffect(() => {
+    if(currentVideo) {
+      const getIds =  JSON.parse(localStorage.getItem("@myVideoPlayerId") || "");
+      if (getIds !== null) {
+        setVideosId(getIds);
+      }
+    }
+  }, [currentVideo]);
 
   return (
     <AuthContext.Provider
@@ -261,6 +278,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user,
         allVideo,
         setAllVideo,
+        videosId,
         currentVideo,
         getAllVideos,
         updateUser,

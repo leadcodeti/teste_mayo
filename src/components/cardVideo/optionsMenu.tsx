@@ -25,7 +25,10 @@ export function OptionsMenu({
 
   function handleClick(currentVideoId: string, currentPlayerId: string) {
     setCurrentVideo({ currentVideoId, currentPlayerId });
-    localStorage.setItem("@myVideoPlayerId", currentPlayerId);
+    
+    if(currentPlayerId && currentVideoId){
+      localStorage.setItem("@myVideoPlayerId", JSON.stringify({currentVideoId,currentPlayerId}));
+    }
   }
 
   async function deleteCurrentVideo(currentVideoId: string) {

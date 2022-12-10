@@ -28,6 +28,7 @@ import { useVideoContext } from "../../contexts/useContext";
 import { ButtonInsideVideo } from "../editVideoSideBar/components/botoes/buttons";
 import { api } from "../../services/api";
 
+
 export default function PlayerVideo() {
   const {
     backgroundColor,
@@ -49,20 +50,8 @@ export default function PlayerVideo() {
 
   const [duration] = usePlayerContext(player, "duration", -1);
 
-  const { currentVideo, buttonPosition, buttonProps, setButtonProps } =
+  const { currentVideo, buttonPosition, buttonProps,videosId, setButtonProps } =
     useVideoContext();
-
-  console.log("tempo", duration);
-
-  const [currentPlayerId, setCurrentPlayerId] = useState("");
-
-  // console.log("tempo", duration);
-  useEffect(() => {
-    const playerId = localStorage.getItem("@myVideoPlayerId");
-    if (playerId !== null) {
-      setCurrentPlayerId(playerId);
-    }
-  }, []);
 
   const onSeekBackward = () => {
     if (currentTime < 5) return;
@@ -117,7 +106,7 @@ export default function PlayerVideo() {
         link: data.link,
       });
     });
-  }, [currentVideo.currentVideoId]);
+  }, [currentVideo.currentVideoId, setButtonProps]);
 
   return (
     <div className={styles.player}>
@@ -179,7 +168,7 @@ export default function PlayerVideo() {
             {buttonProps.text}
           </ButtonInsideVideo>
         </div>
-        <Youtube videoId={currentPlayerId} />
+        <Youtube videoId={videosId.currentPlayerId} />
 
         <Ui>
           <ClickToPlay />

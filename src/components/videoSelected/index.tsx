@@ -15,7 +15,7 @@ const PlayerVideo = dynamic(() => import("./player"), {
 
 export function VideoSelected() {
   const { onGenerate } = usePlayeContext();
-  const { currentVideo } = useVideoContext();
+  const { currentVideo, user } = useVideoContext();
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
     background_hover: "",
@@ -26,19 +26,21 @@ export function VideoSelected() {
   });
 
   useEffect(() => {
-    api(`/cta_buttons/${currentVideo.currentVideoId}`).then((res) => {
-      const data = res.data[0];
-      console.log("data aqui" + res.data);
-      setButtonProps({
-        background_color: data.background_color,
-        background_hover: data.background_hover,
-        size: data.size,
-        text: data.text,
-        text_color: data.text_color,
-        link: data.link,
+    if(user){
+      api(`/cta_buttons/${currentVideo.currentVideoId}`).then((res) => {
+        const data = res.data[0];
+        console.log("data aqui" + res.data);
+        setButtonProps({
+          background_color: data.background_color,
+          background_hover: data.background_hover,
+          size: data.size,
+          text: data.text,
+          text_color: data.text_color,
+          link: data.link,
+        });
       });
-    });
-  }, [currentVideo.currentVideoId]);
+    }
+  }, [currentVideo.currentVideoId, user]);
 
   return (
     <div className={styles.container}>

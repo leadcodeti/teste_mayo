@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
@@ -9,7 +9,8 @@ import styles from "./styles.module.scss";
 
 export function Design() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<videoPrppertyTypes>();
-  const { backgroundColor,setBackgroundColor} = usePlayeContext();
+  const { backgroundColor,setBackgroundColor,} = usePlayeContext();
+  const { videosId } = useVideoContext();
   const {
     activeSmalPlay,
     activeVolume,
@@ -32,7 +33,6 @@ export function Design() {
   const { currentVideo } = useVideoContext();
 
   const onSubmit: SubmitHandler<videoPrppertyTypes> = data => {
-      console.log(data);
       if (data) {
 
         const newDesignData = {
@@ -50,10 +50,10 @@ export function Design() {
           has_fullscreen: data.displayFullScrean,
         }
 
-       const response = api.put(`/designs/${currentVideo.currentVideoId}`,newDesignData)
-       const response2 = api.put(`/controls/${currentVideo.currentVideoId}`,newControlersData)
+        const res=api.put(`/designs/${videosId.currentVideoId}`,newDesignData)
+        console.log(res)
+        api.put(`/controls/${videosId.currentVideoId}`,newControlersData)
 
-       console.log(response2);
       }
   };
 

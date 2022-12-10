@@ -4,9 +4,11 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { embedVideo } from "../components/embedVideo/embed";
+import { api } from "../services/api";
 import { useVideoContext } from "./useContext";
 
 interface contextProps {
@@ -39,7 +41,7 @@ interface ProviderProps {
 const context = createContext({} as contextProps);
 
 export function ContextPlayerProvider({ children }: ProviderProps) {
-  const { openModal } = useVideoContext();
+  const { openModal, videosId } = useVideoContext();
   const [embedString, setString] = useState("");
   const [bigPlay, setBigPlay] = useState(true);
   const [smalPlay, setSmalPlay] = useState(true);
@@ -76,6 +78,34 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
     div = element.innerHTML;
     return div;
   };
+
+
+  useEffect(() => {
+    if(!videosId.currentVideoId){
+      return;
+    }
+
+    async function getDesign() {
+      const response = await api.get(`/designs/${videosId.currentVideoId}`)
+      setBackgroundColor(response.data.background_color);
+      console.log("Teste",response.data);
+     }
+    
+
+    async function getControls() {
+     const response = await api.get(`/controls/${videosId.currentVideoId}`)
+      setBigPlay(response.data.has_big_play_button)
+      setSmalPlay(response.data.has_small_play_button)
+      setVolume(response.data.has_volume)
+      setFullScrean(response.data.has_fullscreen)
+      setProgessBar(response.data.has_progress_bar)
+      setPlayTime(response.data.has_video_duration)
+      setNextBtn(response.data.has_foward_10_seconds)
+      setPrevBtn(response.data.has_back_10_seconds)
+    }
+    getControls() 
+    getDesign()
+   },[videosId.currentVideoId,setBackgroundColor]) 
 
   return (
     <context.Provider

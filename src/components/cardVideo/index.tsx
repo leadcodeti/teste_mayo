@@ -12,6 +12,8 @@ export function CardVideo() {
   const [videoPlayerId, setVideoPlayerId] = useState("");
   const { allVideo } = useVideoContext();
 
+  console.log(allVideo);
+
   const ref = useRef(null);
 
   useClickOutside(ref, () => {
