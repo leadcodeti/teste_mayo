@@ -79,33 +79,31 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
     return div;
   };
 
-
   useEffect(() => {
-    if(!videosId.currentVideoId){
+    if (!videosId.currentVideoId) {
       return;
     }
 
     async function getDesign() {
-      const response = await api.get(`/designs/${videosId.currentVideoId}`)
+      const response = await api.get(`/designs/${videosId.currentVideoId}`);
       setBackgroundColor(response.data.background_color);
-      console.log("Teste",response.data);
-     }
-    
+      console.log("Teste", response.data);
+    }
 
     async function getControls() {
-     const response = await api.get(`/controls/${videosId.currentVideoId}`)
-      setBigPlay(response.data.has_big_play_button)
-      setSmalPlay(response.data.has_small_play_button)
-      setVolume(response.data.has_volume)
-      setFullScrean(response.data.has_fullscreen)
-      setProgessBar(response.data.has_progress_bar)
-      setPlayTime(response.data.has_video_duration)
-      setNextBtn(response.data.has_foward_10_seconds)
-      setPrevBtn(response.data.has_back_10_seconds)
+      const response = await api.get(`/controls/${videosId.currentVideoId}`);
+      setBigPlay(response.data.has_big_play_button);
+      setSmalPlay(response.data.has_small_play_button);
+      setVolume(response.data.has_volume);
+      setFullScrean(response.data.has_fullscreen);
+      setProgessBar(response.data.has_progress_bar);
+      setPlayTime(response.data.has_video_duration);
+      setNextBtn(response.data.has_foward_10_seconds);
+      setPrevBtn(response.data.has_back_10_seconds);
     }
-    getControls() 
-    getDesign()
-   },[videosId.currentVideoId,setBackgroundColor]) 
+    getControls();
+    getDesign();
+  }, [videosId.currentVideoId, setBackgroundColor]);
 
   return (
     <context.Provider

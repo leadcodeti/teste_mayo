@@ -8,8 +8,13 @@ import { DesignFunction } from "../../../../utils/designFunctions";
 import styles from "./styles.module.scss";
 
 export function Design() {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<videoPrppertyTypes>();
-  const { backgroundColor,setBackgroundColor,} = usePlayeContext();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<videoPrppertyTypes>();
+  const { backgroundColor, setBackgroundColor } = usePlayeContext();
   const { videosId } = useVideoContext();
   const {
     activeSmalPlay,
@@ -20,7 +25,7 @@ export function Design() {
     activeNextBtn,
     activePrevBtn,
     activeBigPlay,
-  
+
     activeBigPlaygroung,
     activeSmalPlayground,
     displayVolume,
@@ -28,40 +33,38 @@ export function Design() {
     displayProgressBar,
     displayPlayTime,
     displayNextBtn,
-    displayPrevBtn
+    displayPrevBtn,
   } = DesignFunction();
   const { currentVideo } = useVideoContext();
 
-  const onSubmit: SubmitHandler<videoPrppertyTypes> = data => {
-      if (data) {
+  const onSubmit: SubmitHandler<videoPrppertyTypes> = (data) => {
+    if (data) {
+      const newDesignData = {
+        background_color: data.backgroundColor,
+      };
 
-        const newDesignData = {
-          background_color: data.backgroundColor,
-        }
+      const newControlersData = {
+        has_big_play_button: data.activeBigPlaygroung,
+        has_small_play_button: data.activeSmalPlayground,
+        has_progress_bar: data.displayProgressBar,
+        has_video_duration: data.displayPlayTime,
+        has_back_10_seconds: data.displayPrevBtn,
+        has_foward_10_seconds: data.displayNextBtn,
+        has_volume: data.displayVolume,
+        has_fullscreen: data.displayFullScrean,
+      };
 
-        const newControlersData = {
-          has_big_play_button: data.activeBigPlaygroung,
-          has_small_play_button: data.activeSmalPlayground,
-          has_progress_bar: data.displayProgressBar,
-          has_video_duration: data.displayPlayTime,
-          has_back_10_seconds: data.displayPrevBtn,
-          has_foward_10_seconds: data.displayNextBtn,
-          has_volume: data.displayVolume,
-          has_fullscreen: data.displayFullScrean,
-        }
-
-        const res=api.put(`/designs/${videosId.currentVideoId}`,newDesignData)
-        console.log(res)
-        api.put(`/controls/${videosId.currentVideoId}`,newControlersData)
-
-      }
+      const res = api.put(`/designs/${videosId.currentVideoId}`, newDesignData);
+      console.log(res);
+      api.put(`/controls/${videosId.currentVideoId}`, newControlersData);
+    }
   };
 
   return (
-    <form  onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.design}>
         <span>
-          <label htmlFor="corBackground">Cor background</label>{" "}
+          <label htmlFor="corBackground">Cor background</label>
           <input
             className={styles.colors}
             type="color"
@@ -74,84 +77,103 @@ export function Design() {
       </div>
       <div className={styles.controls}>
         <p>Controles</p>
-        <span>
-          <label htmlFor="botaoPlayGrande">Botão play grande</label>
+
+        <label className={styles.checkContainer}>
           <input
             id="botaoPlayGrande"
             {...register("activeBigPlaygroung")}
             checked={!activeBigPlaygroung}
             type="checkbox"
-           onClick={activeBigPlay}
+            onClick={activeBigPlay}
           />
-        </span>
+          <span className={styles.checkmark}></span>
+          <p>Botão play grande</p>
+        </label>
 
-        <span>
-          <label htmlFor="botaoPlayPequeno">Botão play pequeno</label>
-          <input id="botaoPlayPequeno"  
-             {...register("activeSmalPlayground")}
+        <label className={styles.checkContainer}>
+          <input
+            id="botaoPlayPequeno"
+            {...register("activeSmalPlayground")}
             checked={!activeSmalPlayground}
             type="checkbox"
-            onClick={activeSmalPlay}  />
-        </span>
+            onClick={activeSmalPlay}
+          />
+          <span className={styles.checkmark}></span>
+          <p>Botão play pequeno</p>
+        </label>
 
-        <span>
-          <label htmlFor="botaoPlayGrande">Barra de progresso</label>
-          <input id="botaoPlayGrande"
+        <label className={styles.checkContainer}>
+          <input
+            id="botaoPlayGrande"
             {...register("displayProgressBar")}
-             checked={!displayProgressBar}
-             type="checkbox"
-             onClick={activeProgressBar}
+            checked={!displayProgressBar}
+            type="checkbox"
+            onClick={activeProgressBar}
           />
-        </span>
+          <span className={styles.checkmark}></span>
+          <p>Barra de progresso</p>
+        </label>
 
-        <span>
-          <label htmlFor="botaoPlayGrande">Tempo de vídeo</label>
-          <input id="botaoPlayGrande" 
-           {...register("displayPlayTime")}
-             checked={!displayPlayTime}
-             type="checkbox"
-             onClick={activePlayTime}
+        <label className={styles.checkContainer}>
+          <input
+            id="botaoPlayGrande"
+            {...register("displayPlayTime")}
+            checked={!displayPlayTime}
+            type="checkbox"
+            onClick={activePlayTime}
           />
-        </span>
+          <span className={styles.checkmark}></span>
+          <p>Tempo de vídeo</p>
+        </label>
 
-        <span>
-          <label htmlFor="botaoPlayGrande">Voltar 10s</label>
-          <input id="botaoPlayGrande" 
-           {...register("displayPrevBtn")}
+        <label className={styles.checkContainer}>
+          <input
+            id="botaoPlayGrande"
+            {...register("displayPrevBtn")}
             checked={!displayPrevBtn}
             type="checkbox"
             onClick={activePrevBtn}
           />
-        </span>
+          <span className={styles.checkmark}></span>
+          <p>Voltar 10s</p>
+        </label>
 
-        <span>
-          <label htmlFor="botaoPlayGrande">Avançar 10s</label>
-          <input id="botaoPlayGrande" 
+        <label className={styles.checkContainer}>
+          <input
+            id="botaoPlayGrande"
+            {...register("displayVolume")}
             checked={!displayNextBtn}
             type="checkbox"
             onClick={activeNextBtn}
           />
-        </span>
+          <span className={styles.checkmark}></span>
+          <p>Avançar 10s</p>
+        </label>
 
-        <span>
-          <label htmlFor="botaoPlayGrande">Volume</label>
-          <input id="botaoPlayGrande" 
-            {...register("displayVolume")}  
+        <label className={styles.checkContainer}>
+          <input
+            id="botaoPlayGrande"
+            {...register("displayVolume")}
             checked={!displayVolume}
             type="checkbox"
             onClick={activeVolume}
-           />
-        </span>
-
-        <span>
-          <label htmlFor="botaoPlayGrande">Fullscreen</label>
-          <input id="botaoPlayGrande" 
-            {...register("displayFullScrean")}  
-             checked={!displayFullScrean}
-             type="checkbox"
-             onClick={activeFullScrean}
           />
-        </span>
+          <span className={styles.checkmark}></span>
+          <p>Volume</p>
+        </label>
+
+        <label className={styles.checkContainer}>
+          <input
+            id="botaoPlayGrande"
+            {...register("displayFullScrean")}
+            checked={!displayFullScrean}
+            type="checkbox"
+            onClick={activeFullScrean}
+          />
+          <span className={styles.checkmark}></span>
+          <p>Fullscreen</p>
+        </label>
+
         <div className={styles.saveOrCancel}>
           <button>Cancelar</button>
           <button type="submit">Salvar</button>

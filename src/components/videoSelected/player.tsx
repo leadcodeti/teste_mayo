@@ -29,7 +29,7 @@ import { ButtonInsideVideo } from "../editVideoSideBar/components/botoes/buttons
 import { api } from "../../services/api";
 import { Continuar } from "./components/continuar";
 import { FakeBarInVideo } from "./components/fakeBar";
-
+import { AutoPlay } from "./components/autoPlay";
 
 export default function PlayerVideo() {
   const {
@@ -52,15 +52,27 @@ export default function PlayerVideo() {
 
   const [duration] = usePlayerContext(player, "duration", -1);
 
-
-  const { currentVideo, setButtonPosition,
-     buttonPosition, buttonProps,videosId,
-      setButtonProps,fakeBarIsVisible, 
-      continuarIsVisible} =
-    useVideoContext();
-
+  const {
+    currentVideo,
+    setButtonPosition,
+    buttonPosition,
+    buttonProps,
+    videosId,
+    setButtonProps,
+    hasContinue,
+    setHasContinue,
+    setVideoTime,
+    hasFakeBar,
+    setHasFakeBar,
+    setCurrentVideoTime,
+    hasAutoPlay,
+  } = useVideoContext();
 
   console.log("tempo", duration);
+
+  useEffect(() => {
+    setVideoTime(duration);
+  }, [duration, setVideoTime]);
 
   const onSeekBackward = () => {
     if (currentTime < 5) return;
@@ -110,10 +122,27 @@ export default function PlayerVideo() {
       });
       setButtonPosition(insideResult.position);
     });
+  }, [
+    currentVideo.currentVideoId,
+    setButtonProps,
+    buttonPosition,
+    setButtonPosition,
+    videosId.currentVideoId,
+  ]);
 
-  }, [currentVideo.currentVideoId, setButtonProps, buttonPosition, setButtonPosition, videosId.currentVideoId]);
-  console.log(buttonPosition);
+  setCurrentVideoTime(player.current?.currentTime);
 
+  console.log("dura~ção? ", player.current?.duration);
+
+  useEffect(() => {
+    api(`/videos`).then((res) => {
+      console.log("resposta", res.data);
+      const fakeBar = res.data[3].has_progress_bar;
+      setHasFakeBar(fakeBar);
+      const continuar = res.data[3].has_continue_options;
+      setHasContinue(continuar);
+    });
+  }, [videosId.currentVideoId, setHasFakeBar, setHasContinue]);
 
   return (
     <div className={styles.player}>
@@ -143,8 +172,9 @@ export default function PlayerVideo() {
               }
             `}
         >
-          {continuarIsVisible ? <Continuar /> : ""}
-          {fakeBarIsVisible ? <FakeBarInVideo /> : ""}
+          {hasContinue ? <Continuar /> : ""}
+          {hasFakeBar ? <FakeBarInVideo /> : ""}
+          {hasAutoPlay ? <AutoPlay /> : ""}
 
           {/* <div className={styles.teste}></div> */}
           <ButtonInsideVideo

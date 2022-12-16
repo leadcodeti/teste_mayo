@@ -52,8 +52,8 @@ interface CurrentVideoType {
 }
 
 interface videosId {
-  currentVideoId:string,
-  currentPlayerId:string,
+  currentVideoId: string;
+  currentPlayerId: string;
 }
 
 interface AuthContextProps {
@@ -83,7 +83,7 @@ interface AuthContextProps {
   setButtonPosition: (value: string) => void;
   buttonProps: any;
   setButtonProps: any;
-  videosId: videosId
+  videosId: videosId;
   belowButtonProps: any;
   setBelowButtonProps: any;
   isVisibleBelow: () => void;
@@ -91,14 +91,31 @@ interface AuthContextProps {
   isVisibleButtonBelow: boolean;
   continuarProps: any;
   setContinuarProps: any;
+  autoPLayProps: any;
+  setAutoPlayProps: any;
   continuarIsVisible: boolean;
   setContinuarIsVisible: (value: boolean) => void;
-  fakeBarIsVisible: boolean;
-  setFakeBarIsVisible: (value: boolean) => void;
+  // fakeBarIsVisible: boolean;
+  // setFakeBarIsVisible: (value: boolean) => void;
   heightFakeBar: string;
   setHeightFakeBar: (value: string) => void;
   fakeBarData: any;
   setFakeBarData: any;
+  videoTime: number;
+  setVideoTime: (value: number) => void;
+  hasFakeBar: boolean;
+  setHasFakeBar: (value: boolean) => void;
+  fakeBarIsVibiles: () => void;
+  hasContinue: boolean;
+  setHasContinue: (value: boolean) => void;
+  hasAutoPlay: boolean;
+  setHasAutoPlay: (value: boolean) => void;
+  continueIsVisible: () => void;
+  autoPlayIsVisible: () => void;
+  currentVideoTime: any;
+  setCurrentVideoTime: any;
+  formatedTime: number;
+  setFormatedTime: (value: number) => void;
 }
 
 type AuthProviderProps = {
@@ -121,6 +138,13 @@ type continuarButtonProps = {
   continue_button_text: string;
   restart_button_text: string;
   text_color: string;
+};
+
+type AutoPlayProps = {
+  text_color: string;
+  background_color: string;
+  top_text: string;
+  bottom_text: string;
 };
 
 type TypesFakeBarData = {
@@ -147,9 +171,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 
   const [allVideo, setAllVideo] = useState<VideoTypes[]>([]);
-  const [videosId, setVideosId] = useState<videosId>({} as videosId );
+  const [videosId, setVideosId] = useState<videosId>({} as videosId);
   const [buttonOption, setButtonOption] = useState("below");
   const [isVisibleButtonBelow, setIsVisibleButtonBelow] = useState<any>(false);
+  const [videoTime, setVideoTime] = useState(0);
+  const [hasFakeBar, setHasFakeBar] = useState(false);
+  const [hasContinue, setHasContinue] = useState(false);
+  const [hasAutoPlay, setHasAutoPlay] = useState(false);
+  const [currentVideoTime, setCurrentVideoTime] = useState(0);
+  const [formatedTime, setFormatedTime] = useState(0);
 
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
@@ -177,8 +207,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     text_color: "",
   });
 
+  const [autoPLayProps, setAutoPlayProps] = useState<AutoPlayProps>({
+    text_color: "",
+    background_color: "",
+    top_text: "",
+    bottom_text: "",
+  });
+
   const [continuarIsVisible, setContinuarIsVisible] = useState(false);
-  const [fakeBarIsVisible, setFakeBarIsVisible] = useState<boolean>(false);
   const [heightFakeBar, setHeightFakeBar] = useState("");
   const [fakeBarData, setFakeBarData] = useState<TypesFakeBarData>({
     height: "",
@@ -237,7 +273,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await api.put(
       `/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`,
       {
-        is_visible: isVisibleButtonBelow
+        is_visible: isVisibleButtonBelow,
       }
     );
     // .then((res) => {
@@ -337,6 +373,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [user]);
 
+  async function fakeBarIsVibiles() {
+    setHasFakeBar(!hasFakeBar);
+
+    await api.put(`/videos/${videosId.currentVideoId}`, {
+      has_progress_bar: !hasFakeBar,
+    });
+  }
+  async function continueIsVisible() {
+    setHasContinue(!hasContinue);
+
+    await api
+      .put(`/videos/${videosId.currentVideoId}`, {
+        has_continue_options: !hasContinue,
+      })
+      .then((res) => console.log("data", res.data));
+  }
+
+  async function autoPlayIsVisible() {
+    setHasAutoPlay(!hasAutoPlay);
+
+    await api
+      .put(`/videos/${videosId.currentVideoId}`, {
+        has_autoplay: !hasAutoPlay,
+      })
+      .then((res) => console.log("data", res.data));
+  }
+
   // useCallback(async () => {
   //   if (currentVideo.currentVideoId) {
   //     api(
@@ -361,10 +424,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     getAllVideos();
   }, [getAllVideos, user]);
 
-
   useEffect(() => {
-    if(currentVideo) {
-      const getIds =  JSON.parse(localStorage.getItem("@myVideoPlayerId") || "");
+    if (currentVideo) {
+      const getIds = JSON.parse(localStorage.getItem("@myVideoPlayerId") || "");
       if (getIds !== null) {
         setVideosId(getIds);
       }
@@ -411,12 +473,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setContinuarProps,
         continuarIsVisible,
         setContinuarIsVisible,
-        fakeBarIsVisible,
-        setFakeBarIsVisible,
+
         heightFakeBar,
         setHeightFakeBar,
         fakeBarData,
         setFakeBarData,
+        videoTime,
+        setVideoTime,
+        hasFakeBar,
+        setHasFakeBar,
+        fakeBarIsVibiles,
+        currentVideoTime,
+        setCurrentVideoTime,
+        continueIsVisible,
+        hasContinue,
+        setHasContinue,
+        formatedTime,
+        setFormatedTime,
+        autoPLayProps,
+        setAutoPlayProps,
+        hasAutoPlay,
+        setHasAutoPlay,
+        autoPlayIsVisible,
       }}
     >
       {children}

@@ -31,10 +31,12 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
 
   const {
     openModalNewVideo,
-    continuarIsVisible,
-    setContinuarIsVisible,
-    fakeBarIsVisible,
-    setFakeBarIsVisible,
+    continueIsVisible,
+    fakeBarIsVibiles,
+    hasFakeBar,
+    hasContinue,
+    autoPlayIsVisible,
+    hasAutoPlay,
   } = useVideoContext();
 
   return (
@@ -106,7 +108,12 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                             Autoplay
                           </span>
                           <label className={stylesSwitch.switch}>
-                            <input type="checkbox" />
+                            <input
+                              onClick={() => autoPlayIsVisible()}
+                              type="checkbox"
+                              checked={hasAutoPlay}
+                            />
+
                             <span
                               className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
                             ></span>
@@ -126,10 +133,9 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                           </span>
                           <label className={stylesSwitch.switch}>
                             <input
-                              onClick={() =>
-                                setFakeBarIsVisible(!fakeBarIsVisible)
-                              }
+                              onClick={() => fakeBarIsVibiles()}
                               type="checkbox"
+                              checked={hasFakeBar}
                             />
                             <span
                               className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
@@ -150,11 +156,9 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                           </span>
                           <label className={stylesSwitch.switch}>
                             <input
+                              onClick={() => continueIsVisible()}
                               type="checkbox"
-                              onClick={() =>
-                                setContinuarIsVisible(!continuarIsVisible)
-                              }
-                              checked={continuarIsVisible}
+                              checked={hasContinue}
                             />
                             <span
                               className={`${stylesSwitch.slider} ${stylesSwitch.round}`}

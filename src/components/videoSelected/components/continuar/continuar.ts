@@ -3,6 +3,7 @@ import styled from "styled-components";
 interface containerContinuarProps {
   background_color: string;
   text_color: string;
+  isVisibleContainer: string;
 }
 
 export const Container = styled.div<containerContinuarProps>`
@@ -12,10 +13,11 @@ export const Container = styled.div<containerContinuarProps>`
   color: ${(props) => props.text_color};
   position: absolute;
   z-index: 999;
-  display: flex;
+  display: ${(props) => props.isVisibleContainer};
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   div {
     margin-top: 1.3rem;
     display: flex;
@@ -27,6 +29,7 @@ export const Container = styled.div<containerContinuarProps>`
       align-items: center;
       gap: 10px;
       font-size: 1.2rem;
+      position: relative;
 
       svg {
         font-size: 50px;
