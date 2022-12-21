@@ -5,9 +5,6 @@ interface containerFakeBarProps {
   height: string;
   formatedTime: number;
   animation: number;
-  final: number;
-  teste: number;
-  teste1: number;
 }
 
 export const Container = styled.div<containerFakeBarProps>`
@@ -19,86 +16,139 @@ export const Container = styled.div<containerFakeBarProps>`
   position: absolute;
   left: 0;
   bottom: 0;
-  /* animation: animationBar ${(props) => props.formatedTime}s infinite; */
-  /* animation-delay: 1s; */
+  animation: mayoplayer-fakebar-animation ${(props) => props.animation}s
+    infinite;
 
-  /* @keyframes animationBar {
-    0% {
-      width: calc(${(props) => props.formatedTime}%);
+  @keyframes mayoplayer-fakebar-animation {
+    0.5% {
+      width: 10%;
     }
-
-    2% {
-      width: calc(${(props) => props.formatedTime}% + 5%);
+    0.9% {
+      width: 15%;
     }
-
-    3% {
-      width: calc(${(props) => props.formatedTime}% + 5.5%);
+    1.5% {
+      width: 17%;
     }
-
-    3% {
-      width: calc(${(props) => props.formatedTime}% + 6%);
+    2.4% {
+      width: 22%;
     }
-
-    5% {
-      width: calc(${(props) => props.formatedTime}% + 6.5%);
+    3.6% {
+      width: 26%;
     }
-    10% {
-      width: calc(${(props) => props.formatedTime}% + 7%);
+    5.4% {
+      width: 32%;
     }
-    15% {
-      width: calc(${(props) => props.formatedTime}% + 7.5%);
+    7.2% {
+      width: 37%;
     }
-    20% {
-      width: calc(${(props) => props.formatedTime}% + 7.8%);
-    }
-    25% {
-      width: calc(${(props) => props.formatedTime}% + 8%);
-    }
-    30% {
-      width: calc(${(props) => props.formatedTime}% + 8.5%);
-    }
-    35% {
-      width: calc(${(props) => props.formatedTime}% + 9%);
-    }
-    40% {
-      width: calc(${(props) => props.formatedTime}% + 9.5%);
-    }
-    45% {
-      width: calc(${(props) => props.formatedTime}% + 10%);
-    }
-    50% {
-      width: calc(${(props) => props.formatedTime}% + 10.5%);
-    }
-    55% {
-      width: calc(${(props) => props.formatedTime}% + 11%);
-    }
-    60% {
-      width: calc(${(props) => props.formatedTime}% + 11.5%);
-    }
-    65% {
-      width: calc(${(props) => props.formatedTime}% + 12%);
-    }
-    70% {
-      width: calc(${(props) => props.formatedTime}% + 12.5%);
-    }
-    75% {
-      width: calc(${(props) => props.formatedTime}% + 13%);
-    }
-    80% {
-      width: calc(${(props) => props.formatedTime}% + 12%);
-    }
-    85% {
-      width: calc(${(props) => props.formatedTime}% + 11%);
-    }
-    90% {
-      width: calc(${(props) => props.formatedTime}% + 10%);
-    }
-    95% {
-      width: calc(${(props) => props.formatedTime}% + 7%);
+    9.0% {
+      width: 41%;
     }
 
+    10.8% {
+      width: 45%;
+    }
+    12.6% {
+      width: 48%;
+    }
+    14.4% {
+      width: 51%;
+    }
+    16.2% {
+      width: 54%;
+    }
+    18.0% {
+      width: 57%;
+    }
+    19.8% {
+      width: 59%;
+    }
+    21.6% {
+      width: 62%;
+    }
+    23.4% {
+      width: 64%;
+    }
+    25.2% {
+      width: 66%;
+    }
+    27.0% {
+      width: 68%;
+    }
+    28.8% {
+      width: 70%;
+    }
+    30.5% {
+      width: 72%;
+    }
+    32.4% {
+      width: 73%;
+    }
+    34.1% {
+      width: 75%;
+    }
+    36.0% {
+      width: 77%;
+    }
+    37.7% {
+      width: 78%;
+    }
+    39.5% {
+      width: 79%;
+    }
+    41.3% {
+      width: 80%;
+    }
+    43.1% {
+      width: 82%;
+    }
+    46.7% {
+      width: 84%;
+    }
+    50.3% {
+      width: 86%;
+    }
+    53.9% {
+      width: 88%;
+    }
+    57.5% {
+      width: 90%;
+    }
+    61.1% {
+      width: 92%;
+    }
+    64.7% {
+      width: 93%;
+    }
+    68.3% {
+      width: 94%;
+    }
+    71.8% {
+      width: 95%;
+    }
+    75.4% {
+      width: 96%;
+    }
+    79.0% {
+      width: 97%;
+    }
+    82.6% {
+      width: 98%;
+    }
+    86.2% {
+      width: 99%;
+    }
+    89.8% {
+      width: 99.5%;
+    }
+    93.4% {
+      width: 99.7%;
+    }
+    97.0% {
+      width: 99.9%;
+    }
     100% {
-      width: calc(${(props) => props.formatedTime}% + 3%);
+      width: 100%;
     }
-  } */
+  }
 `;

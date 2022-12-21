@@ -1,7 +1,4 @@
-import {
-  AiOutlineExclamationCircle,
-  AiOutlineQuestionCircle,
-} from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 import styles from "./styles.module.scss";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { useForm } from "react-hook-form";
@@ -42,16 +39,6 @@ export function FakeBar() {
           max={15}
           defaultValue={fakeBarData.height}
         />
-        <p>
-          Variaveis de teste <AiOutlineExclamationCircle />
-        </p>
-
-        <span>
-          <input type="checkbox" />{" "}
-          <label htmlFor="">
-            Término <AiOutlineQuestionCircle />
-          </label>
-        </span>
       </div>
       <div className={styles.saveOrCancel}>
         <button>Cancelar</button>

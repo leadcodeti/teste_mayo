@@ -15,7 +15,7 @@ const nextConfig = {
         protocol: "https",
         hostname: "mayo-player-backend-production.up.railway.app",
         port: "",
-        pathname: "/avatar/**",
+        pathname: "/thumbnails/**",
       },
     ],
   },

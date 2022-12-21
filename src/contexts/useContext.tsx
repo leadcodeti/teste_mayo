@@ -14,7 +14,7 @@ import Router from "next/router";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { newUserDataProps, VideoTypes } from "../types/types";
+import { newUserDataProps, VideoTypes, ThumbnailsProps } from "../types/types";
 import moment from "moment";
 
 type User = {
@@ -30,6 +30,12 @@ type User = {
     subscription_status: string;
     subscription_plan: string;
   };
+};
+
+type Thumbnails = {
+  start_image: string;
+  pause_image: string;
+  final_image: string;
 };
 
 type SignInCredentials = {
@@ -59,6 +65,7 @@ interface videosId {
 interface AuthContextProps {
   signIn(credentials: SignInCredentials): Promise<void>;
   updateUser: (newDataUser: newUserDataProps) => Promise<void>;
+  updateThumbnails: (thumbnailsData: ThumbnailsProps) => Promise<void>;
   openModal: () => void;
   closeModal: () => void;
   getAllVideos: () => Promise<void>;
@@ -66,6 +73,7 @@ interface AuthContextProps {
   openModalNewVideo: () => void;
   closeModalNewVideo: () => void;
   user: User | undefined;
+  thumbnails: Thumbnails | undefined;
   isAuthenticated: boolean;
   setAllVideo: Dispatch<SetStateAction<VideoTypes[]>>;
   setCurrentVideo: Dispatch<SetStateAction<CurrentVideoType>>;
@@ -110,12 +118,20 @@ interface AuthContextProps {
   setHasContinue: (value: boolean) => void;
   hasAutoPlay: boolean;
   setHasAutoPlay: (value: boolean) => void;
+  hasThumbNails: boolean;
+  setHasThumbnails: (value: boolean) => void;
   continueIsVisible: () => void;
   autoPlayIsVisible: () => void;
+  thumbnailsIsVisible: () => void;
   currentVideoTime: any;
   setCurrentVideoTime: any;
   formatedTime: number;
   setFormatedTime: (value: number) => void;
+  pausedVideoThumb: boolean | undefined;
+  setPausedVideoThumb: any;
+  finalVideoThumb: boolean | undefined;
+  setFinalVideoThumb: any;
+  setThumbnails: Dispatch<SetStateAction<Thumbnails | undefined>>;
 }
 
 type AuthProviderProps = {
@@ -161,6 +177,7 @@ export function signOut() {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
+  const [thumbnails, setThumbnails] = useState<Thumbnails>();
   const isAuthenticated = !!user;
   const [modalOpen, setModalOpen] = useState(false);
   const [modalNewButtonOpen, setModalNewButtonOpen] = useState(false);
@@ -178,9 +195,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [hasFakeBar, setHasFakeBar] = useState(false);
   const [hasContinue, setHasContinue] = useState(false);
   const [hasAutoPlay, setHasAutoPlay] = useState(false);
+  const [hasThumbNails, setHasThumbnails] = useState(false);
   const [currentVideoTime, setCurrentVideoTime] = useState(0);
   const [formatedTime, setFormatedTime] = useState(0);
-
+  const [pausedVideoThumb, setPausedVideoThumb] = useState(false);
+  const [finalVideoThumb, setFinalVideoThumb] = useState(false);
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
     background_hover: "",
@@ -352,10 +371,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await api("/me").then((res) => setUser(res.data));
   }
 
+  async function updateThumbnails(thumbnailsData: ThumbnailsProps) {
+    const headers = { "Content-Type": "multipart/form-data" };
+
+    // await api.put(
+    //   `/thumbnails/${videosId.currentVideoId}?type=final_image`,
+    //   thumbnailsData.thumbnail,
+    //   {
+    //     headers: headers,
+    //   }
+    // );
+
+    // await api(`/thumbnails/${videosId.currentVideoId}`).then((res) => {
+    //   setThumbnails(res.data);
+    //   console.log("thumbnails res", res.data);
+    // });
+  }
+  console.log("data thumb", thumbnails);
+
   const getAllVideos = useCallback(async () => {
     if (user) {
-      const response = await api.get(`/videos/${user?.id}`);
-      const data = response.data.map((res: VideoTypes) => {
+      const response = await api.get(`/videos`);
+      const data = response.data.items.map((res: VideoTypes) => {
         return {
           id: res.id,
           name: res.name,
@@ -383,21 +420,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function continueIsVisible() {
     setHasContinue(!hasContinue);
 
-    await api
-      .put(`/videos/${videosId.currentVideoId}`, {
-        has_continue_options: !hasContinue,
-      })
-      .then((res) => console.log("data", res.data));
+    await api.put(`/videos/${videosId.currentVideoId}`, {
+      has_continue_options: !hasContinue,
+    });
   }
 
   async function autoPlayIsVisible() {
     setHasAutoPlay(!hasAutoPlay);
 
-    await api
-      .put(`/videos/${videosId.currentVideoId}`, {
-        has_autoplay: !hasAutoPlay,
-      })
-      .then((res) => console.log("data", res.data));
+    await api.put(`/videos/${videosId.currentVideoId}`, {
+      has_autoplay: !hasAutoPlay,
+    });
+  }
+
+  async function thumbnailsIsVisible() {
+    setHasThumbnails(!hasThumbNails);
+
+    await api.put(`/videos/${videosId.currentVideoId}`, {
+      has_thumbnail: !hasThumbNails,
+    });
   }
 
   // useCallback(async () => {
@@ -440,6 +481,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         isAuthenticated,
         setCurrentVideo,
         user,
+        thumbnails,
         allVideo,
         setAllVideo,
         videosId,
@@ -495,6 +537,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
         hasAutoPlay,
         setHasAutoPlay,
         autoPlayIsVisible,
+        pausedVideoThumb,
+        setPausedVideoThumb,
+        hasThumbNails,
+        setHasThumbnails,
+        thumbnailsIsVisible,
+        finalVideoThumb,
+        setFinalVideoThumb,
+        updateThumbnails,
+        setThumbnails,
       }}
     >
       {children}

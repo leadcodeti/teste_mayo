@@ -30,6 +30,7 @@ import { api } from "../../services/api";
 import { Continuar } from "./components/continuar";
 import { FakeBarInVideo } from "./components/fakeBar";
 import { AutoPlay } from "./components/autoPlay";
+import { Thumbnails } from "./components/thumbnails";
 
 export default function PlayerVideo() {
   const {
@@ -66,6 +67,9 @@ export default function PlayerVideo() {
     setHasFakeBar,
     setCurrentVideoTime,
     hasAutoPlay,
+    setPausedVideoThumb,
+    hasThumbNails,
+    setFinalVideoThumb,
   } = useVideoContext();
 
   console.log("tempo", duration);
@@ -132,7 +136,12 @@ export default function PlayerVideo() {
 
   setCurrentVideoTime(player.current?.currentTime);
 
-  console.log("dura~ção? ", player.current?.duration);
+  setPausedVideoThumb(player.current?.paused);
+
+  let variavel = player.current?.currentTime == player.current?.duration;
+
+  console.log("resultado da varivavel", variavel);
+  setFinalVideoThumb(variavel);
 
   useEffect(() => {
     api(`/videos`).then((res) => {
@@ -175,6 +184,7 @@ export default function PlayerVideo() {
           {hasContinue ? <Continuar /> : ""}
           {hasFakeBar ? <FakeBarInVideo /> : ""}
           {hasAutoPlay ? <AutoPlay /> : ""}
+          {hasThumbNails ? <Thumbnails /> : ""}
 
           {/* <div className={styles.teste}></div> */}
           <ButtonInsideVideo

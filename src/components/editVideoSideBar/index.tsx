@@ -37,6 +37,8 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
     hasContinue,
     autoPlayIsVisible,
     hasAutoPlay,
+    hasThumbNails,
+    thumbnailsIsVisible,
   } = useVideoContext();
 
   return (
@@ -67,12 +69,6 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                             <BsPalette />
                             Design
                           </span>
-                          <label className={stylesSwitch.switch}>
-                            <input type="checkbox" />
-                            <span
-                              className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
-                            ></span>
-                          </label>
                         </div>
                       </Accordion.Header>
                       <Accordion.Body className="p-0">
@@ -88,7 +84,11 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                             Thumbnails
                           </span>
                           <label className={stylesSwitch.switch}>
-                            <input type="checkbox" />
+                            <input
+                              onClick={() => thumbnailsIsVisible()}
+                              type="checkbox"
+                              checked={hasThumbNails}
+                            />
                             <span
                               className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
                             ></span>
@@ -177,12 +177,6 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                             <BsHandIndexThumb />
                             Botões
                           </span>
-                          <label className={stylesSwitch.switch}>
-                            <input type="checkbox" />
-                            <span
-                              className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
-                            ></span>
-                          </label>
                         </div>
                       </Accordion.Header>
                       <Accordion.Body className="p-0">

@@ -16,8 +16,6 @@ export default function MyAccount() {
   const { register, handleSubmit, reset, setValue, watch } =
     useForm<newUserDataProps>();
 
-  console.log(user);
-
   function submitUpdate(data: newUserDataProps) {
     const formData = new FormData();
     formData.append("avatar", data.avatar[0]);

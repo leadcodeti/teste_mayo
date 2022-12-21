@@ -87,7 +87,6 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
     async function getDesign() {
       const response = await api.get(`/designs/${videosId.currentVideoId}`);
       setBackgroundColor(response.data.background_color);
-      console.log("Teste", response.data);
     }
 
     async function getControls() {

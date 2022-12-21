@@ -23,16 +23,24 @@ export interface newUserDataProps {
   avatar?: FormData | any;
 }
 
+export interface ThumbnailsProps {
+  thumbnail: {
+    start_image?: FormData | any;
+    pause_image?: FormData | any;
+    final_image?: FormData | any;
+  };
+}
+
 export interface videoPrppertyTypes {
-  backgroundColor:string
-  activeBigPlaygroung:boolean;
-  activeSmalPlayground:boolean;
-  displayVolume:boolean;  
-  displayFullScrean:boolean;
-  displayProgressBar:boolean;
-  displayPlayTime:boolean;
-  displayNextBtn:boolean;
-  displayPrevBtn:boolean;
+  backgroundColor: string;
+  activeBigPlaygroung: boolean;
+  activeSmalPlayground: boolean;
+  displayVolume: boolean;
+  displayFullScrean: boolean;
+  displayProgressBar: boolean;
+  displayPlayTime: boolean;
+  displayNextBtn: boolean;
+  displayPrevBtn: boolean;
 }
 
 export interface VideoTypes {
