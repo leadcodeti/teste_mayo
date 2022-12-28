@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  justify-content: end;
+  margin-top: 1rem;
+  div {
+    margin: 0.5rem;
+    padding: 1rem;
+    background: #303030;
+    color: var(--white);
+    border-radius: 5px;
+    height: 25px;
+    width: 35px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    &:hover {
+      filter: brightness(0.85);
+    }
+  }
+
+  .paginationPrevItems,
+  .paginationNextItems {
+    margin: 0.5rem;
+    padding: 1rem;
+    background: #303030;
+    color: var(--white);
+    border-radius: 5px;
+    height: 25px;
+    width: 35px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(0.85);
+    }
+  }
+}
