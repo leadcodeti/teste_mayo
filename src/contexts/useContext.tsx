@@ -295,19 +295,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         is_visible: isVisibleButtonBelow,
       }
     );
-    // .then((res) => {
-    //   setBelowButtonProps({
-    //     is_visible: res.data.is_visible,
-    //     video_id: currentVideo.currentVideoId,
-    //   });
-    // });
-
-    await api(`/cta_buttons/${videosId.currentVideoId}`).then((res) => {
-      const belowFiltered = res.data.filter((e: any) => e.type === "below");
-      setBelowButtonProps({
-        is_visible: belowFiltered[0].is_visible,
-      });
-    });
   }
 
   const { "mayoPLayer.token": token } = parseCookies();
@@ -387,7 +374,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     //   console.log("thumbnails res", res.data);
     // });
   }
-  console.log("data thumb", thumbnails);
+  // console.log("data thumb", thumbnails);
 
   const getAllVideos = useCallback(async () => {
     if (user) {

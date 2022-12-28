@@ -23,58 +23,28 @@ export function BelowVideo() {
   const { register, handleSubmit, watch } = useForm<ButtonUpdateProps>();
   const {
     buttonOption,
-    currentVideo,
+    videosId,
     closeModalNewButton,
     setBelowButtonProps,
   } = useVideoContext();
 
-  useEffect(() => {
-    currentVideo.currentVideoId;
-  }, [currentVideo.currentVideoId]);
-
-  async function updateButton({
-    text,
-    size,
-    background,
-    background_hover,
-    position,
-    start,
-    end,
-    text_color,
-    link,
-  }: ButtonUpdateProps) {
-    await api.put(
-      `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
-      {
-        text,
-        size,
-        background,
-        background_hover,
-        position,
-        start,
-        end,
-        text_color,
-        link,
-        video_id: currentVideo.currentVideoId,
-      }
+  async function updateButton(data: ButtonUpdateProps) {
+    const response = await api.put(
+      `/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`,
+        {
+          position: data.position,
+          text: data.text,
+          link: data.link,
+          size: data.size,
+          start: data.start,
+          end: data.end,
+          text_color: data.text_color,
+          background_color: data.background,
+          background_hover: data.background_hover,
+        }
     );
 
-    await api(
-      `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`
-    ).then((res) => {
-      const data = res.data;
-      const belowFiltered = data.filter((e: any) => e.type === "below");
-      const belowResult = belowFiltered[0];
-      setBelowButtonProps({
-        background_color: belowResult.background_color,
-        bacgrkound_hover: belowResult.background_hover,
-        size: belowResult.size,
-        text: belowResult.text,
-        text_color: belowResult.text_color,
-        link: belowResult.link,
-        is_visible: belowResult.is_visible,
-      });
-    });
+    console.log("BUTONS PUT",response.data);
 
     closeModalNewButton();
     toast.success("Botão salvo");

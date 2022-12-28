@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { usePlayeContext } from "../contexts/usePlayerContext";
-
 
 export function DesignFunction() {
 
@@ -12,57 +10,47 @@ export function DesignFunction() {
     setVolume,
     setNextBtn,
     setPrevBtn,
-    setProgessBar
+    setProgessBar,
+    bigPlay,
+    nextBtn,
+    playTime,
+    prevBtn,
+    fullScrean,
+    smalPlay,
+    volume,
+    progressBar
   } = usePlayeContext();
 
-  const[activeBigPlaygroung,setActivePlayground] = useState(false);
-  const[activeSmalPlayground,setActiveSmalPlayground] = useState(false);
-  const[displayVolume,setDisplayVolume] = useState(false);
-  const[displayFullScrean,setDisplayFullScrean] = useState(false);
-  const[displayProgressBar,setDisplayProgressBar] = useState(false);
-  const[displayPlayTime,setDisplayPlayTime] = useState(false);
-  const[displayNextBtn,setDisplayNextBtn] = useState(false);
-  const[displayPrevBtn,setDisplayPrevBtn] = useState(false);
-
-
   function activeBigPlay() {
-    setActivePlayground(!activeBigPlaygroung);
-    setBigPlay(activeBigPlaygroung ? true : false);
+    setBigPlay(!bigPlay);
   }
 
   function activeSmalPlay() {
-    setActiveSmalPlayground(!activeSmalPlayground);
-    setSmalPlay(activeSmalPlayground ? true : false);
+    setSmalPlay(!smalPlay);
   }
 
   function activeVolume() {
-    setDisplayVolume(!displayVolume);
-    setVolume(displayVolume ? true : false);
+    setVolume(!volume);
   }
 
   function activePlayTime() {
-    setDisplayPlayTime(!displayPlayTime);
-    setPlayTime(displayPlayTime ? true : false);
+    setPlayTime(!playTime);
   }
 
   function activeFullScrean() {
-    setDisplayFullScrean(!displayFullScrean);
-    setFullScrean(displayFullScrean ? true : false);
+    setFullScrean(!fullScrean);
   }
 
   function activeProgressBar() {
-    setDisplayProgressBar(!displayProgressBar);
-    setProgessBar(displayProgressBar ? true : false);
+    setProgessBar(!progressBar);
   }
 
   function activeNextBtn() {
-    setDisplayNextBtn(!displayNextBtn);
-    setNextBtn(displayNextBtn ? true : false);
+    setNextBtn(!nextBtn);
   }
 
   function activePrevBtn() {
-    setDisplayPrevBtn(!displayPrevBtn);
-    setPrevBtn(displayPrevBtn ? true : false);
+    setPrevBtn(!prevBtn);
   }
 
   return { 
@@ -74,15 +62,6 @@ export function DesignFunction() {
     activeNextBtn,
     activePrevBtn,
     activeBigPlay,
-  
-    activeBigPlaygroung,
-    activeSmalPlayground,
-    displayVolume,
-    displayFullScrean,
-    displayProgressBar,
-    displayPlayTime,
-    displayNextBtn,
-    displayPrevBtn
   }
 
 }

@@ -64,8 +64,10 @@ export function Botoes() {
           }
         })()}
       </Modal>
+
       <div className={styles.buttons}>
         <button onClick={openModalNewButton}>Adicionar novo botão</button>
+        
         <div>
           {isVisibleButtonBelow ? (
             <label style={{ fontSize: "14px" }}>

@@ -2,7 +2,8 @@
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
-  padding-top: 2rem;
+  height: 100%;
+  padding: 2rem 0;
 
   .detailsVideo {
     display: flex;
@@ -49,10 +50,12 @@
     height: 60vh;
 
     .player {
+      max-width: 800px;
       width: 100% !important;
-      height: 100% !important;
       z-index: 0;
       position: relative;
+      margin: 0 auto;
+      margin-bottom: 2rem;
 
       .insideVideoButton {
         position: absolute;

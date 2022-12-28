@@ -14,7 +14,10 @@ export function Design() {
     watch,
     formState: { errors },
   } = useForm<videoPrppertyTypes>();
-  const { backgroundColor, setBackgroundColor } = usePlayeContext();
+  const { backgroundColor, 
+          setBackgroundColor,bigPlay,
+          fullScrean,playTime,nextBtn,progressBar,
+          prevBtn,smalPlay,volume,getControls,getDesign } = usePlayeContext();
   const { videosId } = useVideoContext();
   const {
     activeSmalPlay,
@@ -25,15 +28,6 @@ export function Design() {
     activeNextBtn,
     activePrevBtn,
     activeBigPlay,
-
-    activeBigPlaygroung,
-    activeSmalPlayground,
-    displayVolume,
-    displayFullScrean,
-    displayProgressBar,
-    displayPlayTime,
-    displayNextBtn,
-    displayPrevBtn,
   } = DesignFunction();
   const { currentVideo } = useVideoContext();
 
@@ -53,10 +47,16 @@ export function Design() {
         has_volume: data.displayVolume,
         has_fullscreen: data.displayFullScrean,
       };
+      // getControls();
+      // getDesign()
 
       const res = api.put(`/designs/${videosId.currentVideoId}`, newDesignData);
       console.log(res);
-      api.put(`/controls/${videosId.currentVideoId}`, newControlersData);
+
+      const res1 = api.put(`/controls/${videosId.currentVideoId}`, newControlersData);
+      console.log(res1);
+      
+      console.log("DATA1:", res1);
     }
   };
 
@@ -75,6 +75,7 @@ export function Design() {
           />
         </span>
       </div>
+
       <div className={styles.controls}>
         <p>Controles</p>
 
@@ -82,7 +83,7 @@ export function Design() {
           <input
             id="botaoPlayGrande"
             {...register("activeBigPlaygroung")}
-            checked={!activeBigPlaygroung}
+            checked={bigPlay}
             type="checkbox"
             onClick={activeBigPlay}
           />
@@ -94,7 +95,7 @@ export function Design() {
           <input
             id="botaoPlayPequeno"
             {...register("activeSmalPlayground")}
-            checked={!activeSmalPlayground}
+            checked={smalPlay}
             type="checkbox"
             onClick={activeSmalPlay}
           />
@@ -104,9 +105,9 @@ export function Design() {
 
         <label className={styles.checkContainer}>
           <input
-            id="botaoPlayGrande"
+            id="botaoProgressBar"
             {...register("displayProgressBar")}
-            checked={!displayProgressBar}
+            checked={progressBar}
             type="checkbox"
             onClick={activeProgressBar}
           />
@@ -116,9 +117,9 @@ export function Design() {
 
         <label className={styles.checkContainer}>
           <input
-            id="botaoPlayGrande"
+            id="botaoDisplayTime"
             {...register("displayPlayTime")}
-            checked={!displayPlayTime}
+            checked={playTime}
             type="checkbox"
             onClick={activePlayTime}
           />
@@ -128,9 +129,9 @@ export function Design() {
 
         <label className={styles.checkContainer}>
           <input
-            id="botaoPlayGrande"
+            id="botaoPrev"
             {...register("displayPrevBtn")}
-            checked={!displayPrevBtn}
+            checked={prevBtn}
             type="checkbox"
             onClick={activePrevBtn}
           />
@@ -140,21 +141,21 @@ export function Design() {
 
         <label className={styles.checkContainer}>
           <input
-            id="botaoPlayGrande"
-            {...register("displayVolume")}
-            checked={!displayNextBtn}
+            id="botaoNext"
+            {...register("displayNextBtn")}
+            checked={nextBtn}
             type="checkbox"
             onClick={activeNextBtn}
           />
           <span className={styles.checkmark}></span>
           <p>Avançar 10s</p>
-        </label>
+        </label> 
 
         <label className={styles.checkContainer}>
           <input
-            id="botaoPlayGrande"
+            id="botaoVolume"
             {...register("displayVolume")}
-            checked={!displayVolume}
+            checked={volume}
             type="checkbox"
             onClick={activeVolume}
           />
@@ -164,9 +165,9 @@ export function Design() {
 
         <label className={styles.checkContainer}>
           <input
-            id="botaoPlayGrande"
+            id="botaoFullScrean"
             {...register("displayFullScrean")}
-            checked={!displayFullScrean}
+            checked={fullScrean}
             type="checkbox"
             onClick={activeFullScrean}
           />

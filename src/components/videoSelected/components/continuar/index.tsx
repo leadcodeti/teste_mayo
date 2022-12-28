@@ -4,6 +4,7 @@ import { BiPlayCircle } from "react-icons/bi";
 import { VscDebugRestart } from "react-icons/vsc";
 import { useEffect, useState, useRef } from "react";
 import { ClickToPlay } from "@vime/react";
+import { useSideBarContext } from "../../../../contexts/thirdContext";
 
 export function Continuar() {
   const {
@@ -13,21 +14,23 @@ export function Continuar() {
     currentVideoTime,
     videoTime,
   } = useVideoContext();
+  
   const [dnoneContainer, setDnoneContainer] = useState("flex");
+  const{ keepWatching, restartVideo} = useSideBarContext()
+
   useEffect(() => {
     continuarProps;
     setContinuarProps;
   }, [continuarProps, setContinuarProps]);
-  const player = useRef<HTMLVmPlayerElement>(null);
-
-  console.log("playbackEnded ?", player.current?.duration);
 
   function closeContinuar() {
     setDnoneContainer("none");
+    keepWatching()
   }
 
   function restartTime() {
     setDnoneContainer("none");
+    restartVideo()
   }
 
   return (

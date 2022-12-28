@@ -6,14 +6,14 @@ import { usePlayeContext } from "../../contexts/usePlayerContext";
 import { EmbedModal } from "../embedModalVideo/embedModal";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
-import { ButtonBelowVideo } from "../editVideoSideBar/components/botoes/buttons";
 import { useVideoContext } from "../../contexts/useContext";
+import { BelowButon } from "../editVideoSideBar/components/botoes/belowButtons";
 
 const PlayerVideo = dynamic(() => import("./player"), {
   ssr: false,
 });
 
-export function VideoSelected() {
+export  function VideoSelected() {
   const { onGenerate } = usePlayeContext();
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
@@ -53,7 +53,6 @@ export function VideoSelected() {
   }, [currentVideo.currentVideoId, user, videosId]);
 
 
-
   useEffect(() => {
     api(`/cta_buttons/${videosId.currentVideoId}`).then((res) => {
       const data = res.data;
@@ -75,6 +74,7 @@ export function VideoSelected() {
   return (
     <div className={styles.container}>
       <EmbedModal />
+
       <div className={styles.detailsVideo}>
         <input type="text" placeholder="Video teste" />
         <button onClick={onGenerate}>
@@ -87,35 +87,7 @@ export function VideoSelected() {
 
         <div className={styles.buttonVideo}>
           {isVisibleButtonBelow ? (
-            <ButtonBelowVideo
-              href={"#"}
-              target="_blank"
-              background={belowButtonProps.background_color}
-              background_hover={belowButtonProps.background_hover}
-              text_color={belowButtonProps.text_color}
-              sizeWidth={
-                belowButtonProps.size === "125"
-                  ? "180px"
-                  : belowButtonProps.size === "150"
-                  ? "250px"
-                  : belowButtonProps.size === "250"
-                  ? "350px"
-                  : ""
-              }
-              sizeFont={
-                belowButtonProps.size === "125"
-                  ? "100%"
-                  : belowButtonProps.size === "150"
-                  ? "150%"
-                  : belowButtonProps.size === "250"
-                  ? "200%"
-                  : ""
-              }
-            >
-              {belowButtonProps.text == ""
-                ? "Saiba mais"
-                : belowButtonProps.text}
-            </ButtonBelowVideo>
+            <BelowButon />
           ) : (
             ""
           )}

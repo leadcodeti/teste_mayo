@@ -3,6 +3,7 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -32,6 +33,8 @@ interface contextProps {
   playTime: boolean;
   fullScrean: boolean;
   embedString: string;
+  getControls:() => Promise<void>;
+  getDesign:() => Promise<void>;
 }
 
 interface ProviderProps {
@@ -78,32 +81,38 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
     div = element.innerHTML;
     return div;
   };
-
-  useEffect(() => {
+  
+  const getDesign = useCallback(async () => {
     if (!videosId.currentVideoId) {
       return;
     }
 
-    async function getDesign() {
-      const response = await api.get(`/designs/${videosId.currentVideoId}`);
-      setBackgroundColor(response.data.background_color);
-    }
+    const response = await api.get(`/designs/${videosId.currentVideoId}`);
+    setBackgroundColor(response.data.background_color);
+    console.log("BACK_color",response.data)
+    
+  },[videosId.currentVideoId,setBackgroundColor])
 
-    async function getControls() {
-      const response = await api.get(`/controls/${videosId.currentVideoId}`);
-      setBigPlay(response.data.has_big_play_button);
-      setSmalPlay(response.data.has_small_play_button);
-      setVolume(response.data.has_volume);
-      setFullScrean(response.data.has_fullscreen);
-      setProgessBar(response.data.has_progress_bar);
-      setPlayTime(response.data.has_video_duration);
-      setNextBtn(response.data.has_foward_10_seconds);
-      setPrevBtn(response.data.has_back_10_seconds);
-    }
+  const getControls = useCallback(async () => {
+    const response = await api.get(`/controls/${videosId.currentVideoId}`);
+    setBigPlay(response.data.has_big_play_button);
+    setSmalPlay(response.data.has_small_play_button);
+    setVolume(response.data.has_volume);
+    setFullScrean(response.data.has_fullscreen);
+    setProgessBar(response.data.has_progress_bar);
+    setPlayTime(response.data.has_video_duration);
+    setNextBtn(response.data.has_foward_10_seconds);
+    setPrevBtn(response.data.has_back_10_seconds);
+
+    console.log("BACK-1",response.data)
+  },[videosId.currentVideoId,setNextBtn,setBigPlay, setVolume, setPrevBtn, setPlayTime,setProgessBar,setFullScrean,setSmalPlay])
+
+  useEffect(() => {
+    getDesign(); 
     getControls();
-    getDesign();
-  }, [videosId.currentVideoId, setBackgroundColor]);
+  }, [getControls, getDesign]);
 
+ 
   return (
     <context.Provider
       value={{
@@ -127,6 +136,8 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
         volume,
         nextBtn,
         prevBtn,
+        getControls,
+        getDesign
       }}
     >
       {children}

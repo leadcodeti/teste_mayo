@@ -7,10 +7,12 @@ import { AuthProvider } from "../contexts/useContext";
 import { useEffect, useState } from "react";
 import { ContextPlayerProvider } from "../contexts/usePlayerContext";
 import { ToastContainer } from "react-toastify";
+import SideBarProvider from "../contexts/thirdContext";
+
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [showCild, setShowChild] = useState(false);
 
+  const [showCild, setShowChild] = useState(false);
   useEffect(() => {
     setShowChild(true);
   }, []);
@@ -26,8 +28,10 @@ export default function App({ Component, pageProps }: AppProps) {
          autoClose={2000}
        />
         <ContextPlayerProvider>
-          <GlobalStyle />
-          <Component {...pageProps} />
+          <SideBarProvider>
+             <GlobalStyle />
+             <Component {...pageProps} />
+          </SideBarProvider>
         </ContextPlayerProvider>
       </AuthProvider>
     </>
