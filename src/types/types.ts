@@ -1,4 +1,3 @@
-
 export interface UserOptionProps {
   setUserOption: (setUserOption: string) => void;
 }
@@ -21,11 +20,9 @@ export interface newUserDataProps {
 }
 
 export interface ThumbnailsProps {
-  thumbnail: {
-    start_image?: FormData | any;
-    pause_image?: FormData | any;
-    final_image?: FormData | any;
-  };
+  start_image?: FormData | any;
+  pause_image?: FormData | any;
+  final_image?: FormData | any;
 }
 
 export interface videoPrppertyTypes {

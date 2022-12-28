@@ -73,7 +73,6 @@ interface AuthContextProps {
   openModalNewVideo: () => void;
   closeModalNewVideo: () => void;
   user: User | undefined;
-  thumbnails: Thumbnails | undefined;
   isAuthenticated: boolean;
   setAllVideo: Dispatch<SetStateAction<VideoTypes[]>>;
   setCurrentVideo: Dispatch<SetStateAction<CurrentVideoType>>;
@@ -131,7 +130,13 @@ interface AuthContextProps {
   setPausedVideoThumb: any;
   finalVideoThumb: boolean | undefined;
   setFinalVideoThumb: any;
-  setThumbnails: Dispatch<SetStateAction<Thumbnails | undefined>>;
+  startVideoThumb: boolean;
+  setStartVideoThumb: any;
+  thumbnailsProps: any;
+  setThumbnailsProps: any;
+  page: number;
+  setPage: (value: number) => void;
+  totalUserVideos: number;
 }
 
 type AuthProviderProps = {
@@ -177,7 +182,6 @@ export function signOut() {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
-  const [thumbnails, setThumbnails] = useState<Thumbnails>();
   const isAuthenticated = !!user;
   const [modalOpen, setModalOpen] = useState(false);
   const [modalNewButtonOpen, setModalNewButtonOpen] = useState(false);
@@ -200,6 +204,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [formatedTime, setFormatedTime] = useState(0);
   const [pausedVideoThumb, setPausedVideoThumb] = useState(false);
   const [finalVideoThumb, setFinalVideoThumb] = useState(false);
+  const [startVideoThumb, setStartVideoThumb] = useState(false);
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
     background_hover: "",
@@ -239,6 +244,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     height: "",
     finish: false,
   });
+  const [thumbnailsProps, setThumbnailsProps] = useState({
+    start_image: "",
+    pause_image: "",
+    final_image: "",
+  });
+
+  const [page, setPage] = useState(1);
+  const [totalUserVideos, setTotalUserVideos] = useState(0);
 
   async function isVisibleContinuar() {
     await api(`/resume_video_options/${videosId.currentVideoId}`).then(
@@ -378,7 +391,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const getAllVideos = useCallback(async () => {
     if (user) {
-      const response = await api.get(`/videos`);
+      const response = await api.get(`/videos?page=${page}`);
+      setTotalUserVideos(response.data.total);
       const data = response.data.items.map((res: VideoTypes) => {
         return {
           id: res.id,
@@ -395,7 +409,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setAllVideo(data);
     }
-  }, [user]);
+  }, [user, page]);
 
   async function fakeBarIsVibiles() {
     setHasFakeBar(!hasFakeBar);
@@ -468,7 +482,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         isAuthenticated,
         setCurrentVideo,
         user,
-        thumbnails,
         allVideo,
         setAllVideo,
         videosId,
@@ -532,7 +545,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         finalVideoThumb,
         setFinalVideoThumb,
         updateThumbnails,
-        setThumbnails,
+        thumbnailsProps,
+        setThumbnailsProps,
+        page,
+        setPage,
+        totalUserVideos,
+        startVideoThumb,
+        setStartVideoThumb,
       }}
     >
       {children}

@@ -5,12 +5,13 @@ import { OptionsMenu } from "./optionsMenu";
 import { useClickOutside } from "@react-hooks-library/core";
 import { useVideoContext } from "../../contexts/useContext";
 import { VideoInfo } from "./videoInfo";
+import { Pagination } from "../Pagination";
 
 export function CardVideo() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeVideoId, setActiveVideoId] = useState("");
   const [videoPlayerId, setVideoPlayerId] = useState("");
-  const { allVideo } = useVideoContext();
+  const { allVideo, page, setPage, totalUserVideos } = useVideoContext();
 
   const ref = useRef(null);
 
@@ -29,37 +30,44 @@ export function CardVideo() {
   }
 
   return (
-    <div className={styles.cardVideo} ref={ref}>
-      <div className={styles.video}>
-        {allVideo.map((video) => (
-          <div key={video.id} className={styles.videoContent}>
+    <>
+      <div className={styles.cardVideo} ref={ref}>
+        <div className={styles.video}>
+          {allVideo.map((video) => (
+            <div key={video.id} className={styles.videoContent}>
+              <VideoInfo video={video} />
 
-           <VideoInfo video={video} />
+              <div className={styles.changes}>
+                <button>{"</>"}</button>
+                {isOpen ? (
+                  <button onClick={closeOptions}>{"..."}</button>
+                ) : (
+                  <button
+                    onClick={() =>
+                      openOptions(video.id, video.youtube_video_id)
+                    }
+                  >
+                    {"..."}
+                  </button>
+                )}
 
-            <div className={styles.changes}>
-              <button>{"</>"}</button>
-              {isOpen ? (
-                <button onClick={closeOptions}>{"..."}</button>
-              ) : (
-                <button
-                  onClick={() => openOptions(video.id, video.youtube_video_id)}
-                >
-                  {"..."}
-                </button>
-              )}
-
-              {activeVideoId === video.id ? (
-                <OptionsMenu 
-                 currentVideoPlayerId={videoPlayerId}
-                 videoId={activeVideoId} 
-                 isOpen={isOpen}
-                
-                />
-              ) : null}
+                {activeVideoId === video.id ? (
+                  <OptionsMenu
+                    currentVideoPlayerId={videoPlayerId}
+                    videoId={activeVideoId}
+                    isOpen={isOpen}
+                  />
+                ) : null}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+      <Pagination
+        currentPage={page}
+        totalCountOfRegisters={totalUserVideos}
+        onPageChange={setPage}
+      />
+    </>
   );
 }

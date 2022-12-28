@@ -6,18 +6,29 @@ import { usePlayeContext } from "../../../../contexts/usePlayerContext";
 import Image from "next/image";
 
 export function Thumbnails() {
-  const { pausedVideoThumb, setPausedVideoThumb, finalVideoThumb, thumbnails } =
-    useVideoContext();
+  const {
+    pausedVideoThumb,
+    finalVideoThumb,
+    thumbnailsProps,
+    startVideoThumb,
+  } = useVideoContext();
   const { backgroundColor } = usePlayeContext();
 
+  console.log("teste de thumbnailsProps", thumbnailsProps);
+
   return (
-    <Container pausedVideo={pausedVideoThumb} finishedVideo={finalVideoThumb}>
-      {pausedVideoThumb ? (
+    <Container
+      startVideo={startVideoThumb}
+      pausedVideo={pausedVideoThumb}
+      finishedVideo={finalVideoThumb}
+    >
+      {startVideoThumb ? (
         <>
           <ClickToPlay />
-          {/* <img src="/images/thumbVideo.jpg" />{" "} */}
           <Image
-            src={thumbnails?.pause_image ? thumbnails.pause_image : ""}
+            src={
+              thumbnailsProps?.start_image ? thumbnailsProps.start_image : ""
+            }
             height={180}
             width={600}
             alt=""
@@ -29,11 +40,32 @@ export function Thumbnails() {
       ) : (
         ""
       )}
-      {finalVideoThumb && !pausedVideoThumb ? (
+
+      {pausedVideoThumb && !startVideoThumb && !finalVideoThumb ? (
         <>
           <ClickToPlay />
           <Image
-            src={thumbnails?.final_image ? thumbnails.final_image : ""}
+            src={
+              thumbnailsProps?.pause_image ? thumbnailsProps.pause_image : ""
+            }
+            height={180}
+            width={600}
+            alt=""
+          />
+          <span>
+            <BsPlayCircle style={{ color: backgroundColor }} />
+          </span>{" "}
+        </>
+      ) : (
+        ""
+      )}
+      {finalVideoThumb ? (
+        <>
+          <ClickToPlay />
+          <Image
+            src={
+              thumbnailsProps?.final_image ? thumbnailsProps.final_image : ""
+            }
             height={180}
             width={600}
             alt=""

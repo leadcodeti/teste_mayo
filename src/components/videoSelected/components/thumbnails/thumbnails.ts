@@ -3,10 +3,12 @@ import styled from "styled-components";
 interface ThumbnailsProps {
   pausedVideo: any;
   finishedVideo: any;
+  startVideo: any;
 }
 
 export const Container = styled.div<ThumbnailsProps>`
-  z-index: ${(props) => (props.pausedVideo || props.finishedVideo ? 999 : "")};
+  z-index: ${(props) =>
+    props.pausedVideo || props.finishedVideo || props.startVideo ? 999 : ""};
   position: absolute;
   width: 100%;
   height: 100%;
