@@ -6,17 +6,19 @@ import { useEffect, useState, useRef } from "react";
 import { ClickToPlay } from "@vime/react";
 import { useSideBarContext } from "../../../../contexts/thirdContext";
 
-export function Continuar() {
+interface ContinueProps {
+  continueWacth:() => void; 
+  restartVideo:() => void;
+}
+
+export function Continuar({continueWacth, restartVideo} : ContinueProps) {
   const {
     continuarProps,
     setContinuarProps,
-    setFormatedTime,
-    currentVideoTime,
-    videoTime,
   } = useVideoContext();
   
   const [dnoneContainer, setDnoneContainer] = useState("flex");
-  const{ keepWatching, restartVideo} = useSideBarContext()
+
 
   useEffect(() => {
     continuarProps;
@@ -25,7 +27,7 @@ export function Continuar() {
 
   function closeContinuar() {
     setDnoneContainer("none");
-    keepWatching()
+    continueWacth();
   }
 
   function restartTime() {

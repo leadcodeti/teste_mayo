@@ -17,8 +17,6 @@ interface AuthContextProps {
   setCurrentTimeVideo:Dispatch<SetStateAction<number>>;
   lastTimeWacth: number;
   getCurrentVideoTime:() => void,
-  keepWatching:() => void,
-  restartVideo:()=> void,
   playerRef: RefObject<HTMLVmPlayerElement>
 }
 
@@ -32,8 +30,6 @@ export default function SideBarProvider({ children }: AuthProviderProps) {
    const playerRef = useRef<HTMLVmPlayerElement>(null);
    const [lastTimeWacth, setLastWacth] = useState(0)
    const [currentTimeVideo, setCurrentTimeVideo] = useState(0)
-
-   console.log('TEMPO', lastTimeWacth)
    
   function getCurrentVideoTime() {
     if(currentTimeVideo === 0) {
@@ -42,16 +38,13 @@ export default function SideBarProvider({ children }: AuthProviderProps) {
       localStorage.setItem("@keepWacth", JSON.stringify({currentTimeVideo}));
     }
   }
-
-  function keepWatching() {
+  
+  useEffect(() => {
     const lastTimeWatch = JSON.parse(localStorage.getItem("@keepWacth") || "");
     setLastWacth(lastTimeWatch.currentTimeVideo)
-  }
-
-  function restartVideo() {
-    setLastWacth(0)
-  }
-
+  },[])
+  
+  
   return (
     <AuthContext.Provider
       value={{
@@ -59,8 +52,6 @@ export default function SideBarProvider({ children }: AuthProviderProps) {
         setCurrentTimeVideo,
         playerRef,
         lastTimeWacth,
-        keepWatching,
-        restartVideo
       }}
     >
       {children}

@@ -31,6 +31,7 @@ import { Continuar } from "./components/continuar";
 import { FakeBarInVideo } from "./components/fakeBar";
 import { AutoPlay } from "./components/autoPlay";
 import { Thumbnails } from "./components/thumbnails";
+import { useSideBarContext } from "../../contexts/thirdContext";
 
 export default function PlayerVideo() {
   const {
@@ -52,6 +53,7 @@ export default function PlayerVideo() {
   );
 
   const [duration] = usePlayerContext(player, "duration", -1);
+  const { lastTimeWacth, getCurrentVideoTime, setCurrentTimeVideo} = useSideBarContext()
 
   const {
     currentVideo,
@@ -73,11 +75,11 @@ export default function PlayerVideo() {
     setStartVideoThumb,
   } = useVideoContext();
 
-  console.log("tempo", duration);
 
   useEffect(() => {
     setVideoTime(duration);
-  }, [duration, setVideoTime]);
+    setCurrentTimeVideo(currentTime)
+  }, [currentTime, duration, setCurrentTimeVideo, setVideoTime]);
 
   const onSeekBackward = () => {
     if (currentTime < 5) return;
@@ -89,6 +91,15 @@ export default function PlayerVideo() {
     setCurrentTime(currentTime + 10);
   };
 
+  function continueWacth() {
+    const lastTimeWatch = JSON.parse(localStorage.getItem("@keepWacth") || "");
+    setCurrentTime(lastTimeWatch.currentTimeVideo)
+  }
+
+  function restartVideo() {
+    setCurrentTime(0)
+  }
+  
   const playerTheme: {} = {
     "--vm-player-theme": `${backgroundColor}`,
     position: "relative",
@@ -139,7 +150,6 @@ export default function PlayerVideo() {
 
   let finalThumb = player.current?.currentTime == player.current?.duration;
 
-  console.log("resultado da varivavel", finalThumb);
   setPausedVideoThumb(
     player.current?.paused && player.current?.currentTime > 1
   );
@@ -183,42 +193,11 @@ export default function PlayerVideo() {
               }
             `}
         >
-          {hasContinue ? <Continuar /> : ""}
+          {hasContinue ? <Continuar restartVideo={restartVideo} continueWacth={continueWacth} /> : ""}
           {hasFakeBar ? <FakeBarInVideo /> : ""}
           {hasAutoPlay ? <AutoPlay /> : ""}
           {hasThumbNails ? <Thumbnails /> : ""}
 
-          <ButtonInsideVideo
-            href={"#"}
-            target="_blank"
-            background={buttonProps.background_color}
-            background_hover={buttonProps.bacgrkound_hover}
-            text_color={buttonProps.text_color}
-            sizeWidth={
-              buttonProps.size === "125"
-                ? "180px"
-                : buttonProps.size === "150"
-                ? "250px"
-                : buttonProps.size === "250"
-                ? "350px"
-                : ""
-            }
-            sizeFont={
-              buttonProps.size === "125"
-                ? "100%"
-                : buttonProps.size === "150"
-                ? "150%"
-                : buttonProps.size === "250"
-                ? "200%"
-                : ""
-            }
-            className={`${buttonProps.text == "" ? styles.button : ""} ${
-              styles.buttonSize
-            }`}
-          >
-            {/* zindez do botão - ver no embed */}
-            {buttonProps.text}
-          </ButtonInsideVideo>
         </div>
         <Youtube videoId={videosId.currentPlayerId} />
 
@@ -228,7 +207,7 @@ export default function PlayerVideo() {
           <Spinner />
 
           <Controls fullWidth pin={"center"}>
-            <PlaybackControl hideTooltip={true} style={centeredPlayBack} />
+            <PlaybackControl hideTooltip={true} style={centeredPlayBack} onClick={getCurrentVideoTime}  />
           </Controls>
 
           <Controls fullWidth>
@@ -242,6 +221,7 @@ export default function PlayerVideo() {
               <PlaybackControl
                 style={{ display: `${smalPlay ? "flex" : "none"}` }}
                 hideTooltip={true}
+                onClick={getCurrentVideoTime} 
               />
 
               <ButtonsContainer>
