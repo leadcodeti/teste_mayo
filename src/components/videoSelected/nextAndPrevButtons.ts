@@ -2,13 +2,13 @@ import styled from "styled-components";
 
 
 interface NextButtonsProps {
-  background: string;
-  nextBtn: boolean;
+  background: string | undefined;
+  nextBtn: boolean | undefined;
 }
 
 interface PrevButtonsProps {
-  background: string;
-  prevBtn: boolean; 
+  background: string | undefined;
+  prevBtn: boolean | undefined; 
 }
 
 export const ButtonsContainer = styled.div`

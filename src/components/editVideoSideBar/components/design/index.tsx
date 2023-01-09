@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { UseMutateAsyncFunction, useQuery } from "react-query";
+import { toast } from "react-toastify";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
+import { PutDesignTypes } from "../../../../pages/api/post_put_functions";
 import { api } from "../../../../services/api";
-import { videoPrppertyTypes } from "../../../../types/types";
-import { DesignFunction } from "../../../../utils/designFunctions";
+import { BackgroundProps, ControllsTypes} from "../../../../types/types";
+import { DesignFunction } from "./controllFunctions";
+import { InputsController } from "./inputsControllers";
 import styles from "./styles.module.scss";
 
-export function Design() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<videoPrppertyTypes>();
-  const { backgroundColor, 
-          setBackgroundColor,bigPlay,
-          fullScrean,playTime,nextBtn,progressBar,
-          prevBtn,smalPlay,volume,getControls,getDesign } = usePlayeContext();
+interface DesignProps {
+  design: BackgroundProps | undefined;
+  designMutation: UseMutateAsyncFunction<BackgroundProps | undefined, unknown, PutDesignTypes, unknown>
+}
+
+export function Design({ design,designMutation }:DesignProps) {
+
+  const methods = useForm<ControllsTypes>();
+
+  const { backgroundColor, setBackgroundColor, controller} = usePlayeContext();
+
   const { videosId } = useVideoContext();
   const {
     activeSmalPlay,
@@ -28,14 +32,56 @@ export function Design() {
     activeNextBtn,
     activePrevBtn,
     activeBigPlay,
-  } = DesignFunction();
-  const { currentVideo } = useVideoContext();
 
-  const onSubmit: SubmitHandler<videoPrppertyTypes> = (data) => {
+    bigPlay,
+    nextBtn,
+    playTime,
+    prevBtn,
+    fullScrean,
+    smalPlay,
+    volume,
+    progressBar,
+  } = DesignFunction();
+
+  const [currentBackgroundColor, setCurrentBackgroundColor] = useState("");
+  const [newBackgroundColor, setnewBackgroundColor] = useState<string | undefined>("");
+  const colorRef = useRef<HTMLInputElement>(null);
+
+  console.log("CONTROLLER_2", controller);
+
+  function backgroundHandleClick() {
+    colorRef.current?.click();
+  }
+
+  useEffect(() => {
+
+    setnewBackgroundColor(design?.background_color);
+  
+    if (currentBackgroundColor) {
+      setBackgroundColor(currentBackgroundColor);
+    } else {
+      setBackgroundColor(newBackgroundColor);
+    }
+  }, [currentBackgroundColor, design?.background_color, newBackgroundColor, setBackgroundColor]);
+
+
+  const onSubmit: SubmitHandler<ControllsTypes> = async (data) => {
+
+    const currentVideoId = videosId.currentVideoId
     if (data) {
-      const newDesignData = {
-        background_color: data.backgroundColor,
-      };
+       
+      if(currentBackgroundColor) {
+        const newDesignData = {
+          background_color: currentBackgroundColor,
+        };
+       await designMutation({newDesignData,currentVideoId})
+        
+      } else if(!currentBackgroundColor) {
+        const newDesignData = {
+          background_color: newBackgroundColor,
+        };
+        await designMutation({newDesignData,currentVideoId})
+      }
 
       const newControlersData = {
         has_big_play_button: data.activeBigPlaygroung,
@@ -47,139 +93,100 @@ export function Design() {
         has_volume: data.displayVolume,
         has_fullscreen: data.displayFullScrean,
       };
-      // getControls();
-      // getDesign()
-
-      const res = api.put(`/designs/${videosId.currentVideoId}`, newDesignData);
-      console.log(res);
-
-      const res1 = api.put(`/controls/${videosId.currentVideoId}`, newControlersData);
-      console.log(res1);
-      
-      console.log("DATA1:", res1);
+          
+      api.put(`/controls/${videosId.currentVideoId}`, newControlersData);
+      toast.success("Alterações salvas!")
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider {...methods}>
+       <form onSubmit={methods.handleSubmit(onSubmit)}>
       <div className={styles.design}>
-        <span>
-          <label htmlFor="corBackground">Cor background</label>
+        <label>Cor background</label>
+        <label
+          className={styles.inputColor}
+          style={{ background: `${backgroundColor}` }}
+          onClick={backgroundHandleClick}
+        ></label>
+
+        <div className={styles.inputDisabled}>
           <input
             className={styles.colors}
             type="color"
-            id="corBackground"
+            ref={colorRef}
             value={backgroundColor}
-            {...register("backgroundColor")}
-            onChange={(e) => setBackgroundColor(e.target.value)}
+            onChange={(e) => setCurrentBackgroundColor(e.target.value)}
           />
-        </span>
+        </div>
       </div>
 
       <div className={styles.controls}>
         <p>Controles</p>
 
-        <label className={styles.checkContainer}>
-          <input
-            id="botaoPlayGrande"
-            {...register("activeBigPlaygroung")}
-            checked={bigPlay}
-            type="checkbox"
-            onClick={activeBigPlay}
-          />
-          <span className={styles.checkmark}></span>
-          <p>Botão play grande</p>
-        </label>
+        <InputsController 
+         checked={bigPlay ? controller.bigPlay : bigPlay}
+         handleClick={activeBigPlay} 
+         inputName="activeBigPlaygroung" 
+         inputText="Botão play grande"  
+        />
 
-        <label className={styles.checkContainer}>
-          <input
-            id="botaoPlayPequeno"
-            {...register("activeSmalPlayground")}
-            checked={smalPlay}
-            type="checkbox"
-            onClick={activeSmalPlay}
-          />
-          <span className={styles.checkmark}></span>
-          <p>Botão play pequeno</p>
-        </label>
+        <InputsController 
+         checked={smalPlay ? controller.smalPlay : bigPlay}
+         handleClick={activeSmalPlay} 
+         inputName="activeSmalPlayground" 
+         inputText="Botão play pequeno"  
+        />
 
-        <label className={styles.checkContainer}>
-          <input
-            id="botaoProgressBar"
-            {...register("displayProgressBar")}
-            checked={progressBar}
-            type="checkbox"
-            onClick={activeProgressBar}
-          />
-          <span className={styles.checkmark}></span>
-          <p>Barra de progresso</p>
-        </label>
+        <InputsController 
+         checked={controller.progressBar}
+         handleClick={activeProgressBar} 
+         inputName="displayProgressBar" 
+         inputText="Barra de progresso"  
+        />
 
-        <label className={styles.checkContainer}>
-          <input
-            id="botaoDisplayTime"
-            {...register("displayPlayTime")}
-            checked={playTime}
-            type="checkbox"
-            onClick={activePlayTime}
-          />
-          <span className={styles.checkmark}></span>
-          <p>Tempo de vídeo</p>
-        </label>
+        <InputsController 
+         checked={controller.playTime}
+         handleClick={activePlayTime} 
+         inputName="displayPlayTime" 
+         inputText="Tempo de vídeo"  
+        />
 
-        <label className={styles.checkContainer}>
-          <input
-            id="botaoPrev"
-            {...register("displayPrevBtn")}
-            checked={prevBtn}
-            type="checkbox"
-            onClick={activePrevBtn}
-          />
-          <span className={styles.checkmark}></span>
-          <p>Voltar 10s</p>
-        </label>
+        <InputsController 
+         checked={controller.prevBtn}
+         handleClick={activePrevBtn} 
+         inputName="displayPrevBtn" 
+         inputText="Voltar 10s"  
+       />
 
-        <label className={styles.checkContainer}>
-          <input
-            id="botaoNext"
-            {...register("displayNextBtn")}
-            checked={nextBtn}
-            type="checkbox"
-            onClick={activeNextBtn}
-          />
-          <span className={styles.checkmark}></span>
-          <p>Avançar 10s</p>
-        </label> 
+        <InputsController 
+         checked={controller.nextBtn}
+         handleClick={activeNextBtn} 
+         inputName="displayNextBtn" 
+         inputText="Avançar 10s"  
+       />
 
-        <label className={styles.checkContainer}>
-          <input
-            id="botaoVolume"
-            {...register("displayVolume")}
-            checked={volume}
-            type="checkbox"
-            onClick={activeVolume}
-          />
-          <span className={styles.checkmark}></span>
-          <p>Volume</p>
-        </label>
+       <InputsController 
+         checked={controller.volume}
+         handleClick={activeVolume} 
+         inputName="displayVolume" 
+         inputText="volume"  
+       />
 
-        <label className={styles.checkContainer}>
-          <input
-            id="botaoFullScrean"
-            {...register("displayFullScrean")}
-            checked={fullScrean}
-            type="checkbox"
-            onClick={activeFullScrean}
-          />
-          <span className={styles.checkmark}></span>
-          <p>Fullscreen</p>
-        </label>
-
+        <InputsController 
+         checked={controller.fullScrean}
+         handleClick={activeFullScrean} 
+         inputName="displayFullScrean" 
+         inputText="Fullscreen"  
+        />
+      
         <div className={styles.saveOrCancel}>
-          <button>Cancelar</button>
+          <button type="reset">Cancelar</button>
           <button type="submit">Salvar</button>
         </div>
       </div>
     </form>
+    </FormProvider>
+   
   );
 }

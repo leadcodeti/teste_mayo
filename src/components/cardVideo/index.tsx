@@ -1,4 +1,3 @@
-import { BsEye } from "react-icons/bs";
 import { useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { OptionsMenu } from "./optionsMenu";
@@ -6,12 +5,22 @@ import { useClickOutside } from "@react-hooks-library/core";
 import { useVideoContext } from "../../contexts/useContext";
 import { VideoInfo } from "./videoInfo";
 import { Pagination } from "../Pagination";
+import { VideoTypes } from "../../types/types";
+import { useSideBarContext } from "../../contexts/thirdContext";
+import { LoadingScrean } from "../loading/loading";
+import { usePlayeContext } from "../../contexts/usePlayerContext";
 
-export function CardVideo() {
+interface CardVideoProps {
+  Video: VideoTypes[] | undefined;
+  isSearching: string;
+}
+
+export function CardVideo({ Video, isSearching }: CardVideoProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeVideoId, setActiveVideoId] = useState("");
   const [videoPlayerId, setVideoPlayerId] = useState("");
-  const { allVideo, page, setPage, totalUserVideos } = useVideoContext();
+  const { onGenerate } = usePlayeContext();
+  const { isLoading , page, setPage, totalUserVideos} = useSideBarContext();
 
   const ref = useRef(null);
 
@@ -30,15 +39,22 @@ export function CardVideo() {
   }
 
   return (
-    <>
+    <section>
+      {isLoading && (
+        <div className={styles.loadingContaine}>
+          <LoadingScrean color="#ff003c" fontSize={1} size="lg" />
+          <p>Carregando os videos...</p>
+        </div>
+      )}
+      
       <div className={styles.cardVideo} ref={ref}>
         <div className={styles.video}>
-          {allVideo.map((video) => (
+          {Video?.map((video) => (
             <div key={video.id} className={styles.videoContent}>
               <VideoInfo video={video} />
 
               <div className={styles.changes}>
-                <button>{"</>"}</button>
+                <button onClick={onGenerate}>{"</>"}</button>
                 {isOpen ? (
                   <button onClick={closeOptions}>{"..."}</button>
                 ) : (
@@ -56,6 +72,8 @@ export function CardVideo() {
                     currentVideoPlayerId={videoPlayerId}
                     videoId={activeVideoId}
                     isOpen={isOpen}
+                    closeOptions={closeOptions}
+                    videoName={video.name}
                   />
                 ) : null}
               </div>
@@ -63,11 +81,15 @@ export function CardVideo() {
           ))}
         </div>
       </div>
-      <Pagination
-        currentPage={page}
-        totalCountOfRegisters={totalUserVideos}
-        onPageChange={setPage}
-      />
-    </>
+      {isSearching ? (
+        ""
+      ) : (
+        <Pagination
+          currentPage={page}
+          totalCountOfRegisters={totalUserVideos}
+          onPageChange={setPage}
+        />
+      )}
+    </section>
   );
 }

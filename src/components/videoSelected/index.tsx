@@ -1,19 +1,21 @@
 import dynamic from "next/dynamic";
-
+import { useCopyToClipboard } from 'usehooks-ts'
 import styles from "./styles.module.scss";
 import { BsCodeSlash } from "react-icons/bs";
 import { usePlayeContext } from "../../contexts/usePlayerContext";
-import { EmbedModal } from "../embedModalVideo/embedModal";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { useVideoContext } from "../../contexts/useContext";
 import { BelowButon } from "../editVideoSideBar/components/botoes/belowButtons";
+import { toast } from "react-toastify";
 
 const PlayerVideo = dynamic(() => import("./player"), {
   ssr: false,
 });
 
 export  function VideoSelected() {
+
+  const [copiedLink, copyLink] = useCopyToClipboard()
   const { onGenerate } = usePlayeContext();
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
@@ -34,6 +36,11 @@ export  function VideoSelected() {
     setIsVisibleButtonBelow,
     videosId
   } = useVideoContext();
+
+  function copyYouTubeLink(){
+    copyLink(`youtube.com/embed/${videosId.currentPlayerId}`)
+    toast.success("Copiado");
+  }
 
   useEffect(() => {
     if(user){
@@ -73,15 +80,22 @@ export  function VideoSelected() {
 
   return (
     <div className={styles.container}>
-      <EmbedModal />
-
       <div className={styles.detailsVideo}>
-        <input type="text" placeholder="Video teste" />
+        <h2>{videosId.videoName}</h2>
+
         <button onClick={onGenerate}>
           <BsCodeSlash size={18} /> Código de incorporação
         </button>
       </div>
+
+      <strong>
+        Link: 
+        <span title="Copiar link" onClick={copyYouTubeLink}>
+         {`youtube.com/embed/${videosId.currentPlayerId}`}
+        </span>
+      </strong>
       <div className={styles.divisor}></div>
+  
       <div className={styles.embedVideo}>
         <PlayerVideo />
 

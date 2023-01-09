@@ -14,42 +14,12 @@ import Router from "next/router";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { newUserDataProps, VideoTypes, ThumbnailsProps } from "../types/types";
+import { newUserDataProps, VideoTypes, ThumbnailsProps, User } from "../types/types";
 import moment from "moment";
-
-type User = {
-  id: string;
-  email: string;
-  avatar?: string;
-  name: string;
-  lastname?: string;
-  phone?: string;
-  password?: string;
-  subscription: {
-    subscriber_code: string;
-    subscription_status: string;
-    subscription_plan: string;
-  };
-};
-
-type Thumbnails = {
-  start_image: string;
-  pause_image: string;
-  final_image: string;
-};
 
 type SignInCredentials = {
   email: string;
   password: string;
-};
-
-type newDataUser = {
-  id: string;
-  name?: string;
-  lastname?: string;
-  phone?: string;
-  password?: string;
-  avatar?: FormData;
 };
 
 interface CurrentVideoType {
@@ -60,6 +30,7 @@ interface CurrentVideoType {
 interface videosId {
   currentVideoId: string;
   currentPlayerId: string;
+  videoName: string;
 }
 
 interface AuthContextProps {
@@ -68,16 +39,13 @@ interface AuthContextProps {
   updateThumbnails: (thumbnailsData: ThumbnailsProps) => Promise<void>;
   openModal: () => void;
   closeModal: () => void;
-  getAllVideos: () => Promise<void>;
   modalNewVideoOpen: boolean;
   openModalNewVideo: () => void;
   closeModalNewVideo: () => void;
   user: User | undefined;
   isAuthenticated: boolean;
-  setAllVideo: Dispatch<SetStateAction<VideoTypes[]>>;
   setCurrentVideo: Dispatch<SetStateAction<CurrentVideoType>>;
   modalOpen: boolean;
-  allVideo: VideoTypes[];
   currentVideo: CurrentVideoType;
   buttonOption: string;
   setButtonOption: (value: string) => void;
@@ -191,7 +159,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     {} as CurrentVideoType
   );
 
-  const [allVideo, setAllVideo] = useState<VideoTypes[]>([]);
+ 
   const [videosId, setVideosId] = useState<videosId>({} as videosId);
   const [buttonOption, setButtonOption] = useState("below");
   const [isVisibleButtonBelow, setIsVisibleButtonBelow] = useState<any>(false);
@@ -389,28 +357,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
   // console.log("data thumb", thumbnails);
 
-  const getAllVideos = useCallback(async () => {
-    if (user) {
-      const response = await api.get(`/videos?page=${page}`);
-      setTotalUserVideos(response.data.total);
-      const data = response.data.items.map((res: VideoTypes) => {
-        return {
-          id: res.id,
-          name: res.name,
-          view_count: res.view_count,
-          youtube_video_id: res.youtube_video_id,
-          cover_image: res.cover_image,
-          date: format(new Date(res.date), "dd/MM/yyyy", {
-            locale: ptBR,
-          }),
-          duration: moment.duration(`${res.duration}`).asMilliseconds(),
-        };
-      });
-
-      setAllVideo(data);
-    }
-  }, [user, page]);
-
   async function fakeBarIsVibiles() {
     setHasFakeBar(!hasFakeBar);
 
@@ -463,10 +409,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // }, [buttonOption, currentVideo.currentVideoId]);
 
   useEffect(() => {
-    getAllVideos();
-  }, [getAllVideos, user]);
-
-  useEffect(() => {
     if (currentVideo) {
       const getIds = JSON.parse(localStorage.getItem("@myVideoPlayerId") || "");
       if (getIds !== null) {
@@ -482,11 +424,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         isAuthenticated,
         setCurrentVideo,
         user,
-        allVideo,
-        setAllVideo,
         videosId,
         currentVideo,
-        getAllVideos,
         updateUser,
         modalOpen,
         closeModal,

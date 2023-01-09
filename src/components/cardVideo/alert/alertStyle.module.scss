@@ -1,0 +1,53 @@
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+.alert {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 350px;
+  flex-direction: column; 
+
+  svg {
+    color: var(--pink-800);
+  }
+
+  p{
+    padding: 1rem 0;
+  }
+
+  .deleteBtn {
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    
+    button {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    padding: 0.2rem 1rem;
+    font-weight: normal;
+    border-radius: 5px;
+    color: #fff;
+    background: var(--pink-800);
+    transition: 0.2s;
+
+    &:nth-child(2) {
+      background: none;
+      border: 1.5px solid var(--pink-800);
+      color: var(--pink-800);
+    }
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+  }
+
+ 
+}

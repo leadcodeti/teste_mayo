@@ -1,50 +1,42 @@
 import Modal from "react-modal";
 import { useVideoContext } from "../../contexts/useContext";
 import styles from "./styles.module.scss";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { api } from "../../services/api";
 import { toast } from "react-toastify";
 import { IoClose } from "react-icons/io5";
 import { useState } from "react";
+import { useRouter } from 'next/router'
 
 import { customStyles } from "../../utils/modalConfig";
+import { useMutation, useQueryClient } from "react-query";
+import { createVideo } from "../../pages/api/post_put_functions";
+import { CreateVideoTypes } from "../../types/types";
 
 Modal.setAppElement("body");
 
-interface VideoTypes {
-  name: string;
-  url: string;
-}
 
 export function NewVideo() {
-  const { modalNewVideoOpen, closeModalNewVideo, getAllVideos } =
-    useVideoContext();
-  const { register, handleSubmit, reset } = useForm<VideoTypes>();
-  const [userId, setUserId] = useState("");
+  const { modalNewVideoOpen, closeModalNewVideo  } = useVideoContext();
+  const { register, handleSubmit, reset } = useForm<CreateVideoTypes>();
 
-  api("/me").then((res) => {
-    setUserId(res.data.id);
+  const queryClient = useQueryClient()
+  const router = useRouter()
+
+  const { mutate: videoMutation } = useMutation(({ name, url }:CreateVideoTypes) => createVideo({ name, url }),{
+    onSuccess:() => {
+      queryClient.invalidateQueries('videos');
+    },
   });
 
-  async function onSubmit({ url, name }: VideoTypes) {
-    try {
-      const response = await api
-        .post(`/videos`, {
-          user_id: userId,
-          url,
-          name,
-        })
-        .then((res) => {
-          console.log(res.data);
-        });
+  const onSubmit: SubmitHandler<CreateVideoTypes> = async (data) => {
+     
+    if(data){
+      videoMutation({name:data.name, url:data.url});
       toast.success("Novo video adicionado!");
-      closeModalNewVideo();
-
-      getAllVideos();
-
+      router.push('../../dashboard')
+      closeModalNewVideo()
       reset();
-    } catch (err) {
-      console.log(err);
     }
   }
 
@@ -58,7 +50,7 @@ export function NewVideo() {
         className={styles.modal}
       >
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-          <IoClose className={styles.closeModal} onClick={closeModalNewVideo} />
+          <IoClose size={25} className={styles.closeModal} onClick={closeModalNewVideo} />
           <label htmlFor="name">Nome do video:</label>
           <input id="name" {...register("name")} type="text" />
           <label style={{ marginTop: "1rem" }} htmlFor="url">

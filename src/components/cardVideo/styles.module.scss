@@ -1,123 +1,142 @@
-.cardVideo {
-  background: none;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0.3rem;
+section {
+  .loadingContaine {
+    position: relative;
+    top: 12rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-radius: 8px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 
-  + .cardVideo {
-    margin-top: 0.6rem;
+    p{
+      padding: 0.8rem 0;
+    }
   }
 
-  .video {
-    width: 100%;
+  .cardVideo {
+    background: none;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.3rem;
 
-    .videoContent {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #ddd;
-      padding: 0.8rem 0.6rem;
-      border-radius: 8px;
-      margin-bottom: 0.6rem;
+    + .cardVideo {
+      margin-top: 0.6rem;
+    }
 
-      .videoInfos {
+    .video {
+      width: 100%;
+
+      .videoContent {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        background: #ddd;
+        padding: 0.8rem 0.6rem;
+        border-radius: 8px;
+        margin-bottom: 0.6rem;
 
-        img {
-          max-width: 100px;
-          border-radius: 5px;
-          margin-right: 0.8rem;
-        }
-
-        .dateAndTime {
-          margin-top: 0.4rem;
-        }
-        .nameContent {
+        .videoInfos {
           display: flex;
           align-items: center;
-          font-weight: bold;
-          font-size: 1rem;
-          margin-top: 0.5rem;
-      
-          .views {
-            font-weight: normal;
-            font-size: 0.875rem;
-            color: #10568f;
-            background: #bcc0e8;
+
+          img {
+            max-width: 100px;
             border-radius: 5px;
-            padding: 0.2rem 0.3rem;
-            margin-left: 0.8rem;
-
-            svg {
-              margin-right: 0.3rem;
-            }
+            margin-right: 0.8rem;
           }
-        }
-      }
 
-      .changes {
-        display: grid;
-        align-items: center;
-        grid-template-columns: 45px 45px;
-        button {
-          background: #303030;
-          color: var(--white);
-          border-radius: 5px;
-          height: 34px;
-          width: 40px;
-          font-weight: bold;
-
-          &:focus {
-            .videoOptions {
-              display: none;
-            }
+          .dateAndTime {
+            margin-top: 0.4rem;
           }
-        }
-
-        .options {
-          background: var(--white);
-          width: 150px;
-          position: absolute;
-          margin: 1rem;
-          border-radius: 5px;
-          transform: translate(-80px,130px);
-          box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
-          display: flex;
-          z-index: 1000;
-         
-          flex-direction: column;
-          padding: 0.6rem 0.5rem;
-          margin-bottom: 0.5rem;
-
-          .links {
+          .nameContent {
             display: flex;
-            font-size: 0.9rem;
-            margin: 0.1rem 0;
-            padding: 0.6rem 0.4rem 0.3rem 0.4rem;
-            border-radius: 4px;
-            font-weight: 400;
-            background: none;
-            width: 100%;
-            color: var(--black-800);
-    
-            &:hover { 
-              background: var(--gray-50);
-            }
+            align-items: center;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: 0.5rem;
 
-            svg {
-              margin-right: 0.4rem;
-              font-size: 1rem;
-            }
-            span {
-              display: block;
-            }
+            .views {
+              font-weight: normal;
+              font-size: 0.875rem;
+              color: #10568f;
+              background: #bcc0e8;
+              border-radius: 5px;
+              padding: 0.2rem 0.3rem;
+              margin-left: 0.8rem;
 
-            .youtubeIcon {
-              color: red;
-              font-size: 1.3rem;
-              margin-left: 0.4rem;
+              svg {
+                margin-right: 0.3rem;
+              }
+            }
+          }
+        }
+
+        .changes {
+          display: grid;
+          align-items: center;
+          grid-template-columns: 45px 45px;
+          button {
+            background: #303030;
+            color: var(--white);
+            border-radius: 5px;
+            height: 34px;
+            width: 40px;
+            font-weight: bold;
+
+            &:focus {
+              .videoOptions {
+                display: none;
+              }
+            }
+          }
+
+          .options {
+            background: var(--white);
+            width: 150px;
+            position: absolute;
+            margin: 1rem;
+            border-radius: 5px;
+            transform: translate(-80px, 130px);
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+              rgba(0, 0, 0, 0.22) 0px 10px 10px;
+            display: flex;
+            z-index: 1000;
+
+            flex-direction: column;
+            padding: 0.6rem 0.5rem;
+            margin-bottom: 0.5rem;
+
+            .links {
+              display: flex;
+              font-size: 0.9rem;
+              margin: 0.1rem 0;
+              padding: 0.6rem 0.4rem 0.3rem 0.4rem;
+              border-radius: 4px;
+              font-weight: 400;
+              background: none;
+              width: 100%;
+              color: var(--black-800);
+
+              &:hover {
+                background: var(--gray-50);
+              }
+
+              svg {
+                margin-right: 0.4rem;
+                font-size: 1rem;
+              }
+              span {
+                display: block;
+              }
+
+              .youtubeIcon {
+                color: red;
+                font-size: 1.3rem;
+                margin-left: 0.4rem;
+              }
             }
           }
         }

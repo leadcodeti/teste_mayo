@@ -8,33 +8,20 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useQuery } from "react-query";
 import { embedVideo } from "../components/embedVideo/embed";
+import { getControllers } from "../pages/api/get_functions";
 import { api } from "../services/api";
+import { ControolerTypes } from "../types/types";
 import { useVideoContext } from "./useContext";
 
 interface contextProps {
   onGenerate: () => void;
-  setBigPlay: Dispatch<SetStateAction<boolean>>;
-  setSmalPlay: Dispatch<SetStateAction<boolean>>;
-  setVolume: Dispatch<SetStateAction<boolean>>;
-  setProgessBar: Dispatch<SetStateAction<boolean>>;
-  setPlayTime: Dispatch<SetStateAction<boolean>>;
-  setFullScrean: Dispatch<SetStateAction<boolean>>;
-  setNextBtn: Dispatch<SetStateAction<boolean>>;
-  setPrevBtn: Dispatch<SetStateAction<boolean>>;
-  setBackgroundColor: Dispatch<SetStateAction<string>>;
-  backgroundColor: string;
-  bigPlay: boolean;
-  smalPlay: boolean;
-  volume: boolean;
-  progressBar: boolean;
-  nextBtn: boolean;
-  prevBtn: boolean;
-  playTime: boolean;
-  fullScrean: boolean;
+  setBackgroundColor: Dispatch<SetStateAction<string | undefined>>;
+  backgroundColor: string | undefined;
   embedString: string;
-  getControls:() => Promise<void>;
-  getDesign:() => Promise<void>;
+  setController: Dispatch<SetStateAction<ControolerTypes>>;
+  controller:ControolerTypes;
 }
 
 interface ProviderProps {
@@ -46,28 +33,31 @@ const context = createContext({} as contextProps);
 export function ContextPlayerProvider({ children }: ProviderProps) {
   const { openModal, videosId } = useVideoContext();
   const [embedString, setString] = useState("");
-  const [bigPlay, setBigPlay] = useState(true);
-  const [smalPlay, setSmalPlay] = useState(true);
-  const [volume, setVolume] = useState(true);
-  const [progressBar, setProgessBar] = useState(true);
-  const [playTime, setPlayTime] = useState(true);
-  const [fullScrean, setFullScrean] = useState(true);
-  const [nextBtn, setNextBtn] = useState(true);
-  const [prevBtn, setPrevBtn] = useState(true);
-  const [backgroundColor, setBackgroundColor] = useState("#ccc");
+  const [backgroundColor, setBackgroundColor] = useState<string | undefined>("");
+
+  const { data: controll } = useQuery(['controll', videosId.currentVideoId],() => getControllers(videosId.currentVideoId))
+
+  const [controller, setController] = useState({} as ControolerTypes);
+
+  console.log("NEW CONTROLLER_TESTE", controller);
+
+  useEffect(() => {
+    setController( {
+      bigPlay: controll?.has_big_play_button,
+      nextBtn: controll?.has_foward_10_seconds, 
+      playTime: controll?.has_video_duration, 
+      prevBtn: controll?.has_back_10_seconds, 
+      fullScrean: controll?.has_fullscreen, 
+      smalPlay: controll?.has_small_play_button,
+      volume: controll?.has_volume,
+      progressBar: controll?.has_progress_bar, 
+    })
+
+},[controll, setController])
 
   const onGenerate = () => {
     openModal();
-    const { jsIframe } = embedVideo({
-      backgroundColor,
-      bigPlay,
-      smalPlay,
-      volume,
-      progressBar,
-      playTime,
-      fullScrean,
-    });
-
+    const { jsIframe } = embedVideo({ backgroundColor,controller});
     setString(getHtml(jsIframe));
   };
 
@@ -81,63 +71,16 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
     div = element.innerHTML;
     return div;
   };
-  
-  const getDesign = useCallback(async () => {
-    if (!videosId.currentVideoId) {
-      return;
-    }
 
-    const response = await api.get(`/designs/${videosId.currentVideoId}`);
-    setBackgroundColor(response.data.background_color);
-    console.log("BACK_color",response.data)
-    
-  },[videosId.currentVideoId,setBackgroundColor])
-
-  const getControls = useCallback(async () => {
-    const response = await api.get(`/controls/${videosId.currentVideoId}`);
-    setBigPlay(response.data.has_big_play_button);
-    setSmalPlay(response.data.has_small_play_button);
-    setVolume(response.data.has_volume);
-    setFullScrean(response.data.has_fullscreen);
-    setProgessBar(response.data.has_progress_bar);
-    setPlayTime(response.data.has_video_duration);
-    setNextBtn(response.data.has_foward_10_seconds);
-    setPrevBtn(response.data.has_back_10_seconds);
-
-    console.log("BACK-1",response.data)
-  },[videosId.currentVideoId,setNextBtn,setBigPlay, setVolume, setPrevBtn, setPlayTime,setProgessBar,setFullScrean,setSmalPlay])
-
-  useEffect(() => {
-    getDesign(); 
-    getControls();
-  }, [getControls, getDesign]);
-
- 
   return (
     <context.Provider
       value={{
         embedString,
         onGenerate,
-        bigPlay,
-        setBigPlay,
         backgroundColor,
         setBackgroundColor,
-        fullScrean,
-        playTime,
-        progressBar,
-        setFullScrean,
-        setPlayTime,
-        setProgessBar,
-        setNextBtn,
-        setPrevBtn,
-        setSmalPlay,
-        setVolume,
-        smalPlay,
-        volume,
-        nextBtn,
-        prevBtn,
-        getControls,
-        getDesign
+        setController,
+        controller,
       }}
     >
       {children}

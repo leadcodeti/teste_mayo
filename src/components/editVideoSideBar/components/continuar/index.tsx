@@ -15,8 +15,7 @@ interface containerContinuarProps {
 export function WatchAgain() {
   const { register, handleSubmit, watch, reset } =
     useForm<containerContinuarProps>();
-  const { continuarProps, setContinuarProps, videosId, user } =
-    useVideoContext();
+  const { continuarProps, setContinuarProps, videosId, user } = useVideoContext();
 
   const getContinuosProps = useCallback(async () => {
     if(user) {
@@ -63,16 +62,16 @@ export function WatchAgain() {
     >
       <div className={styles.textStyles}>
         <p>Mensagem</p>
-        <input {...register("message")} type="text" />
+        <input {...register("message")} defaultValue={continuarProps.message} type="text" />
         <hr />
 
         <p>Botão continuar</p>
-        <input {...register("continue_button_text")} type="text" />
+        <input {...register("continue_button_text")} defaultValue={continuarProps.continue_button_text} type="text" />
 
         <hr />
 
         <p>Botão Recomeçar</p>
-        <input {...register("restart_button_text")} type="text" />
+        <input {...register("restart_button_text")} defaultValue={continuarProps.restart_button_text} type="text" />
         <hr />
       </div>
 
@@ -83,7 +82,7 @@ export function WatchAgain() {
           type="color"
           id="corDoTexto"
           {...register("text_color")}
-          value={watch("text_color") ? watch("text_color") : "#ffffff"}
+          value={watch("text_color") ? watch("text_color") : `${continuarProps.background_color}`}
         />
       </span>
       <br />
@@ -95,7 +94,7 @@ export function WatchAgain() {
           id="corDobackground"
           {...register("background_color")}
           value={
-            watch("background_color") ? watch("background_color") : "#ff003c"
+            watch("background_color") ? watch("background_color") : `${continuarProps.text_color}`
           }
         />
       </span>

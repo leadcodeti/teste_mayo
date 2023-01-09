@@ -7,17 +7,17 @@ import { ClickToPlay } from "@vime/react";
 import { useSideBarContext } from "../../../../contexts/thirdContext";
 
 interface ContinueProps {
-  continueWacth:() => void; 
-  restartVideo:() => void;
+  setCurrentTime: (value: number) => void
 }
 
-export function Continuar({continueWacth, restartVideo} : ContinueProps) {
+export function Continuar({setCurrentTime} : ContinueProps) {
   const {
     continuarProps,
     setContinuarProps,
   } = useVideoContext();
   
   const [dnoneContainer, setDnoneContainer] = useState("flex");
+  const { restartVideo,lastTimeWacth } = useSideBarContext()
 
 
   useEffect(() => {
@@ -27,11 +27,12 @@ export function Continuar({continueWacth, restartVideo} : ContinueProps) {
 
   function closeContinuar() {
     setDnoneContainer("none");
-    continueWacth();
+    setCurrentTime(lastTimeWacth.currentTimeVideo);
   }
 
   function restartTime() {
     setDnoneContainer("none");
+    setCurrentTime(1)
     restartVideo()
   }
 
@@ -46,7 +47,7 @@ export function Continuar({continueWacth, restartVideo} : ContinueProps) {
         <span onClick={closeContinuar}>
           <ClickToPlay />
           <BiPlayCircle />
-          {continuarProps.restart_button_text}
+          {continuarProps.continue_button_text}
         </span>
         <span onClick={restartTime}>
           <VscDebugRestart />

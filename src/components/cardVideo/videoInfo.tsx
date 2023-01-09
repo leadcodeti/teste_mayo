@@ -4,6 +4,7 @@ import { VideoTypes } from "../../types/types";
 import styles from "./styles.module.scss";
 import { intervalToDuration } from "date-fns";
 import { useVideoContext } from "../../contexts/useContext";
+import { Video } from "@vime/react";
 
 interface videoInfoTypes {
   video: VideoTypes;
@@ -25,7 +26,7 @@ export function VideoInfo({ video }: videoInfoTypes) {
     <>
       <div className={styles.videoInfos}>
         <Image
-          src={video.cover_image}
+          src={`https://img.youtube.com/vi/${video.youtube_video_id}/maxresdefault.jpg`}
           height={60}
           width={100}
           alt="Thumb do video"

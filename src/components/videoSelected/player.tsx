@@ -34,26 +34,11 @@ import { Thumbnails } from "./components/thumbnails";
 import { useSideBarContext } from "../../contexts/thirdContext";
 
 export default function PlayerVideo() {
-  const {
-    backgroundColor,
-    bigPlay,
-    fullScrean,
-    playTime,
-    progressBar,
-    volume,
-    smalPlay,
-    nextBtn,
-    prevBtn,
-  } = usePlayeContext();
+  const { backgroundColor, controller} = usePlayeContext();
   const player = useRef<HTMLVmPlayerElement>(null);
-  const [currentTime, setCurrentTime] = usePlayerContext(
-    player,
-    "currentTime",
-    0
-  );
-
+  const [currentTime, setCurrentTime] = usePlayerContext( player, "currentTime",0);
   const [duration] = usePlayerContext(player, "duration", -1);
-  const { lastTimeWacth, getCurrentVideoTime, setCurrentTimeVideo} = useSideBarContext()
+  const { setCurrentTimeVideo, getCurrentVideoTime } = useSideBarContext()
 
   const {
     currentVideo,
@@ -75,7 +60,6 @@ export default function PlayerVideo() {
     setStartVideoThumb,
   } = useVideoContext();
 
-
   useEffect(() => {
     setVideoTime(duration);
     setCurrentTimeVideo(currentTime)
@@ -91,15 +75,6 @@ export default function PlayerVideo() {
     setCurrentTime(currentTime + 10);
   };
 
-  function continueWacth() {
-    const lastTimeWatch = JSON.parse(localStorage.getItem("@keepWacth") || "");
-    setCurrentTime(lastTimeWatch.currentTimeVideo)
-  }
-
-  function restartVideo() {
-    setCurrentTime(0)
-  }
-  
   const playerTheme: {} = {
     "--vm-player-theme": `${backgroundColor}`,
     position: "relative",
@@ -112,7 +87,7 @@ export default function PlayerVideo() {
     width: "80px",
     height: "80px",
     margin: "0 auto",
-    display: `${bigPlay ? "flex" : "none"}`,
+    display: `${controller.bigPlay ? "flex" : "none"}`,
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
@@ -124,7 +99,7 @@ export default function PlayerVideo() {
     api(`/cta_buttons/${videosId.currentVideoId}`).then((res) => {
       const data = res.data;
       console.log(data);
-      const insideFiltered = data.filter((e: any) => e.type === "inside");
+      const insideFiltered = data?.filter((e: any) => e.type === "inside");
       const insideResult = insideFiltered[0];
 
       setButtonProps({
@@ -146,15 +121,19 @@ export default function PlayerVideo() {
     videosId.currentVideoId,
   ]);
 
+ useEffect(() => {
   setCurrentVideoTime(player.current?.currentTime);
 
   let finalThumb = player.current?.currentTime == player.current?.duration;
 
+  console.log("resultado da varivavel", finalThumb);
   setPausedVideoThumb(
     player.current?.paused && player.current?.currentTime > 1
   );
   setFinalVideoThumb(finalThumb);
   setStartVideoThumb(player.current?.currentTime == 0);
+
+ })
 
   // useEffect(() => {
   //   api(`/videos`).then((res) => {
@@ -192,12 +171,12 @@ export default function PlayerVideo() {
                   : styles.centerCenter
               }
             `}
-        >
-          {hasContinue ? <Continuar restartVideo={restartVideo} continueWacth={continueWacth} /> : ""}
+          >
+          {hasContinue ? <Continuar setCurrentTime={setCurrentTime} /> : ""}
           {hasFakeBar ? <FakeBarInVideo /> : ""}
           {hasAutoPlay ? <AutoPlay /> : ""}
           {hasThumbNails ? <Thumbnails /> : ""}
-
+         
         </div>
         <Youtube videoId={videosId.currentPlayerId} />
 
@@ -207,19 +186,19 @@ export default function PlayerVideo() {
           <Spinner />
 
           <Controls fullWidth pin={"center"}>
-            <PlaybackControl hideTooltip={true} style={centeredPlayBack} onClick={getCurrentVideoTime}  />
+            <PlaybackControl hideTooltip={true} style={centeredPlayBack} onClick={getCurrentVideoTime} />
           </Controls>
 
           <Controls fullWidth>
             <ControlGroup>
               <ScrubberControl
-                style={{ display: `${progressBar ? "flex" : "none"}` }}
+                style={{ display: `${controller.progressBar ? "flex" : "none"}` }}
               />
             </ControlGroup>
 
             <ControlGroup space="top">
               <PlaybackControl
-                style={{ display: `${smalPlay ? "flex" : "none"}` }}
+                style={{ display: `${controller.smalPlay ? "flex" : "none"}` }}
                 hideTooltip={true}
                 onClick={getCurrentVideoTime} 
               />
@@ -227,7 +206,7 @@ export default function PlayerVideo() {
               <ButtonsContainer>
                 <PrevButton
                   background={backgroundColor}
-                  prevBtn={prevBtn}
+                  prevBtn={controller.prevBtn}
                   onClick={onSeekBackward}
                 >
                   <MdSkipPrevious size={28} />
@@ -235,7 +214,7 @@ export default function PlayerVideo() {
 
                 <NextButton
                   background={backgroundColor}
-                  nextBtn={nextBtn}
+                  nextBtn={controller.nextBtn}
                   onClick={onSeekForward}
                 >
                   <MdSkipNext size={28} />
@@ -243,16 +222,16 @@ export default function PlayerVideo() {
               </ButtonsContainer>
 
               <VolumeControl
-                style={{ display: `${volume ? "block" : "none"}` }}
+                style={{ display: `${controller.volume ? "block" : "none"}` }}
                 hideTooltip={true}
               />
               <TimeProgress
-                style={{ display: `${playTime ? "flex" : "none"}` }}
+                style={{ display: `${controller.playTime ? "flex" : "none"}` }}
                 separator="/"
               />
               <ControlSpacer />
               <FullscreenControl
-                style={{ display: `${fullScrean ? "flex" : "none"}` }}
+                style={{ display: `${controller.fullScrean ? "flex" : "none"}` }}
                 hideTooltip={true}
               />
             </ControlGroup>
@@ -264,3 +243,35 @@ export default function PlayerVideo() {
     </div>
   );
 }
+
+          // <ButtonInsideVideo
+          //   href={"#"}
+          //   target="_blank"
+          //   background={buttonProps.background_color}
+          //   background_hover={buttonProps.bacgrkound_hover}
+          //   text_color={buttonProps.text_color}
+          //   sizeWidth={
+          //     buttonProps.size === "125"
+          //       ? "180px"
+          //       : buttonProps.size === "150"
+          //       ? "250px"
+          //       : buttonProps.size === "250"
+          //       ? "350px"
+          //       : ""
+          //   }
+          //   sizeFont={
+          //     buttonProps.size === "125"
+          //       ? "100%"
+          //       : buttonProps.size === "150"
+          //       ? "150%"
+          //       : buttonProps.size === "250"
+          //       ? "200%"
+          //       : ""
+          //   }
+          //   className={`${buttonProps.text == "" ? styles.button : ""} ${
+          //     styles.buttonSize
+          //   }`}
+          // >
+          //   {/* zindez do botão - ver no embed */}
+          //   {buttonProps.text}
+          // </ButtonInsideVideo>

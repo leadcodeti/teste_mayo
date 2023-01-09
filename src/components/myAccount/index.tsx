@@ -13,12 +13,13 @@ import { toast } from "react-toastify";
 export default function MyAccount() {
   const { user, updateUser } = useVideoContext();
   const [avatarUser, setAvatarUser] = useState(defaultProfileImage);
-  const { register, handleSubmit, reset, setValue, watch } =
-    useForm<newUserDataProps>();
-
+  const { register, handleSubmit, reset, setValue, watch } = useForm<newUserDataProps>();
+  
+  console.log(user)
+  
   function submitUpdate(data: newUserDataProps) {
     const formData = new FormData();
-    formData.append("avatar", data.avatar[0]);
+    // formData.append("avatar", data.avatar[0]);
 
     const dataUser = {
       name: data.name,
@@ -52,13 +53,13 @@ export default function MyAccount() {
             <div className={style.imageContainer}>
               <strong>Foto de Perfil</strong>
               <div className={style.imageContainer}>
-                <Image
+                {/* <Image
                   src={user?.avatar ? user.avatar : defaultProfileImage}
                   alt="profile"
                   height={180}
                   width={200}
                   className={style.imageProfile}
-                />
+                /> */}
               </div>
               <div className={style.buttonsContainer}>
                 <label htmlFor="uploadAvatar">
@@ -141,22 +142,22 @@ export default function MyAccount() {
         <div className={style.userPlan}>
           <aside>
             <h1>Seu Plano</h1>
-            <span>Informações do seu plano e seu consumo de dados</span>
+            <span>Informações do seu plano</span>
           </aside>
 
           <div className={style.plain}>
-            <strong>{user?.subscription.subscription_plan} - R$ 197,00</strong>
+            <strong>{user?.subscription.plan} - R$ {user?.subscription.price},00</strong>
 
             <div className={style.statusPlan}>
-              {user?.subscription.subscription_status === "ACTIVE" ? (
+              {user?.subscription.status === "ACTIVE" ? (
                 <>
                   <BsCheck2Circle color="#3EB880" size={40} />
-                  <p>{user?.subscription.subscription_status}</p>
+                  <p>{user?.subscription.status}</p>
                 </>
               ) : (
                 <>
                   <SlClose color="#FD365A" size={40} />
-                  <p>{user?.subscription.subscription_status}</p>
+                  <p>{user?.subscription.status}</p>
                 </>
               )}
             </div>

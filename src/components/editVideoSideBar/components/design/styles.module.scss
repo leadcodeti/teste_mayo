@@ -1,39 +1,43 @@
 .design {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:0.2rem 0.5rem;
   color: var(--black-800);
   background: #ddd;
 
-  span {
-    padding: 10px;
+  .inputColor {
+    width: 25px !important;
+    height: 25px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid var(--black-800);
+    z-index: 10;
+  }
 
-    label {
-      margin-top: 1rem;
-    }
+  .inputDisabled {
+    position: absolute;
+    right: 13px;
+    width: 25px !important;
+    height: 25px;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    &:nth-child(1) {
-      padding-bottom: 0 !important;
-    }
-
-    &:nth-last-child(1) {
-      border-bottom: 2px dashed #b6b3b3;
-      padding-top: 0;
-    }
-    .colors {
+   .colors {
       width: 25px !important;
       height: 25px;
       background: none;
       border: none;
+      border: 1px solid red;
+      opacity: -1;
     }
+  }
 
     .colors::-webkit-color-swatch {
       border-radius: 50%;
       border: 2px solid var(--black-800);
     }
-  }
 }
+
+
 .controls {
   padding: 10px;
   background: #dddc;

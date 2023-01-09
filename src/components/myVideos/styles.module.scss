@@ -4,14 +4,15 @@
   padding-top: 2rem;
 
   .searchVideo {
-    display: grid;
-    grid-template-columns: 55% 1fr;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     h1 {
       color: var(--black-200);
       font-weight: normal;
       color: #2c384af2;
-      font-size: 1.8rem;
-      display: flex;
+      font-size: 1.5rem;
       align-items: center;
 
       svg {
@@ -21,22 +22,55 @@
       }
     }
 
-    input {
+    .searchArea {
+      width: 60%;
+      display: flex;
+      align-items: center;
       background: #ddd;
-      padding: 0.6rem;
       border-radius: 5px;
+      padding: 0 0.6rem;
+     
+      input {
+      background: none;
+      padding: 0.5rem 0.6rem;
       border: 0;
       outline: 0;
+      width: 100%;
 
       &::placeholder {
         color: var(--gray-100);
         font-size: 1rem;
       }
     }
+    }
+
+ 
   }
 
   .divisor {
     border-top: 2px dashed #ccc;
     margin: 25px 0;
+  }
+
+  .notFoundVideoContainer {
+    position: relative;
+    top: 50px;
+    .errorMessage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      p{
+        font-size: 1.4rem;
+        padding: 0 0.5rem;
+        span{
+          font-weight: 700;
+        }
+      }
+
+      svg{
+        color: var(--pink-800);
+      }
+    }
   }
 }

@@ -23,8 +23,33 @@ import { useVideoContext } from "../../contexts/useContext";
 import stylesSwitch from "./switch.module.scss";
 
 import { signOut } from "../../contexts/useContext";
+import { CSpinner } from "@coreui/react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getDesign } from "../../pages/api/get_functions";
+import { putDesign } from "../../pages/api/post_put_functions";
+import { LoadingScrean } from "../loading/loading";
+
+interface PutDesignTypes {
+  currentVideoId:string;
+  newDesignData: {
+    background_color: string;
+  }
+}
+
 
 export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
+  
+  const queryClient = useQueryClient()
+  const { videosId } = useVideoContext();
+  
+  const { data: design, isLoading } = useQuery(['design', videosId.currentVideoId],() => getDesign(videosId.currentVideoId))
+  
+  const { mutateAsync: designMutation } = useMutation(putDesign,{
+    onSuccess: () => {
+      queryClient.invalidateQueries('design')
+    },
+  })
+
   function activeUserAccount() {
     setUserOption("account");
   }
@@ -69,10 +94,11 @@ export function EditVideoSideBar({ setUserOption }: UserOptionProps) {
                             <BsPalette />
                             Design
                           </span>
+                          {isLoading && ( <LoadingScrean color="#ff003c" fontSize={0.7} size="sm" />)}
                         </div>
                       </Accordion.Header>
                       <Accordion.Body className="p-0">
-                        <Design />
+                        <Design design={design} designMutation={designMutation}/>
                       </Accordion.Body>
                     </Accordion.Item>
 

@@ -9,7 +9,7 @@ import { useState } from "react";
 
 Modal.setAppElement("body");
 export function EmbedModal() {
-  const { closeModal, modalOpen } = useVideoContext();
+  const { closeModal, modalOpen, user } = useVideoContext();
   const {embedString} = usePlayeContext();
   const [activeEmbed, setActiveEmbed] = useState(false);
 

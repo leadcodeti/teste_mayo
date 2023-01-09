@@ -1,14 +1,16 @@
-import GlobalStyle from "../styles/globalStyles";
 import type { AppProps } from "next/app";
-import "bootstrap/dist/css/bootstrap.min.css";
-
 import { AuthProvider } from "../contexts/useContext";
-
 import { useEffect, useState } from "react";
 import { ContextPlayerProvider } from "../contexts/usePlayerContext";
 import { ToastContainer } from "react-toastify";
 import SideBarProvider from "../contexts/thirdContext";
+import {QueryClient,QueryClientProvider} from 'react-query'
+import "bootstrap/dist/css/bootstrap.min.css";
+import GlobalStyle from "../styles/globalStyles";
+import { EmbedModal } from "../components/embedModalVideo/embedModal";
 
+
+const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -22,18 +24,17 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <AuthProvider>
-       <ToastContainer 
-         autoClose={2000}
-       />
+       <ToastContainer autoClose={2000} />
         <ContextPlayerProvider>
           <SideBarProvider>
              <GlobalStyle />
+             <EmbedModal />
              <Component {...pageProps} />
           </SideBarProvider>
         </ContextPlayerProvider>
       </AuthProvider>
-    </>
+    </QueryClientProvider>
   );
 }

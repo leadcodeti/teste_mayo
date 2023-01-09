@@ -1,23 +1,17 @@
 
 interface embedProps {
-  backgroundColor: string;
-  bigPlay:boolean;
-  smalPlay:boolean;
-  volume:boolean
-  progressBar:boolean;
-  playTime:boolean;
-  fullScrean:boolean;
+  backgroundColor: string | undefined;
+  controller : {
+    bigPlay:boolean | undefined;
+    smalPlay:boolean | undefined;
+    volume:boolean | undefined
+    progressBar:boolean | undefined;
+    playTime:boolean | undefined;
+    fullScrean:boolean | undefined;
+  }
 }
 
-export function embedVideo({
-   backgroundColor,
-   bigPlay,
-   smalPlay,
-   volume,
-   progressBar,
-   playTime,
-   fullScrean,
-  }: embedProps) {
+export function embedVideo({backgroundColor, controller}: embedProps) {
 
   const jsIframe = document.createElement("div");
 
@@ -46,7 +40,7 @@ export function embedVideo({
            z-index: 100;
            width: 80px;
            height: 80px;
-           display: ${bigPlay ? "flex" :"none"};
+           display: ${controller.bigPlay ? "flex" :"none"};
            align-items: center;
            justify-content: center;
            border-radius: 50%;
@@ -61,16 +55,16 @@ export function embedVideo({
 
         <vm-controls full-width>
           <vm-control-group>
-            <vm-scrubber-control style="display:  ${progressBar ? "flex" :"none"}" />
+            <vm-scrubber-control style="display:  ${controller.progressBar ? "flex" :"none"}" />
           </vm-control-group>
     
           <vm-control-group space="top">
-            <vm-playback-control style="display:  ${smalPlay ? "flex" :"none"}" hide-tooltip></vm-playback-control>
-            <vm-volume-control style="display:  ${volume ? "block" :"none"}" hide-tooltip/></vm-volume-control>
-            <vm-time-progress style="display:  ${playTime ? "flex" :"none"}" separator="/"></vm-time-progress>
+            <vm-playback-control style="display:  ${controller.smalPlay ? "flex" :"none"}" hide-tooltip></vm-playback-control>
+            <vm-volume-control style="display:  ${controller.volume ? "block" :"none"}" hide-tooltip/></vm-volume-control>
+            <vm-time-progress style="display:  ${controller.playTime ? "flex" :"none"}" separator="/"></vm-time-progress>
 
             <vm-control-spacer></vm-control-spacer>
-            <vm-fullscreen-control style="display:  ${fullScrean ? "flex" :"none"}" hide-tooltip />
+            <vm-fullscreen-control style="display:  ${controller.fullScrean ? "flex" :"none"}" hide-tooltip />
           </vm-control-group>
         </vm-controls>
 

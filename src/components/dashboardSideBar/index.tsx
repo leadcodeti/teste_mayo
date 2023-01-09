@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BsCameraVideo, BsLock, BsInfoLg } from "react-icons/bs";
 import Link from "next/link";
@@ -5,7 +6,6 @@ import styles from "./styles.module.scss";
 import { UserOptionProps } from "../../types/types";
 import { NewVideo } from "../newVideoModal";
 import { useVideoContext } from "../../contexts/useContext";
-
 import { signOut } from "../../contexts/useContext";
 import { sign } from "crypto";
 
@@ -34,7 +34,7 @@ export function DashboardSideBar({ setUserOption }: UserOptionProps) {
           <IoMdAddCircleOutline size={20} /> Novo vídeo
         </button>
       </div>
-      <NewVideo />
+      
       <div className={styles.userOptions}>
         <Link href="#/videos" onClick={activeUserVideos}>
           <BsCameraVideo />
@@ -55,7 +55,7 @@ export function DashboardSideBar({ setUserOption }: UserOptionProps) {
       </div>
       <div>
         <div className={styles.myAccount}>
-          <Link onClick={activeUserAccount} href="#/account">
+          <Link onClick={activeUserAccount} href="#/minhha-conta">
             Minha conta
           </Link>
           <button onClick={() => signOut()} className={styles.exit}>
@@ -63,6 +63,8 @@ export function DashboardSideBar({ setUserOption }: UserOptionProps) {
           </button>
         </div>
       </div>
+
+      <NewVideo />
     </aside>
   );
 }
