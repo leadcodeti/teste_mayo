@@ -36,7 +36,6 @@ interface videosId {
 interface AuthContextProps {
   signIn(credentials: SignInCredentials): Promise<void>;
   updateUser: (newDataUser: newUserDataProps) => Promise<void>;
-  updateThumbnails: (thumbnailsData: ThumbnailsProps) => Promise<void>;
   openModal: () => void;
   closeModal: () => void;
   modalNewVideoOpen: boolean;
@@ -78,18 +77,6 @@ interface AuthContextProps {
   setFakeBarData: any;
   videoTime: number;
   setVideoTime: (value: number) => void;
-  hasFakeBar: boolean;
-  setHasFakeBar: (value: boolean) => void;
-  fakeBarIsVibiles: () => void;
-  hasContinue: boolean;
-  setHasContinue: (value: boolean) => void;
-  hasAutoPlay: boolean;
-  setHasAutoPlay: (value: boolean) => void;
-  hasThumbNails: boolean;
-  setHasThumbnails: (value: boolean) => void;
-  continueIsVisible: () => void;
-  autoPlayIsVisible: () => void;
-  thumbnailsIsVisible: () => void;
   currentVideoTime: any;
   setCurrentVideoTime: any;
   formatedTime: number;
@@ -164,10 +151,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [buttonOption, setButtonOption] = useState("below");
   const [isVisibleButtonBelow, setIsVisibleButtonBelow] = useState<any>(false);
   const [videoTime, setVideoTime] = useState(0);
-  const [hasFakeBar, setHasFakeBar] = useState(false);
-  const [hasContinue, setHasContinue] = useState(false);
-  const [hasAutoPlay, setHasAutoPlay] = useState(false);
-  const [hasThumbNails, setHasThumbnails] = useState(false);
   const [currentVideoTime, setCurrentVideoTime] = useState(0);
   const [formatedTime, setFormatedTime] = useState(0);
   const [pausedVideoThumb, setPausedVideoThumb] = useState(false);
@@ -339,75 +322,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await api("/me").then((res) => setUser(res.data));
   }
 
-  async function updateThumbnails(thumbnailsData: ThumbnailsProps) {
-    const headers = { "Content-Type": "multipart/form-data" };
 
-    // await api.put(
-    //   `/thumbnails/${videosId.currentVideoId}?type=final_image`,
-    //   thumbnailsData.thumbnail,
-    //   {
-    //     headers: headers,
-    //   }
-    // );
-
-    // await api(`/thumbnails/${videosId.currentVideoId}`).then((res) => {
-    //   setThumbnails(res.data);
-    //   console.log("thumbnails res", res.data);
-    // });
-  }
-  // console.log("data thumb", thumbnails);
-
-  async function fakeBarIsVibiles() {
-    setHasFakeBar(!hasFakeBar);
-
-    await api.put(`/videos/${videosId.currentVideoId}`, {
-      has_progress_bar: !hasFakeBar,
-    });
-  }
-  async function continueIsVisible() {
-    setHasContinue(!hasContinue);
-
-    await api.put(`/videos/${videosId.currentVideoId}`, {
-      has_continue_options: !hasContinue,
-    });
-  }
-
-  async function autoPlayIsVisible() {
-    setHasAutoPlay(!hasAutoPlay);
-
-    await api.put(`/videos/${videosId.currentVideoId}`, {
-      has_autoplay: !hasAutoPlay,
-    });
-  }
-
-  async function thumbnailsIsVisible() {
-    setHasThumbnails(!hasThumbNails);
-
-    await api.put(`/videos/${videosId.currentVideoId}`, {
-      has_thumbnail: !hasThumbNails,
-    });
-  }
-
-  // useCallback(async () => {
-  //   if (currentVideo.currentVideoId) {
-  //     api(
-  //       `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`
-  //     ).then((res) => {
-  //       const data = res.data;
-  //       const insideFiltered = data.filter((e: any) => e.type === "inside");
-  //       const insideResult = insideFiltered[0];
-  //       setBelowButtonProps({
-  //         background_color: insideResult.background_color,
-  //         bacgrkound_hover: insideResult.background_hover,
-  //         size: insideResult.size,
-  //         text: insideResult.text,
-  //         text_color: insideResult.text_color,
-  //         link: insideResult.link,
-  //       });
-  //     });
-  //   }
-  // }, [buttonOption, currentVideo.currentVideoId]);
-
+  
   useEffect(() => {
     if (currentVideo) {
       const getIds = JSON.parse(localStorage.getItem("@myVideoPlayerId") || "");
@@ -461,29 +377,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setFakeBarData,
         videoTime,
         setVideoTime,
-        hasFakeBar,
-        setHasFakeBar,
-        fakeBarIsVibiles,
         currentVideoTime,
         setCurrentVideoTime,
-        continueIsVisible,
-        hasContinue,
-        setHasContinue,
+     
         formatedTime,
         setFormatedTime,
         autoPLayProps,
         setAutoPlayProps,
-        hasAutoPlay,
-        setHasAutoPlay,
-        autoPlayIsVisible,
         pausedVideoThumb,
         setPausedVideoThumb,
-        hasThumbNails,
-        setHasThumbnails,
-        thumbnailsIsVisible,
         finalVideoThumb,
         setFinalVideoThumb,
-        updateThumbnails,
         thumbnailsProps,
         setThumbnailsProps,
         page,

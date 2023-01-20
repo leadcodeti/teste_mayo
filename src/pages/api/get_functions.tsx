@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import moment from "moment";
 import { api } from "../../services/api"
-import { BackgroundProps, User, videoPrppertyTypes, VideoTypes } from "../../types/types";
+import { BackgroundProps, User,ControllerProps,VideoTypes, ThumbnailsTypes } from "../../types/types";
 
 export const getDesign = async (currentVideoId: string) => {
   
@@ -18,7 +18,7 @@ export const getDesign = async (currentVideoId: string) => {
 export const getControllers = async (currentVideoId: string) => {
   
   if(currentVideoId){
-    const { data } =await api.get<videoPrppertyTypes>(`/controls/${currentVideoId}`);
+    const { data } =await api.get<ControllerProps>(`/controls/${currentVideoId}`);
     return data;
   } else {
     return ;
@@ -42,6 +42,11 @@ export const getAllVideos = async (user: User,page: number) => {
         }),
         duration: moment.duration(`${res.duration}`).asMilliseconds(),
         total: totalVideo,
+        has_autoplay: res.has_autoplay,
+        has_progress_bar: res.has_progress_bar,
+        has_cta_button: res.has_cta_button,
+        has_continue_options: res.has_continue_options,
+        has_thumbnail: res.has_thumbnail,
       };
     })
 
@@ -49,5 +54,32 @@ export const getAllVideos = async (user: User,page: number) => {
 
   } else {
     return;
+  }
+}
+
+
+export const getThumbnails = async (currentVideoId: string) => {
+  
+  if(currentVideoId){
+    const { data } = await api.get<ThumbnailsTypes[]>(`/thumbnails/${currentVideoId}`);
+    return data;
+  } else {
+    return ;
+  }
+}
+
+interface AutoplayTypes {
+  text_color: string;
+  background_color: string;
+  top_text: string;
+  bottom_text: string;
+}
+export const getAutoPlayProps = async (currentVideoId: string) => {
+  
+  if(currentVideoId){
+    const { data } = await api.get<AutoplayTypes>(`/autoplays/${currentVideoId}`);
+    return data;
+  } else {
+    return ;
   }
 }

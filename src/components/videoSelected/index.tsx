@@ -3,11 +3,14 @@ import { useCopyToClipboard } from 'usehooks-ts'
 import styles from "./styles.module.scss";
 import { BsCodeSlash } from "react-icons/bs";
 import { usePlayeContext } from "../../contexts/usePlayerContext";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { useVideoContext } from "../../contexts/useContext";
 import { BelowButon } from "../editVideoSideBar/components/botoes/belowButtons";
 import { toast } from "react-toastify";
+import { AiFillEdit } from "react-icons/ai";
+import { useMutation, useQueryClient } from "react-query";
+import { upDateVideoName } from "../../pages/api/post_put_functions";
 
 const PlayerVideo = dynamic(() => import("./player"), {
   ssr: false,
@@ -36,6 +39,16 @@ export  function VideoSelected() {
     setIsVisibleButtonBelow,
     videosId
   } = useVideoContext();
+
+  const [editName,setEditName] = useState(false);
+  const [newVideoName,setNewVideoName] = useState("");
+  const queryClient = useQueryClient();
+
+  const { mutate: videoNameMutation, data } = useMutation(upDateVideoName, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("videos");
+    },
+  });
 
   function copyYouTubeLink(){
     copyLink(`youtube.com/embed/${videosId.currentPlayerId}`)
@@ -78,12 +91,49 @@ export  function VideoSelected() {
     });
   }, [currentVideo.currentVideoId, setBelowButtonProps, videosId]);
 
+  function editVideoName() {
+    setEditName(!editName)
+  }
+
+  function onSubmitName(e:FormEvent) {
+    e.preventDefault();
+    videoNameMutation({
+      videosId: {
+        videoName: newVideoName,
+        currentVideoId: videosId.currentVideoId
+      }
+    })
+    toast.success("Nome atualizado!");
+    setEditName(!editName)
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.detailsVideo}>
-        <h2>{videosId.videoName}</h2>
+         <div className={styles.videoName}>
+           {editName ? (
+           <>
+            <form onSubmit={onSubmitName}>
+              <input  
+               defaultValue={videosId.videoName}
+               onChange={(e) => setNewVideoName(e.target.value)}
+              />
+              <button type="submit">
+                Salvar
+              </button>
+            </form>
+           </>
+           ) : (
+            <>
+              <h2>{videosId.videoName}</h2>
+              <button className={styles.editBtnName} onClick={editVideoName}>
+                <AiFillEdit />
+              </button>
+            </>
+           )}
+         </div>
 
-        <button onClick={onGenerate}>
+        <button className={styles.embedBtn}  onClick={onGenerate}>
           <BsCodeSlash size={18} /> Código de incorporação
         </button>
       </div>

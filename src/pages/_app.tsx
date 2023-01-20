@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-       <ToastContainer autoClose={2000} />
+       <ToastContainer autoClose={1000} />
         <ContextPlayerProvider>
           <SideBarProvider>
              <GlobalStyle />

@@ -11,10 +11,7 @@ interface ContinueProps {
 }
 
 export function Continuar({setCurrentTime} : ContinueProps) {
-  const {
-    continuarProps,
-    setContinuarProps,
-  } = useVideoContext();
+  const {continuarProps, setContinuarProps,} = useVideoContext();
   
   const [dnoneContainer, setDnoneContainer] = useState("flex");
   const { restartVideo,lastTimeWacth } = useSideBarContext()

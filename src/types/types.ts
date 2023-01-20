@@ -43,41 +43,26 @@ export interface ThumbnailsProps {
   final_image: FileList;
 }
 
-export interface ControolerTypes {
-  bigPlay: boolean | undefined;
-  nextBtn: boolean | undefined;
-  playTime: boolean | undefined;
-  prevBtn: boolean | undefined;
-  fullScrean: boolean | undefined;
-  smalPlay: boolean | undefined;
-  volume: boolean | undefined;
-  progressBar: boolean | undefined;
+export interface ThumbnailsTypes {
+  type:string;
+  url: string;
 }
 
-export interface videoPrppertyTypes {
-  backgroundColor: string;
-  has_big_play_button: boolean;
-  has_small_play_button: boolean;
-  has_volume: boolean;
-  has_fullscreen: boolean;
-  has_progress_bar: boolean;
-  has_video_duration: boolean;
-  has_foward_10_seconds: boolean;
-  has_back_10_seconds: boolean;
+export interface ControlType {
+  isActive: boolean | undefined
+}
+
+export interface ControllerProps {
+  has_big_play_button: boolean | undefined;
+  has_small_play_button: boolean | undefined;
+  has_progress_bar: boolean | undefined;
+  has_video_duration: boolean | undefined;
+  has_back_10_seconds: boolean | undefined;
+  has_foward_10_seconds: boolean | undefined;
+  has_volume: boolean | undefined;
+  has_fullscreen: boolean | undefined;
 }
 [];
-
-export interface ControllsTypes {
-  backgroundColor: string;
-  activeBigPlaygroung: boolean;
-  activeSmalPlayground: boolean;
-  displayVolume: boolean;
-  displayFullScrean: boolean;
-  displayProgressBar: boolean;
-  displayPlayTime: boolean;
-  displayNextBtn: boolean;
-  displayPrevBtn: boolean;
-}
 
 export type VideoTypes = {
   id: string;
@@ -87,6 +72,11 @@ export type VideoTypes = {
   cover_image: string;
   date: string;
   duration: number;
+  has_autoplay: boolean,
+  has_progress_bar: boolean,
+  has_cta_button: boolean,
+  has_continue_options: boolean,
+  has_thumbnail: boolean
 };
 
 
@@ -97,4 +87,15 @@ export interface CreateVideoTypes {
 
 export interface BackgroundProps {
   background_color: string;
+}
+
+export interface PutAutoplayTypes {
+  currentVideoId:string;
+
+  autoplayPros:{
+    background_color?: string;
+    bottom_tex?: string;
+    top_text?:string;
+    text_color?:string;
+  }
 }

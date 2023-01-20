@@ -4,23 +4,24 @@ import { UseMutateAsyncFunction, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
-import { PutDesignTypes } from "../../../../pages/api/post_put_functions";
+import { PutControllersTypes, PutDesignTypes } from "../../../../pages/api/post_put_functions";
 import { api } from "../../../../services/api";
-import { BackgroundProps, ControllsTypes} from "../../../../types/types";
+import { BackgroundProps, ControllerProps } from "../../../../types/types";
 import { DesignFunction } from "./controllFunctions";
 import { InputsController } from "./inputsControllers";
 import styles from "./styles.module.scss";
 
 interface DesignProps {
   design: BackgroundProps | undefined;
-  designMutation: UseMutateAsyncFunction<BackgroundProps | undefined, unknown, PutDesignTypes, unknown>
+  designMutation: UseMutateAsyncFunction<BackgroundProps | undefined, unknown, PutDesignTypes, unknown>;
+  controllersMutation: UseMutateAsyncFunction<PutControllersTypes | undefined, unknown, PutControllersTypes, unknown>
 }
 
-export function Design({ design,designMutation }:DesignProps) {
+export function Design({ design,designMutation, controllersMutation }:DesignProps) {
 
-  const methods = useForm<ControllsTypes>();
+  const methods = useForm<ControllerProps>();
 
-  const { backgroundColor, setBackgroundColor, controller} = usePlayeContext();
+  const { backgroundColor, setBackgroundColor } = usePlayeContext();
 
   const { videosId } = useVideoContext();
   const {
@@ -45,9 +46,9 @@ export function Design({ design,designMutation }:DesignProps) {
 
   const [currentBackgroundColor, setCurrentBackgroundColor] = useState("");
   const [newBackgroundColor, setnewBackgroundColor] = useState<string | undefined>("");
+  
   const colorRef = useRef<HTMLInputElement>(null);
 
-  console.log("CONTROLLER_2", controller);
 
   function backgroundHandleClick() {
     colorRef.current?.click();
@@ -65,7 +66,7 @@ export function Design({ design,designMutation }:DesignProps) {
   }, [currentBackgroundColor, design?.background_color, newBackgroundColor, setBackgroundColor]);
 
 
-  const onSubmit: SubmitHandler<ControllsTypes> = async (data) => {
+  const onSubmit: SubmitHandler<ControllerProps> = async (data) => {
 
     const currentVideoId = videosId.currentVideoId
     if (data) {
@@ -74,6 +75,7 @@ export function Design({ design,designMutation }:DesignProps) {
         const newDesignData = {
           background_color: currentBackgroundColor,
         };
+        //put background function:
        await designMutation({newDesignData,currentVideoId})
         
       } else if(!currentBackgroundColor) {
@@ -84,17 +86,19 @@ export function Design({ design,designMutation }:DesignProps) {
       }
 
       const newControlersData = {
-        has_big_play_button: data.activeBigPlaygroung,
-        has_small_play_button: data.activeSmalPlayground,
-        has_progress_bar: data.displayProgressBar,
-        has_video_duration: data.displayPlayTime,
-        has_back_10_seconds: data.displayPrevBtn,
-        has_foward_10_seconds: data.displayNextBtn,
-        has_volume: data.displayVolume,
-        has_fullscreen: data.displayFullScrean,
+        has_big_play_button: bigPlay.isActive,
+        has_small_play_button: smalPlay.isActive,
+        has_progress_bar: progressBar.isActive,
+        has_video_duration: playTime.isActive,
+        has_back_10_seconds: prevBtn.isActive,
+        has_foward_10_seconds: nextBtn.isActive,
+        has_volume: volume.isActive,
+        has_fullscreen: fullScrean.isActive,
       };
+      
+       //put controll function:
+      await controllersMutation({newControlersData,currentVideoId})
           
-      api.put(`/controls/${videosId.currentVideoId}`, newControlersData);
       toast.success("Alterações salvas!")
     }
   };
@@ -125,60 +129,52 @@ export function Design({ design,designMutation }:DesignProps) {
         <p>Controles</p>
 
         <InputsController 
-         checked={bigPlay ? controller.bigPlay : bigPlay}
+         checked={bigPlay?.isActive}
          handleClick={activeBigPlay} 
-         inputName="activeBigPlaygroung" 
          inputText="Botão play grande"  
         />
 
         <InputsController 
-         checked={smalPlay ? controller.smalPlay : bigPlay}
+         checked={smalPlay?.isActive}
          handleClick={activeSmalPlay} 
-         inputName="activeSmalPlayground" 
          inputText="Botão play pequeno"  
         />
 
         <InputsController 
-         checked={controller.progressBar}
+         checked={progressBar?.isActive}
          handleClick={activeProgressBar} 
-         inputName="displayProgressBar" 
          inputText="Barra de progresso"  
         />
 
         <InputsController 
-         checked={controller.playTime}
+         checked={playTime?.isActive}
          handleClick={activePlayTime} 
-         inputName="displayPlayTime" 
          inputText="Tempo de vídeo"  
         />
 
         <InputsController 
-         checked={controller.prevBtn}
+         checked={prevBtn?.isActive}
          handleClick={activePrevBtn} 
-         inputName="displayPrevBtn" 
          inputText="Voltar 10s"  
        />
 
         <InputsController 
-         checked={controller.nextBtn}
+         checked={nextBtn?.isActive}
          handleClick={activeNextBtn} 
-         inputName="displayNextBtn" 
          inputText="Avançar 10s"  
        />
 
        <InputsController 
-         checked={controller.volume}
+         checked={volume?.isActive}
          handleClick={activeVolume} 
-         inputName="displayVolume" 
          inputText="volume"  
        />
 
         <InputsController 
-         checked={controller.fullScrean}
+         checked={fullScrean?.isActive}
          handleClick={activeFullScrean} 
-         inputName="displayFullScrean" 
          inputText="Fullscreen"  
-        />
+        /> 
       
         <div className={styles.saveOrCancel}>
           <button type="reset">Cancelar</button>

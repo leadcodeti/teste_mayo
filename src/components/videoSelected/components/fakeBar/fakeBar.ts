@@ -1,33 +1,34 @@
 import styled from "styled-components";
 
 interface containerFakeBarProps {
-  background_color: string;
+  background_color: string | undefined;
   height: string;
   formatedTime: number;
   animation: number;
+  condictionDalay:number;
 }
 
 export const Container = styled.div<containerFakeBarProps>`
   background: ${(props) => props.background_color};
-  min-width: ${(props) => props.formatedTime}%;
+
 
   height: ${(props) => props.height};
   z-index: 999;
   position: absolute;
   left: 0;
   bottom: 0;
-  animation: mayoplayer-fakebar-animation ${(props) => props.animation}s
-    infinite;
+  
+  animation: mayoplayer-fakebar-animation ${(props) => (props.animation - props.formatedTime )}s;
 
   @keyframes mayoplayer-fakebar-animation {
     0.5% {
-      width: 10%;
+      width: ${(props) => props.formatedTime  <= 5 ? 10 : 0 }%;
     }
     0.9% {
-      width: 15%;
+      width: ${(props) => props.formatedTime  <= 15 ? 15 : 0 }%;
     }
     1.5% {
-      width: 17%;
+      width: 20%;
     }
     2.4% {
       width: 22%;

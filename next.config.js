@@ -6,22 +6,19 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "i.ytimg.com",
-        port: "",
-        // pathname: "/image/**",
-      },
+      // {
+      //   protocol: "https",
+      //   hostname: "i.ytimg.com",
+      //   port: "",
+      //   // pathname: "/image/**",
+      // },
       {
         protocol: "https",
         hostname: "mayo-player-backend-production.up.railway.app",
-        port: "",
-        pathname: "/thumbnails/**",
       },
       {
         protocol: "https",
         hostname: "img.youtube.com",
-        port: "",
         // pathname: "/thumbnails/**",
       },
     ],

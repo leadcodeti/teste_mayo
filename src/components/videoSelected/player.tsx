@@ -32,33 +32,45 @@ import { FakeBarInVideo } from "./components/fakeBar";
 import { AutoPlay } from "./components/autoPlay";
 import { Thumbnails } from "./components/thumbnails";
 import { useSideBarContext } from "../../contexts/thirdContext";
+import { Switch } from "../editVideoSideBar/accordion/switchFunctions";
+import { boolean } from "yup";
 
 export default function PlayerVideo() {
-  const { backgroundColor, controller} = usePlayeContext();
-  const player = useRef<HTMLVmPlayerElement>(null);
-  const [currentTime, setCurrentTime] = usePlayerContext( player, "currentTime",0);
-  const [duration] = usePlayerContext(player, "duration", -1);
-  const { setCurrentTimeVideo, getCurrentVideoTime } = useSideBarContext()
+  const { 
+      setCurrentTimeVideo, getCurrentVideoTime,
+      activeAccordion, playerRef
+  } = useSideBarContext()
+
+  const [currentTime, setCurrentTime] = usePlayerContext( playerRef, "currentTime",0);
+  const [duration] = usePlayerContext(playerRef, "duration", -1);
+
+  const { 
+    backgroundColor,
+    bigPlay,
+    nextBtn,
+    playTime,
+    prevBtn,
+    fullScrean,
+    smalPlay,
+    volume,
+    progressBar,
+  } = usePlayeContext();
 
   const {
     currentVideo,
     setButtonPosition,
     buttonPosition,
-    buttonProps,
     videosId,
     setButtonProps,
-    hasContinue,
-    setHasContinue,
     setVideoTime,
-    hasFakeBar,
-    setHasFakeBar,
     setCurrentVideoTime,
-    hasAutoPlay,
     setPausedVideoThumb,
-    hasThumbNails,
     setFinalVideoThumb,
     setStartVideoThumb,
   } = useVideoContext();
+
+  Switch() 
+   
 
   useEffect(() => {
     setVideoTime(duration);
@@ -87,7 +99,7 @@ export default function PlayerVideo() {
     width: "80px",
     height: "80px",
     margin: "0 auto",
-    display: `${controller.bigPlay ? "flex" : "none"}`,
+    display: `${ bigPlay?.isActive ? "flex" : "none"}`,
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
@@ -122,16 +134,15 @@ export default function PlayerVideo() {
   ]);
 
  useEffect(() => {
-  setCurrentVideoTime(player.current?.currentTime);
+  setCurrentVideoTime(playerRef.current?.currentTime);
 
-  let finalThumb = player.current?.currentTime == player.current?.duration;
+  let finalThumb = playerRef.current?.currentTime == playerRef.current?.duration;
 
-  console.log("resultado da varivavel", finalThumb);
   setPausedVideoThumb(
-    player.current?.paused && player.current?.currentTime > 1
+    playerRef.current?.paused && playerRef.current?.currentTime > 1
   );
   setFinalVideoThumb(finalThumb);
-  setStartVideoThumb(player.current?.currentTime == 0);
+  setStartVideoThumb(playerRef.current?.currentTime == 0);
 
  })
 
@@ -144,9 +155,15 @@ export default function PlayerVideo() {
   //   });
   // }, [videosId.currentVideoId, setHasFakeBar, setHasContinue]);
 
+
   return (
     <div className={styles.player}>
-      <Player theme="dark" style={playerTheme} ref={player}>
+      <Player 
+        theme="dark" 
+        style={playerTheme} 
+        ref={playerRef}
+        volume={activeAccordion?.activeAutoPlay ? 0.01 : 30}
+      >
         <div
           className={`${styles.insideVideoButton}
               ${
@@ -172,10 +189,10 @@ export default function PlayerVideo() {
               }
             `}
           >
-          {hasContinue ? <Continuar setCurrentTime={setCurrentTime} /> : ""}
-          {hasFakeBar ? <FakeBarInVideo /> : ""}
-          {hasAutoPlay ? <AutoPlay /> : ""}
-          {hasThumbNails ? <Thumbnails /> : ""}
+          {activeAccordion?.activeContinue ? <Continuar setCurrentTime={setCurrentTime} /> : ""}
+          {activeAccordion?.activeFakeBar ? <FakeBarInVideo /> : ""}
+          {activeAccordion?.activeAutoPlay ? <AutoPlay setCurrentTime={setCurrentTime} /> : ""}
+          {activeAccordion?.activeThumbNails ? <Thumbnails /> : ""}
          
         </div>
         <Youtube videoId={videosId.currentPlayerId} />
@@ -192,13 +209,16 @@ export default function PlayerVideo() {
           <Controls fullWidth>
             <ControlGroup>
               <ScrubberControl
-                style={{ display: `${controller.progressBar ? "flex" : "none"}` }}
+                style={{ display: `${ progressBar?.isActive ? "flex" : "none"}` }}
               />
             </ControlGroup>
 
-            <ControlGroup space="top">
+            <ControlGroup 
+               space="top" 
+              style={{ display: `${ activeAccordion?.activeAutoPlay ? "none" : "flex"}` }}
+            >
               <PlaybackControl
-                style={{ display: `${controller.smalPlay ? "flex" : "none"}` }}
+                style={{ display: `${ smalPlay?.isActive ? "flex" : "none"}` }}
                 hideTooltip={true}
                 onClick={getCurrentVideoTime} 
               />
@@ -206,7 +226,7 @@ export default function PlayerVideo() {
               <ButtonsContainer>
                 <PrevButton
                   background={backgroundColor}
-                  prevBtn={controller.prevBtn}
+                  prevBtn={prevBtn?.isActive}
                   onClick={onSeekBackward}
                 >
                   <MdSkipPrevious size={28} />
@@ -214,7 +234,7 @@ export default function PlayerVideo() {
 
                 <NextButton
                   background={backgroundColor}
-                  nextBtn={controller.nextBtn}
+                  nextBtn={nextBtn?.isActive}
                   onClick={onSeekForward}
                 >
                   <MdSkipNext size={28} />
@@ -222,16 +242,16 @@ export default function PlayerVideo() {
               </ButtonsContainer>
 
               <VolumeControl
-                style={{ display: `${controller.volume ? "block" : "none"}` }}
+                style={{ display: `${volume?.isActive ? "block" : "none"}` }}
                 hideTooltip={true}
               />
               <TimeProgress
-                style={{ display: `${controller.playTime ? "flex" : "none"}` }}
+                style={{ display: `${playTime?.isActive ? "flex" : "none"}` }}
                 separator="/"
               />
               <ControlSpacer />
               <FullscreenControl
-                style={{ display: `${controller.fullScrean ? "flex" : "none"}` }}
+                style={{ display: `${ fullScrean?.isActive ? "flex" : "none"}` }}
                 hideTooltip={true}
               />
             </ControlGroup>
@@ -243,35 +263,3 @@ export default function PlayerVideo() {
     </div>
   );
 }
-
-          // <ButtonInsideVideo
-          //   href={"#"}
-          //   target="_blank"
-          //   background={buttonProps.background_color}
-          //   background_hover={buttonProps.bacgrkound_hover}
-          //   text_color={buttonProps.text_color}
-          //   sizeWidth={
-          //     buttonProps.size === "125"
-          //       ? "180px"
-          //       : buttonProps.size === "150"
-          //       ? "250px"
-          //       : buttonProps.size === "250"
-          //       ? "350px"
-          //       : ""
-          //   }
-          //   sizeFont={
-          //     buttonProps.size === "125"
-          //       ? "100%"
-          //       : buttonProps.size === "150"
-          //       ? "150%"
-          //       : buttonProps.size === "250"
-          //       ? "200%"
-          //       : ""
-          //   }
-          //   className={`${buttonProps.text == "" ? styles.button : ""} ${
-          //     styles.buttonSize
-          //   }`}
-          // >
-          //   {/* zindez do botão - ver no embed */}
-          //   {buttonProps.text}
-          // </ButtonInsideVideo>

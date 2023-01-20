@@ -1,9 +1,16 @@
 import { useEffect, useCallback,MouseEvent, useState, useRef, FormEvent, ChangeEvent } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { useVideoContext } from "../../../../contexts/useContext";
+import { getThumbnails } from "../../../../pages/api/get_functions";
+import { putThumbnails } from "../../../../pages/api/post_put_functions";
 import { api } from "../../../../services/api";
 
+interface thumbnailType {
+  type: string | null,
+  url: string | null,
+}
 
 export function InputsFunctions() {
   
@@ -20,15 +27,47 @@ export function InputsFunctions() {
   const [previewPauseImage, setPreviewPauseImage] = useState<string | null>(null);
   const [previewFinalImage, setPreviewFinalImage] = useState<string | null>(null);
 
+  const queryClient = useQueryClient();
+  
+  const { data: thumbnails } = useQuery(["thumbnails", videosId.currentVideoId],
+   () => getThumbnails(videosId.currentVideoId)
+  );
+  
+  const { mutateAsync: thumbnailMutation } = useMutation(putThumbnails, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("thumbnails");
+    },
+  });
 
   const imageStartRef = useRef<HTMLInputElement>(null);
   const imagePauseRef = useRef<HTMLInputElement>(null);
   const imageFinalRef = useRef<HTMLInputElement>(null);
-  
+
+
   function handleClickOnStart(e: MouseEvent<HTMLLabelElement, globalThis.MouseEvent>) {
     e.preventDefault();
     imageStartRef.current?.click()
   }
+
+
+  useEffect(() => {
+    thumbnails?.forEach((thumbnail: thumbnailType) => {
+      if (thumbnail?.type === "start_image") {
+        if(startImage === undefined){
+          setPreviewStartImage(thumbnail.url);
+        }
+        
+      } else if(thumbnail?.type === "pause_image"){
+        if(pauseImage === undefined){
+          setPreviewPauseImage(thumbnail.url);
+        }
+      } else {
+        if(finalImage === undefined){
+          setPreviewFinalImage(thumbnail.url);
+        }
+      }
+    });
+  },[finalImage, pauseImage, startImage, thumbnails])
 
     
   function handleClickOnPause(e: MouseEvent<HTMLLabelElement, globalThis.MouseEvent>) {
@@ -41,53 +80,34 @@ export function InputsFunctions() {
     imageFinalRef.current?.click()
   }
 
-  async function teste() {
-    const formData = new FormData();
-    let thumbnailType;
-
-    if (startImage) {
-      formData.append("thumbnail", startImage);
-      thumbnailType = "start_image";
-    }
-
-    const headers = { "Content-Type": "multipart/form-data" };
-
-    const res1 =  await api.put(
-       `/thumbnails/${videosId.currentVideoId}?type=${thumbnailType}`,
-       formData,
-       {
-         headers: headers,
-       }
-     );
-
-  }
-
   async function onChangeStartImage(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files
     const formData = new FormData();
-    let thumbnailType;
 
     if(file){
-      if(file[0].type !== "image/png"){
-        setImageStartError('⚠ Arquivo inválido! Apenas imagem no formato png.')
+      const imageName = file[0];
+      const validationImage = (/\.(jpg|jpeg|png|gif)$/);
+
+      if(!imageName.name.match(validationImage)){
+        setImageStartError('⚠ Arquivo inválido! Apenas imagem no formato jpg|jpeg|png|gif.')
         return;
       }
 
-      if(file[0].size > 200000 ){
-        setImageStartError('⚠ Arquivo demasiado grande! Apenas imagens com tamanho de 2MB.')
+      if(file[0].size > 3000000 ){
+        setImageStartError('⚠ Arquivo demasiado grande! Apenas imagens com tamanho de 3MB.')
         return;
       }
       
       formData.append("thumbnail", file[0]);
-      thumbnailType = "start_image";
-      const headers = { "Content-Type": "multipart/form-data" };
-       await api.put(
-        `/thumbnails/${videosId.currentVideoId}?type=${thumbnailType}`,
-         formData,
-        {
-          headers: headers,
+    
+      await thumbnailMutation ({
+        updata: {
+          formData: formData,
+          currentVideoId: videosId.currentVideoId,
+          type: "start_image"
         }
-     );
+      })
+
 
       toast.success("Imagem atualizada!")
       setStartImage(file[0]);
@@ -102,26 +122,30 @@ export function InputsFunctions() {
     const file = e.target.files
 
     if(file){
-      if(file[0].type !== "image/png"){
-        setImagePauseError('⚠ Arquivo inválido! Apenas imagem no formato png.')
+      const imageName = file[0];
+      const validationImage = (/\.(jpg|jpeg|png|gif)$/);
+
+      if(!imageName.name.match(validationImage)){
+        setImagePauseError('⚠ Arquivo inválido! Apenas imagem no formato jpg|jpeg|png|gif.')
         return;
       }
 
-      if(file[0].size > 200000 ){
-        setImagePauseError('⚠ Arquivo demasiado grande! Apenas imagens com tamanho de 2MB.')
+
+      if(file[0].size > 3000000 ){
+        setImagePauseError('⚠ Arquivo demasiado grande! Apenas imagens com tamanho de 3MB.')
         return;
       }
 
       formData.append("thumbnail", file[0]);
-      const headers = { "Content-Type": "multipart/form-data" };
-       await api.put(
-        `/thumbnails/${videosId.currentVideoId}?type=pause_image`,
-         formData,
-        {
-          headers: headers,
-        }
-     );
 
+      await thumbnailMutation ({
+        updata: {
+          formData: formData,
+          currentVideoId: videosId.currentVideoId,
+          type: "pause_image"
+        }
+      })
+    
       toast.success("Imagem atualizada!")
       setPauseImage(file[0]);
       setImagePauseError("");
@@ -135,25 +159,29 @@ export function InputsFunctions() {
     const file = e.target.files
 
     if(file){
-      if(file[0].type !== "image/png"){
-       setimageFinalError('⚠ Arquivo inválido! Apenas imagem no formato png.')
+      const imageName = file[0];
+      const validationImage = (/\.(jpg|jpeg|png|gif)$/);
+
+      if(!imageName.name.match(validationImage)){
+        setimageFinalError('⚠ Arquivo inválido! Apenas imagem no formato jpg|jpeg|png|gif.')
         return;
       }
 
-      if(file[0].size > 200000 ){
-       setimageFinalError('⚠ Arquivo demasiado grande! Apenas imagens com tamanho de 2MB.')
+
+      if(file[0].size > 3000000 ){
+       setimageFinalError('⚠ Arquivo demasiado grande! Apenas imagens com tamanho de 3MB.')
         return;
       }
 
       formData.append("thumbnail", file[0]);
-      const headers = { "Content-Type": "multipart/form-data" };
-       await api.put(
-        `/thumbnails/${videosId.currentVideoId}?type=final_image`,
-         formData,
-        {
-          headers: headers,
+
+      await thumbnailMutation ({
+        updata: {
+          formData: formData,
+          currentVideoId: videosId.currentVideoId,
+          type: "final_image"
         }
-     );
+      })
 
       toast.success("Imagem atualizada!")
       setfinalImage(file[0]);

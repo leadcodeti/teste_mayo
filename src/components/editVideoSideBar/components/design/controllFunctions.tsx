@@ -1,51 +1,74 @@
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useVideoContext } from "../../../../contexts/useContext";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
-import { getControllers } from "../../../../pages/api/get_functions";
-import { ControolerTypes, videoPrppertyTypes } from "../../../../types/types";
 
 export function DesignFunction() {
 
-  const [bigPlay, setBigPlay] = useState(true);
-  const [smalPlay, setSmalPlay] = useState(true);
-  const [volume, setVolume] = useState(true);
-  const [progressBar, setProgessBar] = useState(true);
-  const [playTime, setPlayTime] = useState(true);
-  const [fullScrean, setFullScrean] = useState(true);
-  const [nextBtn, setNextBtn] = useState(true);
-  const [prevBtn, setPrevBtn] = useState(true);
+  const { 
+    bigPlay,
+    nextBtn,
+    playTime,
+    fullScrean,
+    prevBtn,
+    progressBar,
+    volume,
+    smalPlay,
+
+    setBigPlay,
+    setFullScrean,
+    setNextBtn,
+    setPlayTime,
+    setPrevBtn,
+    setProgessBar,
+    setSmalPlay,
+    setVolume
+  } = usePlayeContext()
+
 
   function activeBigPlay() {
-    setBigPlay(!bigPlay);
+    setBigPlay({
+      isActive: !bigPlay.isActive
+    })
   }
 
   function activeSmalPlay() {
-    setSmalPlay(!smalPlay);
+    setSmalPlay({
+      isActive: !smalPlay.isActive
+    });
   }
 
   function activeVolume() {
-    setVolume(!volume);
+    setVolume({
+      isActive: !volume.isActive
+    });
   }
 
   function activePlayTime() {
-    setPlayTime(!playTime);
+    setPlayTime({
+      isActive: !playTime.isActive
+    });
   }
 
   function activeFullScrean() {
-    setFullScrean(!fullScrean);
+    setFullScrean({
+      isActive: !fullScrean.isActive
+    });
   }
 
   function activeProgressBar() {
-    setProgessBar(!progressBar);
+    setProgessBar({
+      isActive: !progressBar.isActive
+    });
   }
 
   function activeNextBtn() {
-    setNextBtn(!nextBtn);
+    setNextBtn({
+      isActive: !nextBtn.isActive
+    });
   }
 
   function activePrevBtn() {
-    setPrevBtn(!prevBtn);
+    setPrevBtn({
+      isActive: !prevBtn.isActive
+    });
   }
 
   return { 

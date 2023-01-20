@@ -3,14 +3,15 @@ import {AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { api } from "../../../../services/api";
 import { useVideoContext } from "../../../../contexts/useContext";
-import { ThumbnailsProps } from "../../../../types/types";
-import { useEffect, useCallback,FormEvent } from "react";
+import { useEffect, useCallback } from "react";
 import { InputThumbnail } from "./inputThumbnail";
 import { InputsFunctions } from "./inputFunctions";
 
+
 export function Thumbnails() {
 
-  const { videosId, thumbnailsProps, setThumbnailsProps, user } = useVideoContext();
+   const { videosId, thumbnailsProps, setThumbnailsProps, user } = useVideoContext();
+
   const {
 
     previewStartImage,

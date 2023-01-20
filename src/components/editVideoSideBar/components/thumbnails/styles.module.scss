@@ -102,11 +102,31 @@
     .previewImageContainer{
       width: inherit;
       padding-top: 0.5rem;
-    
+
       img {
         width: 100%;
         height: 120px;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+      }
+
+      .deleteImage {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+        padding-right: 0.3rem;
+        top: -10rem;
+
+        svg {
+          margin-bottom: 0;
+          cursor: pointer;
+          filter: brightness(0.7);
+          transition: all .3s ease-in-out;
+
+          &:hover {
+            filter: brightness(0.9);
+          }
+        }
       }
     }
 

@@ -12,7 +12,7 @@ import { useQuery } from "react-query";
 import { embedVideo } from "../components/embedVideo/embed";
 import { getControllers } from "../pages/api/get_functions";
 import { api } from "../services/api";
-import { ControolerTypes } from "../types/types";
+import { ControlType } from "../types/types";
 import { useVideoContext } from "./useContext";
 
 interface contextProps {
@@ -20,8 +20,23 @@ interface contextProps {
   setBackgroundColor: Dispatch<SetStateAction<string | undefined>>;
   backgroundColor: string | undefined;
   embedString: string;
-  setController: Dispatch<SetStateAction<ControolerTypes>>;
-  controller:ControolerTypes;
+  bigPlay: ControlType,
+  nextBtn:ControlType,
+  playTime:ControlType,
+  prevBtn:ControlType,
+  fullScrean:ControlType,
+  smalPlay:ControlType,
+  volume:ControlType,
+  progressBar:ControlType,
+
+  setBigPlay:Dispatch<SetStateAction<ControlType>>;
+  setSmalPlay:Dispatch<SetStateAction<ControlType>>;
+  setVolume:Dispatch<SetStateAction<ControlType>>;
+  setProgessBar:Dispatch<SetStateAction<ControlType>>;
+  setPlayTime:Dispatch<SetStateAction<ControlType>>;
+  setFullScrean:Dispatch<SetStateAction<ControlType>>;
+  setNextBtn:Dispatch<SetStateAction<ControlType>>;
+  setPrevBtn:Dispatch<SetStateAction<ControlType>>;
 }
 
 interface ProviderProps {
@@ -33,31 +48,47 @@ const context = createContext({} as contextProps);
 export function ContextPlayerProvider({ children }: ProviderProps) {
   const { openModal, videosId } = useVideoContext();
   const [embedString, setString] = useState("");
-  const [backgroundColor, setBackgroundColor] = useState<string | undefined>("");
+  const [backgroundColor, setBackgroundColor] = useState<string | undefined>(
+    ""
+  );
 
-  const { data: controll } = useQuery(['controll', videosId.currentVideoId],() => getControllers(videosId.currentVideoId))
+  const { data: controll } = useQuery( ["controll", videosId.currentVideoId],() => getControllers(videosId.currentVideoId));
 
-  const [controller, setController] = useState({} as ControolerTypes);
+  const [bigPlay, setBigPlay] = useState({} as ControlType);
+  const [smalPlay, setSmalPlay] =useState({} as ControlType);
+  const [volume, setVolume] =useState({} as ControlType);
+  const [progressBar, setProgessBar] =useState({} as ControlType);
+  const [playTime, setPlayTime] =useState({} as ControlType);
+  const [fullScrean, setFullScrean] =useState({} as ControlType);
+  const [nextBtn, setNextBtn] =useState({} as ControlType);
+  const [prevBtn, setPrevBtn] =useState({} as ControlType);
 
-  console.log("NEW CONTROLLER_TESTE", controller);
+
 
   useEffect(() => {
-    setController( {
-      bigPlay: controll?.has_big_play_button,
-      nextBtn: controll?.has_foward_10_seconds, 
-      playTime: controll?.has_video_duration, 
-      prevBtn: controll?.has_back_10_seconds, 
-      fullScrean: controll?.has_fullscreen, 
-      smalPlay: controll?.has_small_play_button,
-      volume: controll?.has_volume,
-      progressBar: controll?.has_progress_bar, 
-    })
-
-},[controll, setController])
+    setBigPlay({ isActive: controll?.has_big_play_button})
+    setSmalPlay({ isActive: controll?.has_small_play_button})
+    setVolume({ isActive:controll?.has_volume})
+    setProgessBar({ isActive: controll?.has_progress_bar})
+    setPlayTime({ isActive:controll?.has_video_duration})
+    setFullScrean({ isActive:controll?.has_fullscreen})
+    setNextBtn({ isActive: controll?.has_foward_10_seconds})
+    setPrevBtn({ isActive:controll?.has_back_10_seconds,})
+  }, [controll]);
 
   const onGenerate = () => {
+    const controller = {
+      bigPlay,
+      nextBtn,
+      playTime,
+      fullScrean,
+      prevBtn,
+      progressBar,
+      volume,
+      smalPlay,
+    }
     openModal();
-    const { jsIframe } = embedVideo({ backgroundColor,controller});
+    const { jsIframe } = embedVideo({ backgroundColor, controller });
     setString(getHtml(jsIframe));
   };
 
@@ -79,8 +110,23 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
         onGenerate,
         backgroundColor,
         setBackgroundColor,
-        setController,
-        controller,
+        bigPlay,
+        nextBtn,
+        playTime,
+        fullScrean,
+        prevBtn,
+        progressBar,
+        volume,
+        smalPlay,
+
+        setBigPlay,
+        setFullScrean,
+        setNextBtn,
+        setPlayTime,
+        setPrevBtn,
+        setProgessBar,
+        setSmalPlay,
+        setVolume
       }}
     >
       {children}
