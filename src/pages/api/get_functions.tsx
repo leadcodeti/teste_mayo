@@ -83,3 +83,17 @@ export const getAutoPlayProps = async (currentVideoId: string) => {
     return ;
   }
 }
+
+export const getPropsButtonBelow = async (
+  videosId: string,
+  buttonOption: string
+) => {
+  if (videosId) {
+    const { data: response } = await api.get(
+      `/cta_buttons/${videosId}?type=${buttonOption}`
+    );
+    return response;
+  } else {
+    return;
+  }
+};

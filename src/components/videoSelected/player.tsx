@@ -54,12 +54,22 @@ export default function PlayerVideo() {
     smalPlay,
     volume,
     progressBar,
+    
+    watchVideoTime,
+    setWatchVideoTime,
+    setTotalDuration,
+    htmlCustom,
+    setHtmlCustom,
+    htmlCustomTimer,
+    resultInsideProps,
+    setChangeDuration,
   } = usePlayeContext();
 
   const {
     currentVideo,
     setButtonPosition,
     buttonPosition,
+    buttonProps,
     videosId,
     setButtonProps,
     setVideoTime,
@@ -67,6 +77,8 @@ export default function PlayerVideo() {
     setPausedVideoThumb,
     setFinalVideoThumb,
     setStartVideoThumb,
+    isVisibleButtonInside,
+    isVisibleButtonCustom,
   } = useVideoContext();
 
   Switch() 
@@ -75,7 +87,8 @@ export default function PlayerVideo() {
   useEffect(() => {
     setVideoTime(duration);
     setCurrentTimeVideo(currentTime)
-  }, [currentTime, duration, setCurrentTimeVideo, setVideoTime]);
+    setTotalDuration(playerRef.current?.duration);
+  }, [currentTime, duration, playerRef, setCurrentTimeVideo, setTotalDuration, setVideoTime]);
 
   const onSeekBackward = () => {
     if (currentTime < 5) return;
@@ -114,6 +127,12 @@ export default function PlayerVideo() {
       const insideFiltered = data?.filter((e: any) => e.type === "inside");
       const insideResult = insideFiltered[0];
 
+      if (data?.find((e: any) => e.type === "custom")) {
+        const buttonCustom = data?.find((e: any) => e.type === "custom");
+        setHtmlCustom(buttonCustom.html_content);
+        // setHtmlCustomTimer({buttonCustom?.start, buttonCustom?.end})
+      }
+
       setButtonProps({
         background_color: insideResult.background_color,
         bacgrkound_hover: insideResult.background_hover,
@@ -125,13 +144,7 @@ export default function PlayerVideo() {
       });
       setButtonPosition(insideResult.position);
     });
-  }, [
-    currentVideo.currentVideoId,
-    setButtonProps,
-    buttonPosition,
-    setButtonPosition,
-    videosId.currentVideoId,
-  ]);
+  }, [currentVideo.currentVideoId, setButtonProps, setButtonPosition, videosId.currentVideoId, setHtmlCustom]);
 
  useEffect(() => {
   setCurrentVideoTime(playerRef.current?.currentTime);
@@ -145,6 +158,12 @@ export default function PlayerVideo() {
   setStartVideoThumb(playerRef.current?.currentTime == 0);
 
  })
+
+ setWatchVideoTime(playerRef.current?.currentTime);
+
+ function onTimeUpdate(event: CustomEvent<number>) {
+  setChangeDuration(event.detail);
+}
 
   // useEffect(() => {
   //   api(`/videos`).then((res) => {
@@ -163,6 +182,7 @@ export default function PlayerVideo() {
         style={playerTheme} 
         ref={playerRef}
         volume={activeAccordion?.activeAutoPlay ? 0.01 : 30}
+        onVmCurrentTimeChange={onTimeUpdate}
       >
         <div
           className={`${styles.insideVideoButton}
@@ -193,6 +213,54 @@ export default function PlayerVideo() {
           {activeAccordion?.activeFakeBar ? <FakeBarInVideo /> : ""}
           {activeAccordion?.activeAutoPlay ? <AutoPlay setCurrentTime={setCurrentTime} /> : ""}
           {activeAccordion?.activeThumbNails ? <Thumbnails /> : ""}
+
+          
+          {isVisibleButtonInside ? (
+            <>
+              {watchVideoTime ? (
+                watchVideoTime > resultInsideProps?.start &&
+                watchVideoTime < resultInsideProps?.end ? (
+                  <ButtonInsideVideo
+                    href={"#"}
+                    target="_blank"
+                    background_color={buttonProps.background_color}
+                    background_hover={buttonProps.bacgrkound_hover}
+                    text_color={buttonProps.text_color}
+                    sizeWidth={
+                      buttonProps.size === "125"
+                        ? "180px"
+                        : buttonProps.size === "150"
+                        ? "250px"
+                        : buttonProps.size === "250"
+                        ? "350px"
+                        : ""
+                    }
+                    sizeFont={
+                      buttonProps.size === "125"
+                        ? "100%"
+                        : buttonProps.size === "150"
+                        ? "150%"
+                        : buttonProps.size === "250"
+                        ? "200%"
+                        : ""
+                    }
+                    className={`${
+                      buttonProps.text == "" ? styles.button : ""
+                    } ${styles.buttonSize}`}
+                  >
+                    {/* zindez do botão - ver no embed */}
+                    {buttonProps.text}
+                  </ButtonInsideVideo>
+                ) : (
+                  ""
+                )
+              ) : (
+                ""
+              )}
+            </>
+          ) : (
+            ""
+          )}
          
         </div>
         <Youtube videoId={videosId.currentPlayerId} />

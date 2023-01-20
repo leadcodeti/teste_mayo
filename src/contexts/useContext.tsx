@@ -55,6 +55,9 @@ interface AuthContextProps {
   closeModalNewButton: () => void;
   buttonPosition: string;
   setButtonPosition: (value: string) => void;
+  buttonCustom:() => void;
+  isVisibleInside: () => void;
+  isVisibleCustom: () => void;
   buttonProps: any;
   setButtonProps: any;
   videosId: videosId;
@@ -92,6 +95,10 @@ interface AuthContextProps {
   page: number;
   setPage: (value: number) => void;
   totalUserVideos: number;
+  isVisibleButtonInside: boolean;
+  isVisibleButtonCustom: boolean;
+  setInsideButtonProps:any;
+  InsideButtonProps: any;
 }
 
 type AuthProviderProps = {
@@ -141,21 +148,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalNewButtonOpen, setModalNewButtonOpen] = useState(false);
   const [modalNewVideoOpen, setModalNewVideoOpen] = useState(false);
+
+  const [currentVideo, setCurrentVideo] = useState<CurrentVideoType>({} as CurrentVideoType);
+
   const [buttonPosition, setButtonPosition] = useState("center-center");
-  const [currentVideo, setCurrentVideo] = useState<CurrentVideoType>(
-    {} as CurrentVideoType
-  );
+  const [buttonOption, setButtonOption] = useState("below");
+  const [isVisibleButtonBelow, setIsVisibleButtonBelow] = useState(false);
+  const [isVisibleButtonInside, setIsVisibleButtonInside] =useState(false);
+  const [isVisibleButtonCustom, setIsVisibleButtonCustom] =useState(false);
 
  
   const [videosId, setVideosId] = useState<videosId>({} as videosId);
-  const [buttonOption, setButtonOption] = useState("below");
-  const [isVisibleButtonBelow, setIsVisibleButtonBelow] = useState<any>(false);
+
   const [videoTime, setVideoTime] = useState(0);
   const [currentVideoTime, setCurrentVideoTime] = useState(0);
   const [formatedTime, setFormatedTime] = useState(0);
   const [pausedVideoThumb, setPausedVideoThumb] = useState(false);
   const [finalVideoThumb, setFinalVideoThumb] = useState(false);
   const [startVideoThumb, setStartVideoThumb] = useState(false);
+
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
     background_hover: "",
@@ -165,6 +176,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     link: "",
     position: "",
   });
+
   const [belowButtonProps, setBelowButtonProps] = useState<any>({
     background_color: "",
     background_hover: "",
@@ -200,6 +212,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     pause_image: "",
     final_image: "",
   });
+
+  const [InsideButtonProps, setInsideButtonProps] = useState<any>({
+    background_color: "",
+    background_hover: "",
+    size: "",
+    text: "",
+    text_color: "",
+    link: "",
+    is_visible: isVisibleButtonInside,
+    position: buttonPosition,
+  });
+
 
   const [page, setPage] = useState(1);
   const [totalUserVideos, setTotalUserVideos] = useState(0);
@@ -251,12 +275,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setModalNewButtonOpen(false);
   }
 
+  function buttonCustom() {
+    setButtonOption("custom");
+  }
+
   async function isVisibleBelow() {
     setIsVisibleButtonBelow(!isVisibleButtonBelow);
     await api.put(
       `/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`,
       {
         is_visible: isVisibleButtonBelow,
+      }
+    );
+  }
+
+  async function isVisibleInside() {
+    setIsVisibleButtonInside(!isVisibleButtonInside);
+    await api.put(
+      `/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`,
+      {
+        is_visible: isVisibleButtonInside,
+      }
+    );
+  }
+
+  async function isVisibleCustom() {
+    setIsVisibleButtonCustom(!isVisibleButtonCustom);
+    await api.put(
+      `/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`,
+      {
+        is_visible: isVisibleButtonCustom,
       }
     );
   }
@@ -349,6 +397,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         modalNewVideoOpen,
         openModalNewVideo,
         closeModalNewVideo,
+        buttonCustom,
+        isVisibleCustom,
+        isVisibleInside,
 
         buttonOption,
         setButtonOption,
@@ -370,6 +421,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setContinuarProps,
         continuarIsVisible,
         setContinuarIsVisible,
+        isVisibleButtonCustom,
+        isVisibleButtonInside,
+        setInsideButtonProps,
+        InsideButtonProps,
 
         heightFakeBar,
         setHeightFakeBar,

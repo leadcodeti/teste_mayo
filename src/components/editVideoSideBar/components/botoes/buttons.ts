@@ -1,16 +1,16 @@
 import styled from "styled-components";
 
 interface ButtonStyles {
-  background: string;
-  background_hover: string;
+  background_color: string | undefined;
+  background_hover: string | undefined;
   text_color?: string;
-  sizeWidth: string;
+  sizeWidth: string | undefined;
   sizeFont: string;
 }
 
 export const ButtonBelowVideo = styled.a<ButtonStyles>`
   margin-top: 0.3rem;
-  background: ${(props) => props.background};
+  background: ${(props) => props.background_color};
   color: ${(props) => props.text_color};
   width: ${(props) => props.sizeWidth};
   font-size: ${(props) => props.sizeFont};
@@ -37,7 +37,7 @@ export const ButtonBelowVideo = styled.a<ButtonStyles>`
 
 export const ButtonInsideVideo = styled.a<ButtonStyles>`
   margin: 1rem;
-  background: ${(props) => props.background};
+  background: ${(props) => props.background_color};
   color: ${(props) => props.text_color};
   width: ${(props) => props.sizeWidth};
   font-size: ${(props) => props.sizeFont};
@@ -61,3 +61,5 @@ export const ButtonInsideVideo = styled.a<ButtonStyles>`
     color: ${(props) => props.text_color};
   }
 `;
+
+export const CustomButtonStyles = styled.a``;

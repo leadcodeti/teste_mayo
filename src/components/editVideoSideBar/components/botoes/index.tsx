@@ -1,12 +1,11 @@
 import styles from "./styles.module.scss";
 import Modal from "react-modal";
-import { useState } from "react";
 import { GrFormClose } from "react-icons/gr";
-import { RiTimer2Line } from "react-icons/ri";
 import { BelowVideo } from "./belowVideo";
 import { InsideVideo } from "./insideVideo";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { customStyles } from "../../../../utils/modalConfig";
+import { CustomButton } from "./custom";
 
 Modal.setAppElement("body");
 
@@ -15,11 +14,16 @@ export function Botoes() {
     buttonOption,
     buttonInsideVideo,
     buttoBelowVideo,
+    buttonCustom,
     openModalNewButton,
     closeModalNewButton,
     modalNewButtonOpen,
     isVisibleBelow,
     isVisibleButtonBelow,
+    isVisibleButtonInside,
+    isVisibleInside,
+    isVisibleButtonCustom,
+    isVisibleCustom,
   } = useVideoContext();
 
   return (
@@ -51,6 +55,13 @@ export function Botoes() {
             >
               Dentro do vídeo
             </button>
+
+            <button
+              className={buttonOption == "custom" ? styles.activeButton : ""}
+              onClick={buttonCustom}
+            >
+              Botão personalizado
+            </button>
           </div>
         </div>
         {(() => {
@@ -59,6 +70,8 @@ export function Botoes() {
               return <BelowVideo />;
             case "inside":
               return <InsideVideo />;
+            case "custom":
+              return <CustomButton />;
             default:
               return <BelowVideo />;
           }
@@ -67,7 +80,7 @@ export function Botoes() {
 
       <div className={styles.buttons}>
         <button onClick={openModalNewButton}>Adicionar novo botão</button>
-        
+
         <div>
           {isVisibleButtonBelow ? (
             <label style={{ fontSize: "14px" }}>
@@ -78,12 +91,52 @@ export function Botoes() {
               Mostrar botão abaixo do vídeo &nbsp;
             </label>
           )}
-          <input
-            // onChange={() => !isVisibleButtonBelow}
-            type="checkbox"
-            onClick={isVisibleBelow}
-            checked={isVisibleButtonBelow}
-          />
+          <label className={styles.checkContainer}>
+            <input
+              checked={isVisibleButtonBelow}
+              type="checkbox"
+              onClick={isVisibleBelow}
+            />
+            <span className={styles.checkmark}></span>
+          </label>
+        </div>
+        <div>
+          {isVisibleButtonInside ? (
+            <label style={{ fontSize: "14px", marginTop: 10 }}>
+              Ocultar botão dentro do vídeo &nbsp;
+            </label>
+          ) : (
+            <label style={{ fontSize: "14px", marginTop: 10 }}>
+              Mostrar botão dentro do vídeo &nbsp;
+            </label>
+          )}
+          <label className={styles.checkContainer}>
+            <input
+              checked={isVisibleButtonInside}
+              type="checkbox"
+              onClick={isVisibleInside}
+            />
+            <span className={styles.checkmark}></span>
+          </label>
+        </div>
+        <div>
+          {isVisibleButtonCustom ? (
+            <label style={{ fontSize: "14px", marginTop: 10 }}>
+              Ocultar botão Personalizado &nbsp;
+            </label>
+          ) : (
+            <label style={{ fontSize: "14px", marginTop: 10 }}>
+              Mostrar botão Personalizado &nbsp;
+            </label>
+          )}
+          <label className={styles.checkContainer}>
+            <input
+              checked={isVisibleButtonCustom}
+              type="checkbox"
+              onClick={isVisibleCustom}
+            />
+            <span className={styles.checkmark}></span>
+          </label>
         </div>
       </div>
     </>
