@@ -552,7 +552,15 @@ export function InsideVideo() {
               background_color={backgroundColorInsideButton}
               background_hover={backgroundHoverInsideButton}
               text_color={textColorInsideButton}
-              sizeWidth={sizeInsideButton}
+              sizeWidth={
+                sizeInsideButton === "125"
+                  ? "150"
+                  : sizeInsideButton === "150"
+                  ? "200"
+                  : sizeInsideButton === "250"
+                  ? "250"
+                  : ""
+              }
               sizeFont={
                 sizeInsideButton === "125"
                   ? "100%"

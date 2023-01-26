@@ -252,11 +252,11 @@ export default function PlayerVideo() {
                     text_color={buttonProps.text_color}
                     sizeWidth={
                       buttonProps.size === "125"
-                        ? "180px"
+                        ? "25"
                         : buttonProps.size === "150"
-                        ? "250px"
+                        ? "35"
                         : buttonProps.size === "250"
-                        ? "350px"
+                        ? "50"
                         : ""
                     }
                     sizeFont={

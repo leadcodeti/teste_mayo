@@ -4,7 +4,7 @@ import stylesSwitch from "./switch.module.scss";
 
 interface AccordionProps {
   children: React.ReactNode;
-  icon:React.ReactNode;
+  icon: React.ReactNode;
   accordionTitle: string;
   isLoading: boolean;
   cheacked: boolean | undefined;
@@ -12,7 +12,15 @@ interface AccordionProps {
   activeSwitch: () => void;
 }
 
-export function AccordionItems({accordionKey,icon,accordionTitle,activeSwitch,cheacked,children,isLoading}:AccordionProps) {
+export function AccordionItems({
+  accordionKey,
+  icon,
+  accordionTitle,
+  activeSwitch,
+  cheacked,
+  children,
+  isLoading,
+}: AccordionProps) {
   return (
     <>
       <Accordion.Item eventKey={accordionKey}>
@@ -40,9 +48,7 @@ export function AccordionItems({accordionKey,icon,accordionTitle,activeSwitch,ch
             )}
           </div>
         </Accordion.Header>
-        <Accordion.Body className="p-0">
-          {children}
-        </Accordion.Body>
+        <Accordion.Body className="p-0">{children}</Accordion.Body>
       </Accordion.Item>
     </>
   );

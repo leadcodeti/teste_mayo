@@ -343,13 +343,6 @@ export function BelowVideo() {
             />
           </div>
           <div>
-            {/* <label htmlFor="tamanho">Tamanho</label>
-            <select id="tamanho" value={watch("size")} {...register("size")}>
-              <option value={"125"}>Pequeno</option>
-              <option value={"150"}>Médio</option>
-              <option value={"250"}>Grande</option>
-            </select> */}
-
             <div>
               <label htmlFor="tamanho">Tamanho</label>
               <select
@@ -507,7 +500,15 @@ export function BelowVideo() {
               background_color={backgroundColorBelowButton}
               background_hover={backgroundHoverBelowButton}
               text_color={textColorBelowButton}
-              sizeWidth={sizeBelowButton}
+              sizeWidth={
+                sizeBelowButton === "125"
+                  ? "125"
+                  : sizeBelowButton === "150"
+                  ? "150"
+                  : sizeBelowButton === "250"
+                  ? "200"
+                  : ""
+              }
               sizeFont={
                 sizeBelowButton === "125"
                   ? "100%"

@@ -82,11 +82,11 @@ export function BelowButon() {
                 text_color={buttonsBelowsProperty.text_color}
                 sizeWidth={
                   buttonsBelowsProperty.size === "125"
-                    ? "180px"
+                    ? "20"
                     : buttonsBelowsProperty.size === "150"
-                    ? "250px"
+                    ? "30"
                     : buttonsBelowsProperty.size === "250"
-                    ? "350px"
+                    ? "50"
                     : ""
                 }
                 sizeFont={

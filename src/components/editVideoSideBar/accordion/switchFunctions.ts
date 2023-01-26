@@ -4,14 +4,14 @@ import { useVideoContext } from "../../../contexts/useContext";
 import { api } from "../../../services/api";
 
 interface SwitchTipy {
-  isActive:boolean;
+  isActive: boolean;
 }
 
 export function Switch() {
+  const { allVideo, setActiveAccordion, activeAccordion, setCheckFakebar } =
+    useSideBarContext();
 
-  const { allVideo, setActiveAccordion, activeAccordion } = useSideBarContext() 
-
-  const { currentVideo,videosId } = useVideoContext();
+  const { currentVideo, videosId } = useVideoContext();
 
   const [hasFakeBar, setHasFakeBar] = useState({} as SwitchTipy);
   const [hasContinue, setHasContinue] = useState({} as SwitchTipy);
@@ -19,25 +19,33 @@ export function Switch() {
   const [hasThumbNails, setHasThumbnails] = useState({} as SwitchTipy);
 
   useEffect(() => {
-    setActiveAccordion ({
+    setCheckFakebar(hasFakeBar.isActive);
+    setActiveAccordion({
       activeContinue: hasContinue.isActive,
       activeAutoPlay: hasAutoPlay.isActive,
       activeFakeBar: hasFakeBar.isActive,
       activeThumbNails: hasThumbNails.isActive,
-    })
-
-  },[allVideo, currentVideo.currentVideoId, hasAutoPlay.isActive, hasContinue.isActive, hasFakeBar.isActive, hasThumbNails.isActive, setActiveAccordion])
-
+    });
+  }, [
+    allVideo,
+    currentVideo.currentVideoId,
+    hasAutoPlay.isActive,
+    hasContinue.isActive,
+    hasFakeBar.isActive,
+    hasThumbNails.isActive,
+    setActiveAccordion,
+    setCheckFakebar,
+  ]);
 
   async function fakeBarIsVibiles() {
-    setHasFakeBar({isActive: !hasFakeBar.isActive});
+    setHasFakeBar({ isActive: !hasFakeBar.isActive });
 
     await api.put(`/videos/${videosId.currentVideoId}`, {
       has_progress_bar: hasFakeBar.isActive,
     });
   }
   async function continueIsVisible() {
-    setHasContinue({isActive: !hasContinue.isActive});
+    setHasContinue({ isActive: !hasContinue.isActive });
 
     await api.put(`/videos/${videosId.currentVideoId}`, {
       has_continue_options: hasContinue.isActive,
@@ -45,7 +53,7 @@ export function Switch() {
   }
 
   async function autoPlayIsVisible() {
-    setHasAutoPlay({isActive: !hasAutoPlay.isActive});
+    setHasAutoPlay({ isActive: !hasAutoPlay.isActive });
 
     await api.put(`/videos/${videosId.currentVideoId}`, {
       has_autoplay: hasAutoPlay.isActive,
@@ -53,7 +61,7 @@ export function Switch() {
   }
 
   async function thumbnailsIsVisible() {
-    setHasThumbnails({isActive: !hasThumbNails.isActive});
+    setHasThumbnails({ isActive: !hasThumbNails.isActive });
 
     await api.put(`/videos/${videosId.currentVideoId}`, {
       has_thumbnail: hasThumbNails.isActive,
@@ -69,6 +77,6 @@ export function Switch() {
     fakeBarIsVibiles,
     continueIsVisible,
     thumbnailsIsVisible,
-    autoPlayIsVisible
-  }
+    autoPlayIsVisible,
+  };
 }

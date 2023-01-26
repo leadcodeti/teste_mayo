@@ -169,6 +169,7 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
   const [textColorInsideButton, setTextColorInsideButton] = useState<
     string | undefined
   >("");
+
   const [backgroundHoverInsideButton, setBackgroundHoverInsideButton] =
     useState<string | undefined>("");
 

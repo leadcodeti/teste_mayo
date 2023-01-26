@@ -3,29 +3,70 @@ import styles from "./styles.module.scss";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { useForm } from "react-hook-form";
 import { api } from "../../../../services/api";
-
-interface FakeBarProps {
-  height: string;
-}
+import { useCallback, useEffect, useState } from "react";
+import { useSideBarContext } from "../../../../contexts/thirdContext";
 
 export function FakeBar() {
-  const { setHeightFakeBar, currentVideo, fakeBarData, setFakeBarData } =
-    useVideoContext();
+  const {
+    setHeightFakeBar,
+    currentVideo,
+    fakeBarData,
+    setFakeBarData,
+    fakebarProps,
+    videosId,
+    user,
+    setfakebarProps,
+    getHeight,
+    setGetHeight,
+  } = useVideoContext();
+
   const { register, handleSubmit, watch } = useForm();
 
   async function submitFakeBar() {
-    setHeightFakeBar(watch("range"));
+    setHeightFakeBar(getHeight);
 
-    await api.put(`/fakebars/${currentVideo.currentVideoId}`, {
-      height: watch("range"),
-      finish: false,
-    });
-
-    await api(`/fakebars/${currentVideo.currentVideoId}`).then((res) => {
-      const data = res.data;
-      setFakeBarData({ height: data.height, finish: data.finish });
-    });
+    await api
+      .put(`/fakebars/${currentVideo.currentVideoId}`, {
+        height: getHeight,
+      })
+      .then((res) => console.log("enviado o put do fakebar", res.data));
   }
+
+  useEffect(() => {
+    async function getProps() {
+      await api(`/fakebars/${currentVideo.currentVideoId}`).then((res) => {
+        const data = res.data;
+
+        setfakebarProps(data.height);
+        // console.log("esse é o res", getHeight);
+      });
+    }
+
+    getProps();
+  }, [
+    currentVideo.currentVideoId,
+    setFakeBarData,
+    setGetHeight,
+    getHeight,
+    setfakebarProps,
+  ]);
+
+  const getContinuosProps = useCallback(async () => {
+    if (user) {
+      await api(`/fakebars/${videosId.currentVideoId}`).then((res) => {
+        const data = res.data;
+        setfakebarProps(data.height);
+      });
+    }
+  }, [setfakebarProps, user, videosId.currentVideoId]);
+
+  useEffect(() => {
+    getContinuosProps();
+  }, [getContinuosProps, videosId.currentVideoId, setfakebarProps]);
+
+  console.log("getHeight", getHeight);
+  console.log("fakebarProps.height", fakebarProps.height);
+
   return (
     <form onSubmit={handleSubmit(submitFakeBar)} className={styles.fakeBar}>
       <p className={styles.whatsFakeBar}>
@@ -35,9 +76,9 @@ export function FakeBar() {
         <label htmlFor="">Altura</label>
         <input
           type="range"
-          {...register("range")}
+          onChange={(e) => setGetHeight(Number(e.target.value))}
           max={15}
-          defaultValue={fakeBarData.height}
+          defaultValue={getHeight ? getHeight : fakebarProps.height}
         />
       </div>
       <div className={styles.saveOrCancel}>

@@ -14,7 +14,12 @@ import Router from "next/router";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { newUserDataProps, VideoTypes, ThumbnailsProps, User } from "../types/types";
+import {
+  newUserDataProps,
+  VideoTypes,
+  ThumbnailsProps,
+  User,
+} from "../types/types";
 import moment from "moment";
 
 type SignInCredentials = {
@@ -55,7 +60,7 @@ interface AuthContextProps {
   closeModalNewButton: () => void;
   buttonPosition: string;
   setButtonPosition: (value: string) => void;
-  buttonCustom:() => void;
+  buttonCustom: () => void;
   isVisibleInside: () => void;
   isVisibleCustom: () => void;
   buttonProps: any;
@@ -68,14 +73,16 @@ interface AuthContextProps {
   isVisibleButtonBelow: boolean;
   continuarProps: any;
   setContinuarProps: any;
+  fakebarProps: { height: number };
+  setfakebarProps: (value: { height: number }) => void;
   autoPLayProps: any;
   setAutoPlayProps: any;
   continuarIsVisible: boolean;
   setContinuarIsVisible: (value: boolean) => void;
   // fakeBarIsVisible: boolean;
   // setFakeBarIsVisible: (value: boolean) => void;
-  heightFakeBar: string;
-  setHeightFakeBar: (value: string) => void;
+  heightFakeBar: number;
+  setHeightFakeBar: (value: number) => void;
   fakeBarData: any;
   setFakeBarData: any;
   videoTime: number;
@@ -97,8 +104,10 @@ interface AuthContextProps {
   totalUserVideos: number;
   isVisibleButtonInside: boolean;
   isVisibleButtonCustom: boolean;
-  setInsideButtonProps:any;
+  setInsideButtonProps: any;
   InsideButtonProps: any;
+  getHeight: number;
+  setGetHeight: (value: number) => void;
 }
 
 type AuthProviderProps = {
@@ -123,6 +132,10 @@ type continuarButtonProps = {
   text_color: string;
 };
 
+type fakebarProps = {
+  height: number;
+};
+
 type AutoPlayProps = {
   text_color: string;
   background_color: string;
@@ -131,8 +144,7 @@ type AutoPlayProps = {
 };
 
 type TypesFakeBarData = {
-  height: string;
-  finish: boolean;
+  height: number;
 };
 
 export const AuthContext = createContext({} as AuthContextProps);
@@ -149,17 +161,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [modalNewButtonOpen, setModalNewButtonOpen] = useState(false);
   const [modalNewVideoOpen, setModalNewVideoOpen] = useState(false);
 
-  const [currentVideo, setCurrentVideo] = useState<CurrentVideoType>({} as CurrentVideoType);
+  const [currentVideo, setCurrentVideo] = useState<CurrentVideoType>(
+    {} as CurrentVideoType
+  );
 
   const [buttonPosition, setButtonPosition] = useState("center-center");
   const [buttonOption, setButtonOption] = useState("below");
   const [isVisibleButtonBelow, setIsVisibleButtonBelow] = useState(false);
-  const [isVisibleButtonInside, setIsVisibleButtonInside] =useState(false);
-  const [isVisibleButtonCustom, setIsVisibleButtonCustom] =useState(false);
+  const [isVisibleButtonInside, setIsVisibleButtonInside] = useState(false);
+  const [isVisibleButtonCustom, setIsVisibleButtonCustom] = useState(false);
 
- 
   const [videosId, setVideosId] = useState<videosId>({} as videosId);
-
+  const [getHeight, setGetHeight] = useState(0);
   const [videoTime, setVideoTime] = useState(0);
   const [currentVideoTime, setCurrentVideoTime] = useState(0);
   const [formatedTime, setFormatedTime] = useState(0);
@@ -193,6 +206,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     restart_button_text: "",
     text_color: "",
   });
+  const [fakebarProps, setfakebarProps] = useState<fakebarProps>({
+    height: 0,
+  });
 
   const [autoPLayProps, setAutoPlayProps] = useState<AutoPlayProps>({
     text_color: "",
@@ -202,10 +218,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   });
 
   const [continuarIsVisible, setContinuarIsVisible] = useState(false);
-  const [heightFakeBar, setHeightFakeBar] = useState("");
+  const [heightFakeBar, setHeightFakeBar] = useState(0);
   const [fakeBarData, setFakeBarData] = useState<TypesFakeBarData>({
-    height: "",
-    finish: false,
+    height: 0,
   });
   const [thumbnailsProps, setThumbnailsProps] = useState({
     start_image: "",
@@ -223,7 +238,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     is_visible: isVisibleButtonInside,
     position: buttonPosition,
   });
-
 
   const [page, setPage] = useState(1);
   const [totalUserVideos, setTotalUserVideos] = useState(0);
@@ -370,8 +384,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await api("/me").then((res) => setUser(res.data));
   }
 
-
-  
   useEffect(() => {
     if (currentVideo) {
       const getIds = JSON.parse(localStorage.getItem("@myVideoPlayerId") || "");
@@ -400,7 +412,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         buttonCustom,
         isVisibleCustom,
         isVisibleInside,
-
+        getHeight,
+        setGetHeight,
         buttonOption,
         setButtonOption,
         buttoBelowVideo,
@@ -434,7 +447,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setVideoTime,
         currentVideoTime,
         setCurrentVideoTime,
-     
+
         formatedTime,
         setFormatedTime,
         autoPLayProps,
@@ -450,6 +463,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         totalUserVideos,
         startVideoThumb,
         setStartVideoThumb,
+        fakebarProps,
+        setfakebarProps,
       }}
     >
       {children}
