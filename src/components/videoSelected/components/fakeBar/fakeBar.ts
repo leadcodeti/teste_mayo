@@ -5,30 +5,36 @@ interface containerFakeBarProps {
   height: string;
   formatedTime: number;
   animation: number;
-  condictionDalay:number;
+  pausedVideo?: boolean;
+  detailsDuration: number;
 }
 
 export const Container = styled.div<containerFakeBarProps>`
   background: ${(props) => props.background_color};
-
+  width: ${(props) => props.formatedTime}%;
 
   height: ${(props) => props.height};
   z-index: 999;
   position: absolute;
   left: 0;
   bottom: 0;
-  
-  animation: mayoplayer-fakebar-animation ${(props) => (props.animation - props.formatedTime )}s;
+  animation: mayoplayer-fakebar-animation
+    ${(props) =>
+      props.detailsDuration == 0 ? 0 : props.animation - props.detailsDuration}s
+    infinite;
+
+  animation-play-state: ${(props) =>
+    !props.pausedVideo && props.formatedTime > 0 ? "running" : "paused"};
 
   @keyframes mayoplayer-fakebar-animation {
     0.5% {
-      width: ${(props) => props.formatedTime  <= 5 ? 10 : 0 }%;
+      width: 10%;
     }
     0.9% {
-      width: ${(props) => props.formatedTime  <= 15 ? 15 : 0 }%;
+      width: 15%;
     }
     1.5% {
-      width: 20%;
+      width: 17%;
     }
     2.4% {
       width: 22%;

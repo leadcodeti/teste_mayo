@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
 import { useQuery } from "react-query";
 import { getPropsButtonBelow } from "../../../../pages/api/get_functions";
+import { ModalTimerStartBelow } from "./timers/timerStartBelow";
+import { ModalTimerEndBelow } from "./timers/timerEndBelow";
 
 interface ButtonUpdateProps {
   text: string;
@@ -41,9 +43,7 @@ export function BelowVideo() {
 
   const {
     totalDuration,
-    startTimerSeconds,
     setStartTimerSeconds,
-    endTimerSeconds,
     setEndTimerSeconds,
     bellowButtonsValues,
     setBellowButtonsValues,
@@ -53,24 +53,31 @@ export function BelowVideo() {
     setTextColorBelowButton,
     backgroundHoverBelowButton,
     setBackgroundHoverBelowButton,
-
+    startTimerBelow,
+    endTimerBelow,
+    startTimerSecondsBelow,
+    endTimerSecondsBelow,
     textBelowButton,
     setTextBelowButton,
+    sizeBelowButton,
+    setSizeBelowButton,
+    setPropsButtonBelow,
+    setStartTimerBelow,
+    setEndTimerBelow,
   } = usePlayeContext();
 
   const formatedTotalDurationInMinutes = Math.floor(totalDuration / 60);
+  const [buttonsBelowsProperty, setButtonsBelowsProperty] = useState(
+    {} as ButtonBelowProps
+  );
 
   const [listStart, setListStart] = useState([]);
   const [listEnd, setListEnd] = useState([]);
   const [startSeconds, setStartSeconds] = useState([]);
 
-  const [startTimer, setStartTimer] = useState(0);
-  const [endTimer, setEndTimer] = useState(0);
-  const [showOrHideStart, setshowOrHideStart] = useState(false);
-  const [showOrHideEnd, setshowOrHideEnd] = useState(false);
-  const [currentText, setCurrentText] = useState("");
-  const [currentLink, setCurrentLink] = useState("");
-  const [currentSize, setCurrentSize] = useState("");
+  const [currentText, setCurrentText] = useState(buttonsBelowsProperty?.text);
+  const [currentLink, setCurrentLink] = useState(buttonsBelowsProperty?.link);
+  const [currentSize, setCurrentSize] = useState(buttonsBelowsProperty?.size);
   const [currentBackgroundColor, setCurrentBackgroundColor] = useState("");
   const [currentTextColor, setCurrentTextColor] = useState("");
   const [currentBackgroundHover, setCurrentBackgroundHover] = useState("");
@@ -86,6 +93,65 @@ export function BelowVideo() {
   const textRef = useRef<HTMLInputElement>(null);
   const colorRef = useRef<HTMLInputElement>(null);
   const backgroundHover = useRef<HTMLInputElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenEnd, setIsOpenEnd] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRefEnd = useRef<HTMLButtonElement>(null);
+  const [newSize, setnewSize] = useState<string | undefined>("");
+
+  const [getFormatedStart, setGetFormatedStart] = useState("");
+  const [getFormatedEnd, setGetFormatedEnd] = useState("");
+  const [xpto, setXpto] = useState({ start: 0, end: 0 });
+
+  useEffect(() => {
+    async function getData() {
+      const res = await api
+        .get(`/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`)
+        .then((res) => {
+          const buttonBelowFiltered = res.data.find(
+            (e: any) => e.type === "below"
+          );
+          if (buttonBelowFiltered) {
+            setXpto({
+              start: buttonsBelowsProperty?.start,
+              end: buttonsBelowsProperty?.end,
+            });
+          }
+        });
+    }
+
+    var minutesStart = Math.floor(buttonsBelowsProperty.start / 60);
+    var remainingSecondsStart = buttonsBelowsProperty.start % 60;
+
+    const formatedTimerStart =
+      minutesStart +
+      " : " +
+      (remainingSecondsStart < 10 ? "0" : "") +
+      remainingSecondsStart;
+
+    var minutesEnd = Math.floor(buttonsBelowsProperty.end / 60);
+    var remainingSecondsEnd = buttonsBelowsProperty.end % 60;
+
+    const formatedTimerEnd =
+      minutesEnd +
+      " : " +
+      (remainingSecondsEnd < 10 ? "0" : "") +
+      remainingSecondsEnd;
+
+    setGetFormatedStart(formatedTimerStart);
+    setGetFormatedEnd(formatedTimerEnd);
+    setStartTimerBelow(0);
+    setEndTimerBelow(0);
+
+    getData();
+  }, [
+    buttonOption,
+    videosId.currentVideoId,
+    buttonsBelowsProperty.start,
+    buttonsBelowsProperty.end,
+    setStartTimerBelow,
+    setEndTimerBelow,
+  ]);
 
   useEffect(() => {
     let start: any = [];
@@ -115,40 +181,38 @@ export function BelowVideo() {
         background_color: currentBackgroundColor,
       };
 
-      api
-        .put(
-          `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
-          {
-            background_color: currentBackgroundColor,
-            text_color: currentTextColor,
-            background_hover: currentBackgroundHover,
-            text: currentText,
-            link: currentLink,
-            size: currentSize,
-            start: startTimer * 60 + startTimerSeconds,
-            end: endTimer * 60 + endTimerSeconds,
-          }
-        )
-        .then((res) => console.log("funciou o put", res.data));
+      api.put(
+        `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
+        {
+          background_color: currentBackgroundColor,
+          text_color: currentTextColor,
+          background_hover: currentBackgroundHover,
+          text: currentText,
+          link: currentLink,
+          size: currentSize,
+          start: startTimerBelow * 60 + startTimerSecondsBelow,
+          end: endTimerBelow * 60 + endTimerSecondsBelow,
+        }
+      );
     } else if (!currentBackgroundColor) {
       const newDesignData = {
         background_color: newBackgroundColor,
       };
-      api
-        .put(
-          `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
-          {
-            background_color: newBackgroundColor,
-            text_color: newTextColor,
-            text: currentText,
-            link: currentLink,
-            size: currentSize,
-            background_hover: newBackgroundHover,
-            start: startTimer * 60 + startTimerSeconds,
-            end: endTimer * 60 + endTimerSeconds,
-          }
-        )
-        .then((res) => console.log("funciou o put", res.data));
+      api.put(
+        `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
+        {
+          background_color: newBackgroundColor,
+          text_color: newTextColor,
+          text: currentText,
+          link: currentLink,
+          size: currentSize,
+          background_hover: newBackgroundHover,
+          start: startTimerBelow * 60 + startTimerSecondsBelow,
+          end: endTimerBelow * 60 + endTimerSecondsBelow,
+        }
+      );
+
+      setPropsButtonBelow(currentSize);
     }
     closeModalNewButton();
     toast.success("Botão salvo");
@@ -165,10 +229,6 @@ export function BelowVideo() {
   function backgroundHoverHandleClick() {
     backgroundHover.current?.click();
   }
-
-  const [buttonsBelowsProperty, setButtonsBelowsProperty] = useState(
-    {} as ButtonBelowProps
-  );
 
   const { data, isLoading } = useQuery(
     ["belowProps", videosId.currentVideoId, buttonOption],
@@ -196,6 +256,16 @@ export function BelowVideo() {
     videosId,
     setBellowButtonsValues,
   ]);
+
+  useEffect(() => {
+    setnewSize(buttonsBelowsProperty?.size);
+
+    if (currentSize) {
+      setSizeBelowButton(currentSize);
+    } else {
+      setSizeBelowButton(newSize);
+    }
+  }, [currentSize, buttonsBelowsProperty?.size, newSize, setSizeBelowButton]);
 
   useEffect(() => {
     setNewText(buttonsBelowsProperty?.text);
@@ -273,12 +343,40 @@ export function BelowVideo() {
             />
           </div>
           <div>
-            <label htmlFor="tamanho">Tamanho</label>
+            {/* <label htmlFor="tamanho">Tamanho</label>
             <select id="tamanho" value={watch("size")} {...register("size")}>
               <option value={"125"}>Pequeno</option>
               <option value={"150"}>Médio</option>
               <option value={"250"}>Grande</option>
-            </select>
+            </select> */}
+
+            <div>
+              <label htmlFor="tamanho">Tamanho</label>
+              <select
+                id="tamanho"
+                onChange={(e) => setCurrentSize(e.target.value)}
+                defaultValue={buttonsBelowsProperty?.size}
+              >
+                <option
+                  selected={buttonsBelowsProperty?.size == "125"}
+                  value={"125"}
+                >
+                  Pequeno
+                </option>
+                <option
+                  selected={buttonsBelowsProperty?.size == "150"}
+                  value={"150"}
+                >
+                  Médio
+                </option>
+                <option
+                  selected={buttonsBelowsProperty?.size == "250"}
+                  value={"250"}
+                >
+                  Grande
+                </option>
+              </select>
+            </div>
           </div>
         </div>
         <div className={styles.linkButton}>
@@ -295,68 +393,43 @@ export function BelowVideo() {
           <div>
             <label htmlFor="start">Início</label>
             <input
-              value={`${startTimer} : ${startTimerSeconds}`}
+              value={
+                startTimerBelow
+                  ? `${startTimerBelow} : ${startTimerSecondsBelow}`
+                  : getFormatedStart
+              }
               placeholder="00:00"
-              title={`${startTimer} : ${startTimerSeconds}`}
+              title="00:00"
               type="text"
               id="start"
-              onClick={() => setshowOrHideStart(!showOrHideStart)}
+              onClick={() => setIsOpen(!isOpen)}
             />
-            <div className={styles.timerStart}>
-              <div
-                style={{
-                  display: showOrHideStart == false ? "none" : "flex",
-                }}
-              >
-                <ul>
-                  {listStart.map((e) => (
-                    <li onClick={() => setStartTimer(e + 1)} key={e}>
-                      {e + 1}
-                    </li>
-                  ))}
-                </ul>
-                <ul>
-                  {startSeconds.map((e) => (
-                    <li onClick={() => setStartTimerSeconds(e + 1)} key={e}>
-                      {e + 1}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <ModalTimerStartBelow
+              buttonRef={buttonRef}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+            />
           </div>
+
           <div>
             <label htmlFor="end">Término</label>
             <input
               type="text"
               id="end"
-              value={`${endTimer} : ${endTimerSeconds}`}
+              value={
+                endTimerBelow
+                  ? `${endTimerBelow} : ${endTimerSecondsBelow}`
+                  : getFormatedEnd
+              }
               placeholder="00:00"
-              title={`${endTimer} : ${endTimerSeconds}`}
-              onClick={() => setshowOrHideEnd(!showOrHideEnd)}
+              title="00:00"
+              onClick={() => setIsOpenEnd(!isOpenEnd)}
             />
-            <div className={styles.timerStart}>
-              <div
-                style={{
-                  display: showOrHideEnd == false ? "none" : "flex",
-                }}
-              >
-                <ul>
-                  {listEnd.map((e) => (
-                    <li onClick={() => setEndTimer(e + 1)} key={e}>
-                      {e + 1}
-                    </li>
-                  ))}
-                </ul>
-                <ul>
-                  {startSeconds.map((e) => (
-                    <li onClick={() => setEndTimerSeconds(e + 1)} key={e}>
-                      {e + 1}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <ModalTimerEndBelow
+              buttonRefEnd={buttonRefEnd}
+              isOpenEnd={isOpenEnd}
+              setIsOpenEnd={setIsOpenEnd}
+            />
           </div>
         </div>
         <div className={styles.divisor} />
@@ -383,7 +456,7 @@ export function BelowVideo() {
           </div>
 
           <div className={styles.design}>
-            <label>Background hover</label>
+            <label>Background</label>
             <label
               className={styles.inputColor}
               style={{
@@ -434,21 +507,13 @@ export function BelowVideo() {
               background_color={backgroundColorBelowButton}
               background_hover={backgroundHoverBelowButton}
               text_color={textColorBelowButton}
-              sizeWidth={
-                watch("size") === "125"
-                  ? "180px"
-                  : watch("size") === "150"
-                  ? "250px"
-                  : watch("size") === "250"
-                  ? "350px"
-                  : ""
-              }
+              sizeWidth={sizeBelowButton}
               sizeFont={
-                watch("size") === "125"
+                sizeBelowButton === "125"
                   ? "100%"
-                  : watch("size") === "150"
+                  : sizeBelowButton === "150"
                   ? "150%"
-                  : watch("size") === "250"
+                  : sizeBelowButton === "250"
                   ? "200%"
                   : ""
               }

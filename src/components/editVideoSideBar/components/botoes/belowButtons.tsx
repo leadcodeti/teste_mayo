@@ -22,11 +22,16 @@ interface ButtonBelowProps {
 
 export function BelowButon() {
   const { buttonOption, videosId, setBelowButtonProps } = useVideoContext();
-  const { watchVideoTime, setBellowButtonsValues } = usePlayeContext();
+  const { watchVideoTime, setBellowButtonsValues, setPropsButtonBelow } =
+    usePlayeContext();
 
   const [buttonsBelowsProperty, setButtonsBelowsProperty] = useState(
     {} as ButtonBelowProps
   );
+
+  useEffect(() => {
+    setPropsButtonBelow(buttonsBelowsProperty?.size);
+  }, [buttonsBelowsProperty?.size, setPropsButtonBelow]);
 
   const { data, isLoading } = useQuery(
     ["belowProps", videosId.currentVideoId, buttonOption],
@@ -57,6 +62,7 @@ export function BelowButon() {
     setBelowButtonProps,
     videosId,
     setBellowButtonsValues,
+    setPropsButtonBelow,
   ]);
 
   return (

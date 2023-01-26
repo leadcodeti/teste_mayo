@@ -1,5 +1,5 @@
 import styles from "./styles.module.scss";
-import {AiOutlineExclamationCircle } from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { api } from "../../../../services/api";
 import { useVideoContext } from "../../../../contexts/useContext";
@@ -7,13 +7,11 @@ import { useEffect, useCallback } from "react";
 import { InputThumbnail } from "./inputThumbnail";
 import { InputsFunctions } from "./inputFunctions";
 
-
 export function Thumbnails() {
-
-   const { videosId, thumbnailsProps, setThumbnailsProps, user } = useVideoContext();
+  const { videosId, thumbnailsProps, setThumbnailsProps, user } =
+    useVideoContext();
 
   const {
-
     previewStartImage,
     previewPauseImage,
     previewFinalImage,
@@ -29,12 +27,12 @@ export function Thumbnails() {
     imageStartRef,
     imagePauseRef,
     imageFinalRef,
-    
+
     imageStartError,
     imagePauseError,
     imageFinalError,
-   }= InputsFunctions()
- 
+  } = InputsFunctions();
+
   useEffect(() => {
     thumbnailsProps;
     setThumbnailsProps;
@@ -43,7 +41,6 @@ export function Thumbnails() {
   const getContinuosProps = useCallback(async () => {
     if (user) {
       await api(`/thumbnails/${videosId.currentVideoId}`).then((res) => {
-        console.log("teste thumbnails sem props", res.data[0]?.url);
         const startImageFiltered = res.data.filter(
           (e: { type: string }) => e.type === "start_image"
         );
@@ -65,39 +62,37 @@ export function Thumbnails() {
   useEffect(() => {
     getContinuosProps();
   }, [getContinuosProps, setThumbnailsProps, videosId.currentVideoId]);
- 
+
   return (
     <>
-      <form
-        className={styles.thumbnails}
-      >
+      <form className={styles.thumbnails}>
         <p className={styles.whatsThumbnails}>
           <AiOutlineExclamationCircle /> O que são Thumbnails
         </p>
-         <InputThumbnail 
-          inputImage={previewStartImage} 
-          inputTitle="Thumbnail de início" 
-          inputName="start_image" 
+        <InputThumbnail
+          inputImage={previewStartImage}
+          inputTitle="Thumbnail de início"
+          inputName="start_image"
           handleChange={onChangeStartImage}
           handleClick={handleClickOnStart}
           imageRef={imageStartRef}
           imageError={imageStartError}
         />
 
-        <InputThumbnail 
-          inputImage={previewPauseImage} 
-          inputTitle="Thumbnail de pause" 
-          inputName="pause_image" 
+        <InputThumbnail
+          inputImage={previewPauseImage}
+          inputTitle="Thumbnail de pause"
+          inputName="pause_image"
           handleChange={onChangePauseImage}
           handleClick={handleClickOnPause}
           imageRef={imagePauseRef}
           imageError={imagePauseError}
         />
 
-        <InputThumbnail 
-          inputImage={previewFinalImage} 
-          inputTitle="Thumbnail no final" 
-          inputName="final_image" 
+        <InputThumbnail
+          inputImage={previewFinalImage}
+          inputTitle="Thumbnail no final"
+          inputName="final_image"
           handleChange={onChangeFinalImage}
           handleClick={handleClickOnFinal}
           imageRef={imageFinalRef}

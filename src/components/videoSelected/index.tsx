@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useCopyToClipboard } from 'usehooks-ts'
+import { useCopyToClipboard } from "usehooks-ts";
 import styles from "./styles.module.scss";
 import { BsCodeSlash } from "react-icons/bs";
 import { usePlayeContext } from "../../contexts/usePlayerContext";
@@ -16,9 +16,8 @@ const PlayerVideo = dynamic(() => import("./player"), {
   ssr: false,
 });
 
-export  function VideoSelected() {
-
-  const [copiedLink, copyLink] = useCopyToClipboard()
+export function VideoSelected() {
+  const [copiedLink, copyLink] = useCopyToClipboard();
   const { onGenerate } = usePlayeContext();
   const [buttonProps, setButtonProps] = useState({
     background_color: "",
@@ -37,11 +36,11 @@ export  function VideoSelected() {
     user,
     isVisibleButtonBelow,
     setIsVisibleButtonBelow,
-    videosId
+    videosId,
   } = useVideoContext();
 
-  const [editName,setEditName] = useState(false);
-  const [newVideoName,setNewVideoName] = useState("");
+  const [editName, setEditName] = useState(false);
+  const [newVideoName, setNewVideoName] = useState("");
   const queryClient = useQueryClient();
 
   const { mutate: videoNameMutation, data } = useMutation(upDateVideoName, {
@@ -50,16 +49,15 @@ export  function VideoSelected() {
     },
   });
 
-  function copyYouTubeLink(){
-    copyLink(`youtube.com/embed/${videosId.currentPlayerId}`)
+  function copyYouTubeLink() {
+    copyLink(`youtube.com/embed/${videosId.currentPlayerId}`);
     toast.success("Copiado");
   }
 
   useEffect(() => {
-    if(user){
+    if (user) {
       api(`/cta_buttons/${videosId.currentVideoId}`).then((res) => {
         const data = res.data[0];
-        console.log("data aqui" + res.data);
         setButtonProps({
           background_color: data.background_color,
           background_hover: data.background_hover,
@@ -71,7 +69,6 @@ export  function VideoSelected() {
       });
     }
   }, [currentVideo.currentVideoId, user, videosId]);
-
 
   useEffect(() => {
     api(`/cta_buttons/${videosId.currentVideoId}`).then((res) => {
@@ -92,69 +89,63 @@ export  function VideoSelected() {
   }, [currentVideo.currentVideoId, setBelowButtonProps, videosId]);
 
   function editVideoName() {
-    setEditName(!editName)
+    setEditName(!editName);
   }
 
-  function onSubmitName(e:FormEvent) {
+  function onSubmitName(e: FormEvent) {
     e.preventDefault();
     videoNameMutation({
       videosId: {
         videoName: newVideoName,
-        currentVideoId: videosId.currentVideoId
-      }
-    })
+        currentVideoId: videosId.currentVideoId,
+      },
+    });
     toast.success("Nome atualizado!");
-    setEditName(!editName)
+    setEditName(!editName);
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.detailsVideo}>
-         <div className={styles.videoName}>
-           {editName ? (
-           <>
-            <form onSubmit={onSubmitName}>
-              <input  
-               defaultValue={videosId.videoName}
-               onChange={(e) => setNewVideoName(e.target.value)}
-              />
-              <button type="submit">
-                Salvar
-              </button>
-            </form>
-           </>
-           ) : (
+        <div className={styles.videoName}>
+          {editName ? (
+            <>
+              <form onSubmit={onSubmitName}>
+                <input
+                  defaultValue={videosId.videoName}
+                  onChange={(e) => setNewVideoName(e.target.value)}
+                />
+                <button type="submit">Salvar</button>
+              </form>
+            </>
+          ) : (
             <>
               <h2>{videosId.videoName}</h2>
               <button className={styles.editBtnName} onClick={editVideoName}>
                 <AiFillEdit />
               </button>
             </>
-           )}
-         </div>
+          )}
+        </div>
 
-        <button className={styles.embedBtn}  onClick={onGenerate}>
+        <button className={styles.embedBtn} onClick={onGenerate}>
           <BsCodeSlash size={18} /> Código de incorporação
         </button>
       </div>
 
       <strong>
-        Link: 
+        Link:
         <span title="Copiar link" onClick={copyYouTubeLink}>
-         {`youtube.com/embed/${videosId.currentPlayerId}`}
+          {`youtube.com/embed/${videosId.currentPlayerId}`}
         </span>
       </strong>
       <div className={styles.divisor}></div>
-  
+
       <div className={styles.embedVideo}>
         <PlayerVideo />
 
         <div className={styles.buttonVideo}>
-          {isVisibleButtonBelow ? (
-            <BelowButon />
-          ) : (
-            ""
-          )}
+          {isVisibleButtonBelow ? <BelowButon /> : ""}
         </div>
       </div>
     </div>

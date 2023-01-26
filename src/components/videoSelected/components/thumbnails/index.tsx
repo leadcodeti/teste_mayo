@@ -14,8 +14,6 @@ export function Thumbnails() {
   } = useVideoContext();
   const { backgroundColor } = usePlayeContext();
 
-  console.log("teste de thumbnailsProps", thumbnailsProps);
-
   return (
     <Container
       startVideo={startVideoThumb}

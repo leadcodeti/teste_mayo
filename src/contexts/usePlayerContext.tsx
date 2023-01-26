@@ -20,23 +20,23 @@ interface contextProps {
   setBackgroundColor: Dispatch<SetStateAction<string | undefined>>;
   backgroundColor: string | undefined;
   embedString: string;
-  bigPlay: ControlType,
-  nextBtn:ControlType,
-  playTime:ControlType,
-  prevBtn:ControlType,
-  fullScrean:ControlType,
-  smalPlay:ControlType,
-  volume:ControlType,
-  progressBar:ControlType,
+  bigPlay: ControlType;
+  nextBtn: ControlType;
+  playTime: ControlType;
+  prevBtn: ControlType;
+  fullScrean: ControlType;
+  smalPlay: ControlType;
+  volume: ControlType;
+  progressBar: ControlType;
 
-  setBigPlay:Dispatch<SetStateAction<ControlType>>;
-  setSmalPlay:Dispatch<SetStateAction<ControlType>>;
-  setVolume:Dispatch<SetStateAction<ControlType>>;
-  setProgessBar:Dispatch<SetStateAction<ControlType>>;
-  setPlayTime:Dispatch<SetStateAction<ControlType>>;
-  setFullScrean:Dispatch<SetStateAction<ControlType>>;
-  setNextBtn:Dispatch<SetStateAction<ControlType>>;
-  setPrevBtn:Dispatch<SetStateAction<ControlType>>;
+  setBigPlay: Dispatch<SetStateAction<ControlType>>;
+  setSmalPlay: Dispatch<SetStateAction<ControlType>>;
+  setVolume: Dispatch<SetStateAction<ControlType>>;
+  setProgessBar: Dispatch<SetStateAction<ControlType>>;
+  setPlayTime: Dispatch<SetStateAction<ControlType>>;
+  setFullScrean: Dispatch<SetStateAction<ControlType>>;
+  setNextBtn: Dispatch<SetStateAction<ControlType>>;
+  setPrevBtn: Dispatch<SetStateAction<ControlType>>;
 
   backgroundColorInsideButton: string | undefined;
   setBackgroundColorInsideButton: Dispatch<SetStateAction<string | undefined>>;
@@ -56,7 +56,28 @@ interface contextProps {
   backgroundHoverBelowButton: string | undefined;
   setBackgroundHoverBelowButton: Dispatch<SetStateAction<string | undefined>>;
   setTextColorBelowButton: Dispatch<SetStateAction<string | undefined>>;
-
+  startTimer: number;
+  setStartTimer: (value: number) => void;
+  endTimer: number;
+  setEndTimer: (value: number) => void;
+  startTimerSecondsBelow: number;
+  setStartTimerSecondsBelow: (value: number) => void;
+  endTimerSecondsBelow: number;
+  setEndTimerSecondsBelow: (value: number) => void;
+  startTimerBelow: number;
+  setStartTimerBelow: (value: number) => void;
+  endTimerBelow: number;
+  setEndTimerBelow: (value: number) => void;
+  startTimerSecondsInside: number;
+  setStartTimerSecondsInside: (value: number) => void;
+  endTimerSecondsInside: number;
+  setEndTimerSecondsInside: (value: number) => void;
+  startTimerInside: number;
+  setStartTimerInside: (value: number) => void;
+  endTimerInside: number;
+  setEndTimerInside: (value: number) => void;
+  propsButtonBelow: string;
+  setPropsButtonBelow: (value: string) => void;
   watchVideoTime: number | undefined;
   setWatchVideoTime: any;
   totalDuration: number;
@@ -77,6 +98,9 @@ interface contextProps {
   setBellowButtonsValues: any;
   changeDuration: number;
   setChangeDuration: Dispatch<SetStateAction<number>>;
+  sizeBelowButton: string | undefined;
+  setSizeBelowButton: Dispatch<SetStateAction<string | undefined>>;
+  openModalTimers: () => void;
 }
 
 interface ProviderProps {
@@ -88,53 +112,101 @@ const context = createContext({} as contextProps);
 export function ContextPlayerProvider({ children }: ProviderProps) {
   const { openModal, videosId } = useVideoContext();
   const [embedString, setString] = useState("");
-  const [backgroundColor, setBackgroundColor] = useState<string | undefined>("");
+  const [backgroundColor, setBackgroundColor] = useState<string | undefined>(
+    ""
+  );
 
   const [bigPlay, setBigPlay] = useState({} as ControlType);
-  const [smalPlay, setSmalPlay] =useState({} as ControlType);
-  const [volume, setVolume] =useState({} as ControlType);
-  const [progressBar, setProgessBar] =useState({} as ControlType);
-  const [playTime, setPlayTime] =useState({} as ControlType);
-  const [fullScrean, setFullScrean] =useState({} as ControlType);
-  const [nextBtn, setNextBtn] =useState({} as ControlType);
-  const [prevBtn, setPrevBtn] =useState({} as ControlType);
+  const [smalPlay, setSmalPlay] = useState({} as ControlType);
+  const [volume, setVolume] = useState({} as ControlType);
+  const [progressBar, setProgessBar] = useState({} as ControlType);
+  const [playTime, setPlayTime] = useState({} as ControlType);
+  const [fullScrean, setFullScrean] = useState({} as ControlType);
+  const [nextBtn, setNextBtn] = useState({} as ControlType);
+  const [prevBtn, setPrevBtn] = useState({} as ControlType);
 
-  const { data: controll } = useQuery( ["controll", videosId.currentVideoId],() => getControllers(videosId.currentVideoId));
+  const { data: controll } = useQuery(
+    ["controll", videosId.currentVideoId],
+    () => getControllers(videosId.currentVideoId)
+  );
   const [changeDuration, setChangeDuration] = useState<number>(0);
 
-  const [backgroundColorBelowButton, setBackgroundColorBelowButton] = useState<string | undefined>("");
-  const [textColorBelowButton, setTextColorBelowButton] = useState<string | undefined>("");
-  const [backgroundHoverBelowButton, setBackgroundHoverBelowButton] = useState<string | undefined>("");
+  const [backgroundColorBelowButton, setBackgroundColorBelowButton] = useState<
+    string | undefined
+  >("");
+  const [textColorBelowButton, setTextColorBelowButton] = useState<
+    string | undefined
+  >("");
+  const [backgroundHoverBelowButton, setBackgroundHoverBelowButton] = useState<
+    string | undefined
+  >("");
+  const [sizeBelowButton, setSizeBelowButton] = useState<string | undefined>(
+    ""
+  );
+  const [textInsideButton, setTextInsideButton] = useState<string | undefined>(
+    ""
+  );
+  const [sizeInsideButton, setSizeInsideButton] = useState<string | undefined>(
+    ""
+  );
+  const [textBelowButton, setTextBelowButton] = useState<string | undefined>(
+    ""
+  );
+  const [propsButtonBelow, setPropsButtonBelow] = useState("");
+  const [startTimer, setStartTimer] = useState(0);
+  const [endTimer, setEndTimer] = useState(0);
+  const [startTimerBelow, setStartTimerBelow] = useState(0);
+  const [startTimerSecondsBelow, setStartTimerSecondsBelow] = useState(0);
+  const [endTimerBelow, setEndTimerBelow] = useState(0);
+  const [endTimerSecondsBelow, setEndTimerSecondsBelow] = useState(0);
+  const [startTimerInside, setStartTimerInside] = useState(0);
+  const [startTimerSecondsInside, setStartTimerSecondsInside] = useState(0);
+  const [endTimerInside, setEndTimerInside] = useState(0);
+  const [endTimerSecondsInside, setEndTimerSecondsInside] = useState(0);
 
-  const [textInsideButton, setTextInsideButton] = useState<string | undefined>("");
-  const [sizeInsideButton, setSizeInsideButton] = useState<string | undefined>("");
-  const [textBelowButton, setTextBelowButton] = useState<string | undefined>("");
-
-  const [backgroundColorInsideButton, setBackgroundColorInsideButton] =useState<string | undefined>("");
-  const [textColorInsideButton, setTextColorInsideButton] = useState<string | undefined>("");
-  const [backgroundHoverInsideButton, setBackgroundHoverInsideButton] = useState<string | undefined>("");
+  const [backgroundColorInsideButton, setBackgroundColorInsideButton] =
+    useState<string | undefined>("");
+  const [textColorInsideButton, setTextColorInsideButton] = useState<
+    string | undefined
+  >("");
+  const [backgroundHoverInsideButton, setBackgroundHoverInsideButton] =
+    useState<string | undefined>("");
 
   const [watchVideoTime, setWatchVideoTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
   const [valueInMinutes, setValueInMinutes] = useState(0);
-  const [bellowButtonsValues, setBellowButtonsValues] = useState({text: "",link: "",});
+  const [bellowButtonsValues, setBellowButtonsValues] = useState({
+    text: "",
+    link: "",
+  });
   const [startTimerSeconds, setStartTimerSeconds] = useState(0);
   const [endTimerSeconds, setEndTimerSeconds] = useState(0);
-  const [resultInsideProps, setResultInsideProps] = useState({start: 0,end: 0});
+  const [resultInsideProps, setResultInsideProps] = useState({
+    start: 0,
+    end: 0,
+  });
 
-  const [htmlCustomTimer, setHtmlCustomTimer] = useState({start: 0,end: 0});
+  const [htmlCustomTimer, setHtmlCustomTimer] = useState({ start: 0, end: 0 });
   const [htmlCustom, setHtmlCustom] = useState("");
+  const [modalTimersIsOpen, setModalTimersIsOpen] = useState(false);
 
+  function openModalTimers() {
+    setModalTimersIsOpen(!modalTimersIsOpen);
+  }
+
+  function closeModalTimers() {
+    setModalTimersIsOpen(false);
+  }
 
   useEffect(() => {
-    setBigPlay({ isActive: controll?.has_big_play_button})
-    setSmalPlay({ isActive: controll?.has_small_play_button})
-    setVolume({ isActive:controll?.has_volume})
-    setProgessBar({ isActive: controll?.has_progress_bar})
-    setPlayTime({ isActive:controll?.has_video_duration})
-    setFullScrean({ isActive:controll?.has_fullscreen})
-    setNextBtn({ isActive: controll?.has_foward_10_seconds})
-    setPrevBtn({ isActive:controll?.has_back_10_seconds,})
+    setBigPlay({ isActive: controll?.has_big_play_button });
+    setSmalPlay({ isActive: controll?.has_small_play_button });
+    setVolume({ isActive: controll?.has_volume });
+    setProgessBar({ isActive: controll?.has_progress_bar });
+    setPlayTime({ isActive: controll?.has_video_duration });
+    setFullScrean({ isActive: controll?.has_fullscreen });
+    setNextBtn({ isActive: controll?.has_foward_10_seconds });
+    setPrevBtn({ isActive: controll?.has_back_10_seconds });
   }, [controll]);
 
   const onGenerate = () => {
@@ -147,7 +219,7 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
       progressBar,
       volume,
       smalPlay,
-    }
+    };
     openModal();
     const { jsIframe } = embedVideo({ backgroundColor, controller });
     setString(getHtml(jsIframe));
@@ -188,7 +260,8 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
         setProgessBar,
         setSmalPlay,
         setVolume,
-
+        sizeBelowButton,
+        setSizeBelowButton,
         watchVideoTime,
         setWatchVideoTime,
         totalDuration,
@@ -227,6 +300,29 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
         setTextBelowButton,
         setSizeInsideButton,
         sizeInsideButton,
+        startTimer,
+        setStartTimer,
+        endTimer,
+        setEndTimer,
+        startTimerSecondsBelow,
+        setStartTimerSecondsBelow,
+        endTimerSecondsBelow,
+        setEndTimerSecondsBelow,
+        startTimerBelow,
+        setStartTimerBelow,
+        endTimerBelow,
+        setEndTimerBelow,
+        startTimerSecondsInside,
+        setStartTimerSecondsInside,
+        endTimerSecondsInside,
+        setEndTimerSecondsInside,
+        startTimerInside,
+        setStartTimerInside,
+        endTimerInside,
+        setEndTimerInside,
+        propsButtonBelow,
+        setPropsButtonBelow,
+        openModalTimers,
       }}
     >
       {children}

@@ -16,11 +16,7 @@ export function VideoInfo({ video }: videoInfoTypes) {
 
   if (duration.minutes && duration.seconds) {
     const teste = duration.minutes * 60 + duration.seconds;
-    // setVideoTime(teste);
-    console.log("xpto", teste);
   }
-
-  // console.log("tempo de video", videoTime);
 
   return (
     <>
