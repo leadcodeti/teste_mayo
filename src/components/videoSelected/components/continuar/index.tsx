@@ -11,16 +11,9 @@ interface ContinueProps {
 }
 
 export function Continuar({setCurrentTime} : ContinueProps) {
-  const {continuarProps, setContinuarProps,} = useVideoContext();
-  
+
   const [dnoneContainer, setDnoneContainer] = useState("flex");
-  const { restartVideo,lastTimeWacth } = useSideBarContext()
-
-
-  useEffect(() => {
-    continuarProps;
-    setContinuarProps;
-  }, [continuarProps, setContinuarProps]);
+  const { restartVideo,lastTimeWacth, continueColors } = useSideBarContext()
 
   function closeContinuar() {
     setDnoneContainer("none");
@@ -35,20 +28,21 @@ export function Continuar({setCurrentTime} : ContinueProps) {
 
   return (
     <Container
-      background_color={continuarProps.background_color}
-      text_color={continuarProps.text_color}
+      background_color={continueColors.continueBackgoundColor}
+      text_color={continueColors.continueTextColor}
       isVisibleContainer={dnoneContainer}
     >
-      <h2>{continuarProps.message}</h2>
+      <h2>{continueColors.message}</h2>
       <div>
         <span onClick={closeContinuar}>
           <ClickToPlay />
           <BiPlayCircle />
-          {continuarProps.continue_button_text}
+          {continueColors.topText}
         </span>
+        
         <span onClick={restartTime}>
           <VscDebugRestart />
-          {continuarProps.restart_button_text}
+          {continueColors.bottonText}
         </span>
       </div>
     </Container>

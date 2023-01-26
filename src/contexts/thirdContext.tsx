@@ -14,8 +14,8 @@ import {
 import { useQuery } from "react-query";
 import { useLocalStorage } from 'usehooks-ts'
 import { boolean } from "yup";
-import { getAllVideos, getAutoPlayProps } from "../pages/api/get_functions";
-import { VideoTypes } from "../types/types";
+import { getAllVideos, getAutoPlayProps, getThumbnails } from "../pages/api/get_functions";
+import { ThumbnailDisplayTimeTypes, ThumbnailsTypes, ThumbnailTypes, VideoTypes } from "../types/types";
 import { useVideoContext } from "./useContext";
 
 interface LastTimeProps {
@@ -36,6 +36,20 @@ interface AutoplayerColors {
   bottonText?:string | undefined;
 }
 
+interface ContinueColors {
+  continueBackgoundColor?:string | undefined;
+  continueTextColor?:string | undefined;
+  topText?:string | undefined;
+  bottonText?:string | undefined;
+  message?:string | undefined;
+}
+
+interface ThumbnailImageProps {
+  startImage?:File | null;
+  pauseImage?:File | null;
+  finalImage?:File | null;
+}
+
 interface AuthContextProps {
   setCurrentTimeVideo:Dispatch<SetStateAction<number>>;
   lastTimeWacth: LastTimeProps ;
@@ -50,9 +64,18 @@ interface AuthContextProps {
   setPage:Dispatch<SetStateAction<number>>,
   setActiveAccordion:Dispatch<SetStateAction<AccordionProps>>,
   setAutoPlayerColors:Dispatch<SetStateAction<AutoplayerColors>>,
+  setContinueColors:Dispatch<SetStateAction<ContinueColors>>,
+  setThumbnailsProps: Dispatch<SetStateAction<ThumbnailTypes>>;
+  setThumbnailsImages: Dispatch<SetStateAction<ThumbnailImageProps>>
+  setSaveSwitch: Dispatch<SetStateAction<boolean>>;
+  thumbnailsProps: ThumbnailTypes;
+  thumbnailsImages: ThumbnailImageProps
   activeAccordion: AccordionProps;
   autoPlayerColors: AutoplayerColors;
+  continueColors:ContinueColors;
+  saveSwitch: boolean;
   allVideo: VideoTypes[] | undefined,
+  allThumbsnails: ThumbnailsTypes[] | undefined
 }
 
 type AuthProviderProps = {
@@ -67,22 +90,34 @@ export default function SideBarProvider({ children }: AuthProviderProps) {
    const playerRef = useRef<HTMLVmPlayerElement>(null);
    const [currentTimeVideo, setCurrentTimeVideo] = useState(1)
    const [lastTimeWacth, setLastWacth] = useLocalStorage<LastTimeProps>('@keepWacth',{currentTimeVideo: 1})
+   
    const [allVideo, setAllVideo] = useState<VideoTypes[] | undefined>([]);
    const [page, setPage] = useState(1);
    const [totalUserVideos, setTotalUserVideos] = useState(0);
    const [activeAccordion,setActiveAccordion] = useState({} as AccordionProps);
    const [autoPlayerColors, setAutoPlayerColors] = useState({} as AutoplayerColors)
+   const [continueColors, setContinueColors] = useState({} as ContinueColors)
+   const [thumbnailsProps, setThumbnailsProps] = useState({} as ThumbnailTypes);
+   const [thumbnailsImages, setThumbnailsImages] = useState({} as ThumbnailImageProps);
+   const [allThumbsnails, setAllThumbsnails] = useState<ThumbnailsTypes[] | undefined>([]);
+   const [saveSwitch, setSaveSwitch] = useState(false);
 
    const { data: videos, isLoading } = useQuery(['videos', user,page],() => getAllVideos(user,page))
+   const { data: thumbnails } = useQuery(["thumbnails", videosId.currentVideoId],
+   () => getThumbnails(videosId.currentVideoId)
+   );
   
    useEffect(() => {
+
     setAllVideo(videos)
+    setAllThumbsnails(thumbnails)
     if(videos){
       setTotalUserVideos(videos[0].total)
     }
 
-   }, [videos]);
- 
+   }, [thumbnails, videos]);
+
+
   function getCurrentVideoTime() {
     if(currentTimeVideo === 0) {
       setLastWacth(lastTimeWacth)
@@ -109,11 +144,20 @@ export default function SideBarProvider({ children }: AuthProviderProps) {
         setActiveAccordion,
         currentTimeVideo,
         activeAccordion,
+        setThumbnailsProps,
+        thumbnailsProps,
+        allThumbsnails,
         autoPlayVideo,
         playerRef,
         lastTimeWacth,
         autoPlayerColors,
         setAutoPlayerColors,
+        setThumbnailsImages,
+        thumbnailsImages,
+        setContinueColors,
+        setSaveSwitch,
+        saveSwitch,
+        continueColors,
         restartVideo,
         allVideo,
         isLoading,

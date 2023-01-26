@@ -1,20 +1,34 @@
+/* eslint-disable @next/next/no-img-element */
 import { useVideoContext } from "../../../../contexts/useContext";
 import { Container } from "./thumbnails";
 import { ClickToPlay } from "@vime/react";
 import { BsPlayCircle } from "react-icons/bs";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
 import Image from "next/image";
+import { useSideBarContext } from "../../../../contexts/thirdContext";
+import { useEffect } from "react";
+
 
 export function Thumbnails() {
-  const {
-    pausedVideoThumb,
-    finalVideoThumb,
-    thumbnailsProps,
-    startVideoThumb,
-  } = useVideoContext();
-  const { backgroundColor } = usePlayeContext();
+  const {pausedVideoThumb,finalVideoThumb,startVideoThumb,  setCurrentVideoTime,
+    setPausedVideoThumb,setFinalVideoThumb,setStartVideoThumb, } = useVideoContext();
 
-  console.log("teste de thumbnailsProps", thumbnailsProps);
+  const { backgroundColor } = usePlayeContext();
+  const { thumbnailsProps, playerRef } = useSideBarContext()
+
+  useEffect(() => {
+    setCurrentVideoTime(playerRef.current?.currentTime);
+  
+    let finalThumb = playerRef.current?.currentTime == playerRef.current?.duration;
+  
+    setPausedVideoThumb(
+      playerRef.current?.paused && playerRef.current?.currentTime > 1
+    );
+    setFinalVideoThumb(finalThumb);
+    setStartVideoThumb(playerRef.current?.currentTime == 0);
+  
+   })
+  
 
   return (
     <Container
@@ -25,17 +39,20 @@ export function Thumbnails() {
       {startVideoThumb ? (
         <>
           <ClickToPlay />
-          <Image
-            src={
-              thumbnailsProps?.start_image ? thumbnailsProps.start_image : ""
-            }
-            height={180}
-            width={600}
-            alt=""
-          />
-          <span>
-            <BsPlayCircle style={{ color: backgroundColor }} />
-          </span>{" "}
+
+          {thumbnailsProps.start_image && (
+            <>
+              <Image
+                src={thumbnailsProps?.start_image}
+                height={180}
+                width={600}
+                alt=""
+              />
+              <span>
+                <BsPlayCircle style={{ color: backgroundColor }} />
+              </span>{" "}
+            </>
+          )}
         </>
       ) : (
         ""
@@ -44,17 +61,19 @@ export function Thumbnails() {
       {pausedVideoThumb && !startVideoThumb && !finalVideoThumb ? (
         <>
           <ClickToPlay />
-          <Image
-            src={
-              thumbnailsProps?.pause_image ? thumbnailsProps.pause_image : ""
-            }
-            height={180}
-            width={600}
-            alt=""
-          />
-          <span>
-            <BsPlayCircle style={{ color: backgroundColor }} />
-          </span>{" "}
+          {thumbnailsProps.pause_image && (
+            <>
+              <Image
+                src={thumbnailsProps?.pause_image}
+                height={180}
+                width={600}
+                alt=""
+              />
+              <span>
+                <BsPlayCircle style={{ color: backgroundColor }} />
+              </span>{" "}
+            </>
+          )}
         </>
       ) : (
         ""
@@ -62,17 +81,19 @@ export function Thumbnails() {
       {finalVideoThumb ? (
         <>
           <ClickToPlay />
-          <Image
-            src={
-              thumbnailsProps?.final_image ? thumbnailsProps.final_image : ""
-            }
-            height={180}
-            width={600}
-            alt=""
-          />{" "}
-          <span>
-            <BsPlayCircle style={{ color: backgroundColor }} />
-          </span>{" "}
+          {thumbnailsProps.final_image && (
+            <>
+              <Image
+                src={thumbnailsProps?.final_image}
+                height={180}
+                width={600}
+                alt=""
+              />
+              <span>
+                <BsPlayCircle style={{ color: backgroundColor }} />
+              </span>{" "}
+            </>
+          )}
         </>
       ) : (
         ""

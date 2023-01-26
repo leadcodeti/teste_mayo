@@ -14,7 +14,7 @@ import Router from "next/router";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { newUserDataProps, VideoTypes, ThumbnailsProps, User } from "../types/types";
+import { newUserDataProps, VideoTypes, ThumbnailsProps, User, ThumbnailTypes } from "../types/types";
 import moment from "moment";
 
 type SignInCredentials = {
@@ -32,6 +32,7 @@ interface videosId {
   currentPlayerId: string;
   videoName: string;
 }
+
 
 interface AuthContextProps {
   signIn(credentials: SignInCredentials): Promise<void>;
@@ -66,12 +67,8 @@ interface AuthContextProps {
   isVisibleBelow: () => void;
   setIsVisibleButtonBelow: (value: boolean) => void;
   isVisibleButtonBelow: boolean;
-  continuarProps: any;
-  setContinuarProps: any;
   autoPLayProps: any;
   setAutoPlayProps: any;
-  continuarIsVisible: boolean;
-  setContinuarIsVisible: (value: boolean) => void;
   // fakeBarIsVisible: boolean;
   // setFakeBarIsVisible: (value: boolean) => void;
   heightFakeBar: string;
@@ -90,11 +87,10 @@ interface AuthContextProps {
   setFinalVideoThumb: any;
   startVideoThumb: boolean;
   setStartVideoThumb: any;
-  thumbnailsProps: any;
-  setThumbnailsProps: any;
+  thumbnailsProps: ThumbnailTypes;
+  setThumbnailsProps: Dispatch<SetStateAction<ThumbnailTypes>>;
   page: number;
   setPage: (value: number) => void;
-  totalUserVideos: number;
   isVisibleButtonInside: boolean;
   isVisibleButtonCustom: boolean;
   setInsideButtonProps:any;
@@ -186,13 +182,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     link: "",
     is_visible: isVisibleButtonBelow,
   });
-  const [continuarProps, setContinuarProps] = useState<continuarButtonProps>({
-    background_color: "",
-    message: "",
-    continue_button_text: "",
-    restart_button_text: "",
-    text_color: "",
-  });
+
 
   const [autoPLayProps, setAutoPlayProps] = useState<AutoPlayProps>({
     text_color: "",
@@ -201,17 +191,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     bottom_text: "",
   });
 
-  const [continuarIsVisible, setContinuarIsVisible] = useState(false);
   const [heightFakeBar, setHeightFakeBar] = useState("");
+
   const [fakeBarData, setFakeBarData] = useState<TypesFakeBarData>({
     height: "",
     finish: false,
   });
-  const [thumbnailsProps, setThumbnailsProps] = useState({
-    start_image: "",
-    pause_image: "",
-    final_image: "",
-  });
+  
+  const [thumbnailsProps, setThumbnailsProps] = useState({} as ThumbnailTypes);
 
   const [InsideButtonProps, setInsideButtonProps] = useState<any>({
     background_color: "",
@@ -226,22 +213,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 
   const [page, setPage] = useState(1);
-  const [totalUserVideos, setTotalUserVideos] = useState(0);
 
-  async function isVisibleContinuar() {
-    await api(`/resume_video_options/${videosId.currentVideoId}`).then(
-      (res) => {
-        setContinuarProps({
-          message: res.data.message,
-          continue_button_text: res.data.continue_button_text,
-          restart_button_text: res.data.restart_button_text,
-          text_color: res.data.text_color,
-          background_color: res.data.background_color,
-        });
-      }
-    );
-    setContinuarIsVisible(!continuarIsVisible);
-  }
+
+
 
   function openModal() {
     setModalOpen(true);
@@ -417,10 +391,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         isVisibleBelow,
         setIsVisibleButtonBelow,
         isVisibleButtonBelow,
-        continuarProps,
-        setContinuarProps,
-        continuarIsVisible,
-        setContinuarIsVisible,
         isVisibleButtonCustom,
         isVisibleButtonInside,
         setInsideButtonProps,
@@ -447,7 +417,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setThumbnailsProps,
         page,
         setPage,
-        totalUserVideos,
         startVideoThumb,
         setStartVideoThumb,
       }}

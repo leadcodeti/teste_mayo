@@ -73,16 +73,11 @@ export default function PlayerVideo() {
     videosId,
     setButtonProps,
     setVideoTime,
-    setCurrentVideoTime,
-    setPausedVideoThumb,
-    setFinalVideoThumb,
-    setStartVideoThumb,
+
     isVisibleButtonInside,
     isVisibleButtonCustom,
   } = useVideoContext();
 
-  Switch() 
-   
 
   useEffect(() => {
     setVideoTime(duration);
@@ -146,33 +141,11 @@ export default function PlayerVideo() {
     });
   }, [currentVideo.currentVideoId, setButtonProps, setButtonPosition, videosId.currentVideoId, setHtmlCustom]);
 
- useEffect(() => {
-  setCurrentVideoTime(playerRef.current?.currentTime);
-
-  let finalThumb = playerRef.current?.currentTime == playerRef.current?.duration;
-
-  setPausedVideoThumb(
-    playerRef.current?.paused && playerRef.current?.currentTime > 1
-  );
-  setFinalVideoThumb(finalThumb);
-  setStartVideoThumb(playerRef.current?.currentTime == 0);
-
- })
-
  setWatchVideoTime(playerRef.current?.currentTime);
 
  function onTimeUpdate(event: CustomEvent<number>) {
   setChangeDuration(event.detail);
 }
-
-  // useEffect(() => {
-  //   api(`/videos`).then((res) => {
-  //     const fakeBar = res.data[3].has_progress_bar;
-  //     setHasFakeBar(fakeBar);
-  //     const continuar = res.data[3].has_continue_options;
-  //     setHasContinue(continuar);
-  //   });
-  // }, [videosId.currentVideoId, setHasFakeBar, setHasContinue]);
 
 
   return (

@@ -16,6 +16,7 @@ import { usePlayeContext } from "../../contexts/usePlayerContext";
 import { useMutation, useQueryClient } from "react-query";
 import { createVideo } from "../../pages/api/post_put_functions";
 import { CreateVideoTypes, VideoTypes } from "../../types/types";
+import { useLocalStorage } from "usehooks-ts";
 
 
 interface OptionsProps {
@@ -24,11 +25,12 @@ interface OptionsProps {
   videoName:string;
   currentVideoPlayerId: string;
   closeOptions:() => void;
+  selectedVideo:VideoTypes;
 }
 
-export function OptionsMenu({ closeOptions, isOpen, videoId, currentVideoPlayerId,videoName}: OptionsProps) {
+export function OptionsMenu({ closeOptions, isOpen, videoId, currentVideoPlayerId,videoName,selectedVideo}: OptionsProps) {
 
-  const { setCurrentVideo } = useVideoContext();
+  const { setCurrentVideo, } = useVideoContext();
   const { onGenerate } = usePlayeContext();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [deleteVideoId, setDeleteVideoId] = useState("");
@@ -59,9 +61,8 @@ export function OptionsMenu({ closeOptions, isOpen, videoId, currentVideoPlayerI
 
   // if (!isOpen) return null;
 
-  function handleClick(currentVideoId: string, currentPlayerId: string, videoName: string) {
+  function handleClick(currentVideoId: string, currentPlayerId: string, videoName: string, selectedVideo:VideoTypes) {
     setCurrentVideo({ currentVideoId, currentPlayerId });
-    
     if(currentPlayerId && currentVideoId){
       localStorage.setItem("@myVideoPlayerId", JSON.stringify({currentVideoId,currentPlayerId,videoName}));
       router.push('../editVideo')
@@ -74,7 +75,7 @@ export function OptionsMenu({ closeOptions, isOpen, videoId, currentVideoPlayerI
         <div className={styles.options}>
           <button
             className={styles.links}
-            onClick={() => handleClick(videoId, currentVideoPlayerId,videoName)}
+            onClick={() => handleClick(videoId, currentVideoPlayerId,videoName, selectedVideo)}
           >
             <FaRegEdit />
             <span>Editar</span>

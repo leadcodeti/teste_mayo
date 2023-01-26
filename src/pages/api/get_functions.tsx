@@ -74,10 +74,29 @@ interface AutoplayTypes {
   top_text: string;
   bottom_text: string;
 }
+
+interface ContinueTypes {
+  text_color: string;
+  background_color: string;
+  restart_button_text: string;
+  continue_button_text:string;
+  message:string;
+}
+
 export const getAutoPlayProps = async (currentVideoId: string) => {
   
   if(currentVideoId){
     const { data } = await api.get<AutoplayTypes>(`/autoplays/${currentVideoId}`);
+    return data;
+  } else {
+    return ;
+  }
+}
+
+export const getContinueProps = async (currentVideoId: string) => {
+  
+  if(currentVideoId){
+    const { data } = await api.get<ContinueTypes>(`/resume_video_options/${currentVideoId}`);
     return data;
   } else {
     return ;

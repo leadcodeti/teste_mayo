@@ -4,6 +4,7 @@ import { FaFileUpload } from "react-icons/fa";
 import { TiDelete } from "react-icons/ti";
 import { useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
+import { useSideBarContext } from "../../../../contexts/thirdContext";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { deleteThumbnail, ThumbsTypes } from "../../../../pages/api/post_put_functions";
 import styles from "./styles.module.scss";
@@ -13,17 +14,18 @@ type ThumbnailsTypes = {
   inputTitle: string;
   inputName: string;
   imageError: string;
-  inputImage: string | null,
+  inputImage: string | null | undefined,
   handleClick:(e: MouseEvent<HTMLLabelElement, globalThis.MouseEvent>) => void;
   handleChange:(e: ChangeEvent<HTMLInputElement>) => void;
   imageRef: RefObject<HTMLInputElement> | null;
+  
 }
 
 export function InputThumbnail({ inputTitle,inputName,inputImage,handleChange,handleClick,imageRef,imageError }: ThumbnailsTypes) {
  
   const queryClient = useQueryClient();
-  const { videosId } = useVideoContext();
-  const { user } = useVideoContext();
+  const { videosId, user } = useVideoContext();
+  const { setThumbnailsImages } = useSideBarContext()
 
   const { mutate: deleteThumbnailMutation } = useMutation(({ updata }: ThumbsTypes) => deleteThumbnail({updata}),{
     onSuccess:() => {
@@ -34,12 +36,30 @@ export function InputThumbnail({ inputTitle,inputName,inputImage,handleChange,ha
   
   function deleteThumbnailImage() {
    if(user){
-        deleteThumbnailMutation({
+      deleteThumbnailMutation({
       updata: {
         currentVideoId: videosId.currentVideoId,
         type: inputName
       }
     })
+
+    if(inputName === "start_image"){
+      setThumbnailsImages({
+        startImage:null,
+      })
+    }
+
+    if(inputName === "pause_image"){
+      setThumbnailsImages({
+        pauseImage:null,
+      })
+    }
+
+    if(inputName === "final_image"){
+      setThumbnailsImages({
+        finalImage:null,
+      })
+    }
 
     toast.success("Imagem removida")
    }

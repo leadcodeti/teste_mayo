@@ -1,23 +1,41 @@
 import Accordion from "react-bootstrap/Accordion";
+import { useSideBarContext } from "../../../contexts/thirdContext";
 import { LoadingScrean } from "../../loading/loading";
 import stylesSwitch from "./switch.module.scss";
 
 interface AccordionProps {
   children: React.ReactNode;
-  icon:React.ReactNode;
+  icon: React.ReactNode;
   accordionTitle: string;
   isLoading: boolean;
   cheacked: boolean | undefined;
   accordionKey: string;
   activeSwitch: () => void;
+  upDateSwitch: () => void;
 }
 
-export function AccordionItems({accordionKey,icon,accordionTitle,activeSwitch,cheacked,children,isLoading}:AccordionProps) {
+export function AccordionItems({
+  accordionKey,
+  upDateSwitch,
+  icon,
+  accordionTitle,
+  activeSwitch,
+  cheacked,
+  children,
+  isLoading,
+}: AccordionProps) {
+  const { saveSwitch, setSaveSwitch } = useSideBarContext();
+
+  function UpDataSwitch() {
+    upDateSwitch();
+    setSaveSwitch(false);
+  }
+
   return (
     <>
-      <Accordion.Item eventKey={accordionKey}>
+      <Accordion.Item eventKey={accordionKey} className={stylesSwitch.AccordionContainer}>
         <Accordion.Header>
-          <div className={stylesSwitch.container}>
+          <div className={stylesSwitch.card}>
             <span className={stylesSwitch.content}>
               {icon}
               {accordionTitle}
@@ -28,7 +46,7 @@ export function AccordionItems({accordionKey,icon,accordionTitle,activeSwitch,ch
               <>
                 <label className={stylesSwitch.switch}>
                   <input
-                    onClick={() => activeSwitch()}
+                    onClick={activeSwitch}
                     type="checkbox"
                     checked={cheacked}
                   />
@@ -40,9 +58,16 @@ export function AccordionItems({accordionKey,icon,accordionTitle,activeSwitch,ch
             )}
           </div>
         </Accordion.Header>
-        <Accordion.Body className="p-0">
-          {children}
-        </Accordion.Body>
+        <Accordion.Body className="p-0">{children}</Accordion.Body>
+        {saveSwitch ? (
+          <>
+            <div className={stylesSwitch.saveSwitch}>
+              <button onClick={UpDataSwitch}>Salvar</button>
+            </div>
+          </>
+        ) : (
+          ""
+        )}
       </Accordion.Item>
     </>
   );

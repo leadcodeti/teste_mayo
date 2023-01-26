@@ -1,103 +1,274 @@
 import styles from "./styles.module.scss";
-import { useForm } from "react-hook-form";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, FormEvent } from "react";
 import { useVideoContext } from "../../../../contexts/useContext";
-import { api } from "../../../../services/api";
-
-interface containerContinuarProps {
-  background_color: string;
-  message: string;
-  continue_button_text: string;
-  restart_button_text: string;
-  text_color: string;
-}
+import { useSideBarContext } from "../../../../contexts/thirdContext";
+import { useDebounce } from "usehooks-ts";
+import { InputColors } from "../../../inputsColors/inputsColors";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getContinueProps } from "../../../../pages/api/get_functions";
+import { putContinueProps } from "../../../../pages/api/post_put_functions";
+import { toast } from "react-toastify";
 
 export function WatchAgain() {
-  const { register, handleSubmit, watch, reset } =
-    useForm<containerContinuarProps>();
-  const { continuarProps, setContinuarProps, videosId, user } = useVideoContext();
+  const { continueColors, setContinueColors } = useSideBarContext();
+  const { videosId } = useVideoContext();
 
-  const getContinuosProps = useCallback(async () => {
-    if(user) {
-      await api(`/resume_video_options/${videosId.currentVideoId}`).then(
-        (res) => {
-          setContinuarProps({
-            message: res.data.message,
-            continue_button_text: res.data.continue_button_text,
-            restart_button_text: res.data.restart_button_text,
-            text_color: res.data.text_color,
-            background_color: res.data.background_color,
-          });
-        }
-      );
-    }
-  }, [setContinuarProps, user, videosId.currentVideoId]);
+  const [currentContinueBackgroundColor, setCurrentContinueBackgroundColor] =
+    useState("");
+  const [continueBackgroundColor, setContinueBackgroundColor] = useState<
+    string | undefined
+  >("");
+
+  const [currentContinueTextColor, setCurrentContinueTextColor] = useState("");
+  const [continueTextColor, setContinueTextColor] = useState<
+    string | undefined
+  >("");
+
+  const [newContinueBackgoundColor, setNewContinueBackgoundColor] = useState<
+    string | undefined
+  >("");
+  const [newcontinuwTextColor, setNewContinuwTextColor] = useState<
+    string | undefined
+  >("");
+
+  const [message, setMessage] = useState<string | undefined>("");
+  const [downText, setDownText] = useState<string | undefined>("");
+  const [topText, setTopText] = useState<string | undefined>("");
+
+  const messageValue = useDebounce<string | undefined>(message, 400);
+  const topTextValue = useDebounce<string | undefined>(topText, 400);
+  const downTextValue = useDebounce<string | undefined>(downText, 400);
+
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: continueMutation } = useMutation(putContinueProps, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("resume_video_options"); //atualizar a minha requisição
+    },
+  });
+
+  const { data: continuedata } = useQuery(
+    ["resume_video_options", videosId.currentVideoId],
+    () => getContinueProps(videosId.currentVideoId)
+  );
+
+  const textColorRef = useRef<HTMLInputElement>(null);
+  const backgroundColorRef = useRef<HTMLInputElement>(null);
+
+  function backgroundContinueHandleClick() {
+    backgroundColorRef.current?.click();
+  }
+
+  function backgroundTextHandleClick() {
+    textColorRef.current?.click();
+  }
 
   useEffect(() => {
-    getContinuosProps();
-  }, [getContinuosProps, setContinuarProps, videosId.currentVideoId]);
-
-  async function submitContinuar({
-    message,
-    continue_button_text,
-    restart_button_text,
-    text_color,
-    background_color,
-  }: containerContinuarProps) {
-    await api.put(`/resume_video_options/${videosId.currentVideoId}`, {
-      message,
-      continue_button_text,
-      restart_button_text,
-      text_color,
-      background_color,
+    setContinueColors({
+      continueBackgoundColor: newContinueBackgoundColor,
+      continueTextColor: newcontinuwTextColor,
+      bottonText: downTextValue,
+      topText: topTextValue,
+      message: messageValue,
     });
-    getContinuosProps();
-    reset();
+
+    /////////// BACKGROUND AUTOPLAY //////////////////
+    setContinueBackgroundColor(continuedata?.background_color);
+    if (currentContinueBackgroundColor) {
+      setNewContinueBackgoundColor(currentContinueBackgroundColor);
+    } else {
+      setNewContinueBackgoundColor(continueBackgroundColor);
+    }
+
+    ///////////// COLOR TEST //////////////////
+    setContinueTextColor(continuedata?.text_color);
+    if (currentContinueTextColor) {
+      setNewContinuwTextColor(currentContinueTextColor);
+    } else {
+      setNewContinuwTextColor(continueTextColor);
+    }
+
+    ///// Message text ////////
+
+    if (message) {
+      setMessage(message);
+    } else {
+      setMessage(continuedata?.message);
+    }
+
+    ///// Top text ////////
+
+    if (downText) {
+      setDownText(downText);
+    } else {
+      setDownText(continuedata?.restart_button_text);
+    }
+
+    if (topText) {
+      setTopText(topText);
+    } else {
+      setTopText(continuedata?.continue_button_text);
+    }
+  }, [
+    continueBackgroundColor,
+    continueTextColor,
+    continuedata,
+    currentContinueBackgroundColor,
+    currentContinueTextColor,
+    downText,
+    downTextValue,
+    message,
+    messageValue,
+    newContinueBackgoundColor,
+    newcontinuwTextColor,
+    setContinueColors,
+    topText,
+    topTextValue,
+  ]);
+
+  async function submitContinue(e: FormEvent) {
+    e.preventDefault();
+
+    ///////////// BACKGROUND CONTINUE //////////////////
+
+    if (currentContinueBackgroundColor) {
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+        continuePros: {
+          background_color: currentContinueBackgroundColor,
+        },
+      });
+    } else {
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+        continuePros: {
+          background_color: newContinueBackgoundColor,
+        },
+      });
+    }
+
+    ///////////// TEXT COLOR CONTINUE //////////////////
+
+    if (currentContinueTextColor) {
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+
+        continuePros: {
+          text_color: currentContinueTextColor,
+        },
+      });
+    } else {
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+        continuePros: {
+          text_color: newcontinuwTextColor,
+        },
+      });
+    }
+
+    ///////////// MESSAGE TEXT //////////////////
+
+    if (message) {
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+        continuePros: {
+          message: message,
+        },
+      });
+    } else {
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+        continuePros: {
+          message: continueColors.message,
+        },
+      });
+    }
+
+    ///////////// BOTTON TEXT //////////////////
+
+    if (downText) {
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+        continuePros: {
+          restart_button_text: downText,
+        },
+      });
+    } else {
+
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+        continuePros: {
+          restart_button_text: continueColors.bottonText,
+        },
+      });
+      
+    }
+
+    /////////////  TOP TEXT //////////////////
+
+    if (topText) {
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+        continuePros: {
+          continue_button_text: topText,
+        },
+      });
+    } else {
+      await continueMutation({
+        currentVideoId: videosId.currentVideoId,
+        continuePros: {
+          continue_button_text: continueColors.topText,
+        },
+      });
+    }
+
+    toast.success("Proriedades salvas");
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(submitContinuar)}
-      className={styles.watchAgain}
-    >
+    <form onSubmit={submitContinue} className={styles.watchAgain}>
       <div className={styles.textStyles}>
         <p>Mensagem</p>
-        <input {...register("message")} defaultValue={continuarProps.message} type="text" />
+        <input
+          defaultValue={continueColors.message}
+          type="text"
+          onChange={(e) => setMessage(e.target.value)}
+        />
         <hr />
 
         <p>Botão continuar</p>
-        <input {...register("continue_button_text")} defaultValue={continuarProps.continue_button_text} type="text" />
-
+        <input
+          defaultValue={continueColors.topText}
+          type="text"
+          onChange={(e) => setTopText(e.target.value)}
+        />
         <hr />
 
         <p>Botão Recomeçar</p>
-        <input {...register("restart_button_text")} defaultValue={continuarProps.restart_button_text} type="text" />
+        <input
+          defaultValue={continueColors.bottonText}
+          type="text"
+          onChange={(e) => setDownText(e.target.value)}
+        />
         <hr />
       </div>
 
-      <span>
-        <label htmlFor="corDoTexto">Cor do Texto</label>{" "}
-        <input
-          className={styles.colors}
-          type="color"
-          id="corDoTexto"
-          {...register("text_color")}
-          value={watch("text_color") ? watch("text_color") : `${continuarProps.background_color}`}
-        />
-      </span>
-      <br />
-      <span>
-        <label htmlFor="corDobackground">Cor do background</label>{" "}
-        <input
-          className={styles.colors}
-          type="color"
-          id="corDobackground"
-          {...register("background_color")}
-          value={
-            watch("background_color") ? watch("background_color") : `${continuarProps.text_color}`
-          }
-        />
-      </span>
+      <InputColors
+        inputTextName="Cor de fundo"
+        backgroundColor={continueColors.continueBackgoundColor}
+        backgroundHandleClick={backgroundContinueHandleClick}
+        backgroundStates={setCurrentContinueBackgroundColor}
+        inputRef={backgroundColorRef}
+      />
+
+      <InputColors
+        inputTextName="Cor do texto"
+        backgroundColor={continueColors.continueTextColor}
+        backgroundHandleClick={backgroundTextHandleClick}
+        backgroundStates={setCurrentContinueTextColor}
+        inputRef={textColorRef}
+      />
+
       <div className={styles.saveOrCancel}>
         <span>Cancelar</span>
         <button type="submit">Salvar</button>

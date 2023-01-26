@@ -1,23 +1,24 @@
-import styles from "./styles.module.scss";
-import {AiOutlineExclamationCircle } from "react-icons/ai";
 
-import { api } from "../../../../services/api";
-import { useVideoContext } from "../../../../contexts/useContext";
-import { useEffect, useCallback } from "react";
+import {AiOutlineExclamationCircle } from "react-icons/ai";
 import { InputThumbnail } from "./inputThumbnail";
 import { InputsFunctions } from "./inputFunctions";
-
+import { useMutation, useQueryClient } from "react-query";
+import { putThumbnails } from "../../../../pages/api/post_put_functions";
+import { useSideBarContext } from "../../../../contexts/thirdContext";
+import styles from "./styles.module.scss";
 
 export function Thumbnails() {
 
-   const { videosId, thumbnailsProps, setThumbnailsProps, user } = useVideoContext();
+  const queryClient = useQueryClient();
+  const { allThumbsnails, thumbnailsProps  } = useSideBarContext()
+  
+   const { mutateAsync: thumbnailMutation } = useMutation(putThumbnails, {
+     onSuccess: () => {
+       queryClient.invalidateQueries("thumbnails");
+     },
+   });
 
   const {
-
-    previewStartImage,
-    previewPauseImage,
-    previewFinalImage,
-
     handleClickOnFinal,
     handleClickOnStart,
     handleClickOnPause,
@@ -33,39 +34,8 @@ export function Thumbnails() {
     imageStartError,
     imagePauseError,
     imageFinalError,
-   }= InputsFunctions()
- 
-  useEffect(() => {
-    thumbnailsProps;
-    setThumbnailsProps;
-  }, [thumbnailsProps, setThumbnailsProps]);
+   }= InputsFunctions({thumbnailMutation, allThumbsnails})
 
-  const getContinuosProps = useCallback(async () => {
-    if (user) {
-      await api(`/thumbnails/${videosId.currentVideoId}`).then((res) => {
-        console.log("teste thumbnails sem props", res.data[0]?.url);
-        const startImageFiltered = res.data.filter(
-          (e: { type: string }) => e.type === "start_image"
-        );
-        const pauseImageFiltered = res.data.filter(
-          (e: { type: string }) => e.type === "pause_image"
-        );
-        const finalImageFiltered = res.data.filter(
-          (e: { type: string }) => e.type === "final_image"
-        );
-        setThumbnailsProps({
-          start_image: startImageFiltered[0]?.url,
-          pause_image: pauseImageFiltered[0]?.url,
-          final_image: finalImageFiltered[0]?.url,
-        });
-      });
-    }
-  }, [setThumbnailsProps, user, videosId.currentVideoId]);
-
-  useEffect(() => {
-    getContinuosProps();
-  }, [getContinuosProps, setThumbnailsProps, videosId.currentVideoId]);
- 
   return (
     <>
       <form
@@ -75,7 +45,7 @@ export function Thumbnails() {
           <AiOutlineExclamationCircle /> O que são Thumbnails
         </p>
          <InputThumbnail 
-          inputImage={previewStartImage} 
+          inputImage={thumbnailsProps?.start_image} 
           inputTitle="Thumbnail de início" 
           inputName="start_image" 
           handleChange={onChangeStartImage}
@@ -85,7 +55,7 @@ export function Thumbnails() {
         />
 
         <InputThumbnail 
-          inputImage={previewPauseImage} 
+          inputImage={thumbnailsProps?.pause_image} 
           inputTitle="Thumbnail de pause" 
           inputName="pause_image" 
           handleChange={onChangePauseImage}
@@ -95,7 +65,7 @@ export function Thumbnails() {
         />
 
         <InputThumbnail 
-          inputImage={previewFinalImage} 
+          inputImage={thumbnailsProps?.final_image} 
           inputTitle="Thumbnail no final" 
           inputName="final_image" 
           handleChange={onChangeFinalImage}
@@ -103,11 +73,6 @@ export function Thumbnails() {
           imageRef={imageFinalRef}
           imageError={imageFinalError}
         />
-
-        {/* <div className={styles.saveOrCancel}>
-          <button>Cancelar</button>
-          <button>Salvar</button>
-        </div> */}
       </form>
     </>
   );

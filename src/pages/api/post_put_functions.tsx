@@ -1,5 +1,5 @@
 import { api } from "../../services/api"
-import { BackgroundProps, ControllerProps, CreateVideoTypes, PutAutoplayTypes } from "../../types/types";
+import { BackgroundProps, ControllerProps, CreateVideoTypes, PutAutoplayTypes, PutContinueTypes, PutSwicthTypes } from "../../types/types";
 
 export interface PutDesignTypes {
   currentVideoId:string;
@@ -115,3 +115,27 @@ export const putAutoplayProps = async ({currentVideoId, autoplayPros}:PutAutopla
   }
 
 }
+
+export const putContinueProps = async ({currentVideoId, continuePros}:PutContinueTypes):Promise<PutContinueTypes | undefined> => {
+  
+  if(currentVideoId){
+    const { data } =  await api.put(`/resume_video_options/${currentVideoId}`, continuePros);;
+    return data
+  } else {
+    return ;
+  }
+
+}
+
+
+export const putSwictProps = async ({currentVideoId, swicthPros}:PutSwicthTypes):Promise<PutSwicthTypes | undefined> => {
+  
+  if(currentVideoId){
+    const { data } =  await api.put(`/videos/${currentVideoId}`, swicthPros);;
+    return data
+  } else {
+    return ;
+  }
+
+}
+

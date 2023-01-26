@@ -19,15 +19,6 @@ export function FakeBarInVideo() {
   const [counter,setCounter] = useState(10);
 
   const conditionDelay = (videoTime * 50) / 100;
-  
-
-  console.log("CONDITION", conditionDelay);
-
-  useEffect(() =>{
-    console.log("INICIAL", currentTimeVideo);
-    console.log("FINAL", counter);
-
-  },[counter, currentTimeVideo])
 
   useEffect(() => {
 

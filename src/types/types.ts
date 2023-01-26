@@ -43,6 +43,19 @@ export interface ThumbnailsProps {
   final_image: FileList;
 }
 
+export interface ThumbnailTypes {
+  start_image?: string | null,
+  pause_image?: string | null,
+  final_image?: string | null,
+}
+
+export interface ThumbnailDisplayTimeTypes {
+  start_time?: boolean | undefined,
+  pause_time?: boolean | undefined,
+  final_time?: boolean | undefined,
+}
+
+
 export interface ThumbnailsTypes {
   type:string;
   url: string;
@@ -99,3 +112,30 @@ export interface PutAutoplayTypes {
     text_color?:string;
   }
 }
+
+export interface PutContinueTypes {
+  currentVideoId:string;
+
+  continuePros:{
+    background_color?: string;
+    continue_button_text?: string;
+    restart_button_text?:string;
+    text_color?:string;
+    message?:string;
+  }
+}
+
+export interface PutSwicthTypes {
+  currentVideoId: string;
+
+  swicthPros: {
+    has_autoplay?: boolean;
+    has_continue_options?: boolean;
+    has_cta_button?: boolean;
+    has_progress_bar?: boolean;
+    has_thumbnail?: boolean;
+  };
+}
+
+
+
