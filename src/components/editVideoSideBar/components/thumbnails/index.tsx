@@ -1,16 +1,20 @@
 
-import {AiOutlineExclamationCircle } from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+
 import { InputThumbnail } from "./inputThumbnail";
 import { InputsFunctions } from "./inputFunctions";
 import { useMutation, useQueryClient } from "react-query";
 import { putThumbnails } from "../../../../pages/api/post_put_functions";
 import { useSideBarContext } from "../../../../contexts/thirdContext";
 import styles from "./styles.module.scss";
+import { useVideoContext } from "../../../../contexts/useContext";
 
 export function Thumbnails() {
 
   const queryClient = useQueryClient();
   const { allThumbsnails, thumbnailsProps  } = useSideBarContext()
+  
+  const { videosId, setThumbnailsProps, user } = useVideoContext();
   
    const { mutateAsync: thumbnailMutation } = useMutation(putThumbnails, {
      onSuccess: () => {
@@ -18,7 +22,11 @@ export function Thumbnails() {
      },
    });
 
+
+
+
   const {
+
     handleClickOnFinal,
     handleClickOnStart,
     handleClickOnPause,
@@ -30,17 +38,16 @@ export function Thumbnails() {
     imageStartRef,
     imagePauseRef,
     imageFinalRef,
-    
+
     imageStartError,
     imagePauseError,
     imageFinalError,
    }= InputsFunctions({thumbnailMutation, allThumbsnails})
 
+
   return (
     <>
-      <form
-        className={styles.thumbnails}
-      >
+      <form className={styles.thumbnails}>
         <p className={styles.whatsThumbnails}>
           <AiOutlineExclamationCircle /> O que são Thumbnails
         </p>

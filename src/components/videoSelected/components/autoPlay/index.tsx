@@ -10,7 +10,6 @@ interface AutoPlayProps {
 }
 
 export function AutoPlay({setCurrentTime} : AutoPlayProps) {
-  const {continuarProps, setContinuarProps,} = useVideoContext();
   const { setActiveAccordion, autoPlayVideo, activeAccordion, autoPlayerColors } = useSideBarContext();
 
 

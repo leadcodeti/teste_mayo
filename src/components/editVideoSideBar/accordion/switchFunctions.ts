@@ -6,17 +6,15 @@ import { putSwictProps } from "../../../pages/api/post_put_functions";
 import { api } from "../../../services/api";
 import { VideoTypes } from "../../../types/types";
 
-interface SwitchTipy {
-  isActive:boolean | undefined;
-}
 
 export function Switch() {
 
-  const { allVideo, setActiveAccordion, setSaveSwitch } = useSideBarContext() 
+  const { allVideo, setActiveAccordion, setSaveSwitch, setCheckFakebar} = useSideBarContext() 
   const [selectedVideo, setSelectedVideo] = useState({} as VideoTypes | undefined);
   const { currentVideo,videosId } = useVideoContext();
   
   const queryClient = useQueryClient ()
+
 
   const [hasFakeBar, setHasFakeBar] = useState<boolean | undefined>();
   const [hasContinue, setHasContinue] = useState<boolean | undefined>(false);
@@ -28,18 +26,11 @@ export function Switch() {
       queryClient.invalidateQueries("videos");
     },
   });
- 
-   console.log("DADOS ATUAIS", data);
-   console.log("DADOS ATUAIS DO BACK", selectedVideo);
-   console.log("IS VISIBLE", hasFakeBar);
-   
 
   useEffect(() =>{
     setHasFakeBar(selectedVideo?.has_progress_bar)
   },[selectedVideo?.has_progress_bar])
 
-
-   
   useEffect(() => {
     setActiveAccordion ({
       activeContinue: hasContinue,
@@ -71,17 +62,21 @@ export function Switch() {
     setSaveSwitch(true)
   }
 
+  
+
   async function continueIsVisible() {
     setHasContinue(!hasContinue);
-   
   }
 
   async function autoPlayIsVisible() {
     setHasAutoPlay(!hasAutoPlay);
   }
 
+
+
   async function thumbnailsIsVisible() {
-    setHasThumbnails(!hasThumbNails);
+    setHasThumbnails(hasThumbNails);
+
   }
 
   return {

@@ -12,7 +12,7 @@ export const ButtonBelowVideo = styled.a<ButtonStyles>`
   margin-top: 0.3rem;
   background: ${(props) => props.background_color};
   color: ${(props) => props.text_color};
-  width: ${(props) => props.sizeWidth};
+  width: ${(props) => props.sizeWidth}%;
   font-size: ${(props) => props.sizeFont};
   font-weight: 600;
   padding: 0.5rem 1rem;
@@ -39,7 +39,7 @@ export const ButtonInsideVideo = styled.a<ButtonStyles>`
   margin: 1rem;
   background: ${(props) => props.background_color};
   color: ${(props) => props.text_color};
-  width: ${(props) => props.sizeWidth};
+  width: ${(props) => props.sizeWidth}%;
   font-size: ${(props) => props.sizeFont};
   font-weight: 600;
   padding: 0.5rem 1rem;

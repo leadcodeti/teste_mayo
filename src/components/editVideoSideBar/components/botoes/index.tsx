@@ -1,6 +1,8 @@
 import styles from "./styles.module.scss";
 import Modal from "react-modal";
+import { useState } from "react";
 import { GrFormClose } from "react-icons/gr";
+import { RiTimer2Line } from "react-icons/ri";
 import { BelowVideo } from "./belowVideo";
 import { InsideVideo } from "./insideVideo";
 import { useVideoContext } from "../../../../contexts/useContext";

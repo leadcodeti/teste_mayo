@@ -34,17 +34,24 @@ import { Thumbnails } from "./components/thumbnails";
 import { useSideBarContext } from "../../contexts/thirdContext";
 import { Switch } from "../editVideoSideBar/accordion/switchFunctions";
 import { boolean } from "yup";
+import parse from "html-react-parser";
 
 export default function PlayerVideo() {
-  const { 
-      setCurrentTimeVideo, getCurrentVideoTime,
-      activeAccordion, playerRef
-  } = useSideBarContext()
+  const {
+    setCurrentTimeVideo,
+    getCurrentVideoTime,
+    activeAccordion,
+    playerRef,
+  } = useSideBarContext();
 
-  const [currentTime, setCurrentTime] = usePlayerContext( playerRef, "currentTime",0);
+  const [currentTime, setCurrentTime] = usePlayerContext(
+    playerRef,
+    "currentTime",
+    0
+  );
   const [duration] = usePlayerContext(playerRef, "duration", -1);
 
-  const { 
+  const {
     backgroundColor,
     bigPlay,
     nextBtn,
@@ -54,7 +61,7 @@ export default function PlayerVideo() {
     smalPlay,
     volume,
     progressBar,
-    
+
     watchVideoTime,
     setWatchVideoTime,
     setTotalDuration,
@@ -81,9 +88,16 @@ export default function PlayerVideo() {
 
   useEffect(() => {
     setVideoTime(duration);
-    setCurrentTimeVideo(currentTime)
+    setCurrentTimeVideo(currentTime);
     setTotalDuration(playerRef.current?.duration);
-  }, [currentTime, duration, playerRef, setCurrentTimeVideo, setTotalDuration, setVideoTime]);
+  }, [
+    currentTime,
+    duration,
+    playerRef,
+    setCurrentTimeVideo,
+    setTotalDuration,
+    setVideoTime,
+  ]);
 
   const onSeekBackward = () => {
     if (currentTime < 5) return;
@@ -107,7 +121,7 @@ export default function PlayerVideo() {
     width: "80px",
     height: "80px",
     margin: "0 auto",
-    display: `${ bigPlay?.isActive ? "flex" : "none"}`,
+    display: `${bigPlay?.isActive ? "flex" : "none"}`,
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
@@ -118,7 +132,6 @@ export default function PlayerVideo() {
   useEffect(() => {
     api(`/cta_buttons/${videosId.currentVideoId}`).then((res) => {
       const data = res.data;
-      console.log(data);
       const insideFiltered = data?.filter((e: any) => e.type === "inside");
       const insideResult = insideFiltered[0];
 
@@ -139,7 +152,14 @@ export default function PlayerVideo() {
       });
       setButtonPosition(insideResult.position);
     });
-  }, [currentVideo.currentVideoId, setButtonProps, setButtonPosition, videosId.currentVideoId, setHtmlCustom]);
+  }, [
+    currentVideo.currentVideoId,
+    setButtonProps,
+    setButtonPosition,
+    videosId.currentVideoId,
+    setHtmlCustom,
+  ]);
+
 
  setWatchVideoTime(playerRef.current?.currentTime);
 
@@ -147,12 +167,26 @@ export default function PlayerVideo() {
   setChangeDuration(event.detail);
 }
 
+  setWatchVideoTime(playerRef.current?.currentTime);
+
+
+  // useEffect(() => {
+  //   api(`/videos`).then((res) => {
+  //     const fakeBar = res.data[3].has_progress_bar;
+  //     setHasFakeBar(fakeBar);
+  //     const continuar = res.data[3].has_continue_options;
+  //     setHasContinue(continuar);
+  //   });
+  // }, [videosId.currentVideoId, setHasFakeBar, setHasContinue]);
+
+  console.log("RESULT",resultInsideProps?.start);
+
 
   return (
     <div className={styles.player}>
-      <Player 
-        theme="dark" 
-        style={playerTheme} 
+      <Player
+        theme="dark"
+        style={playerTheme}
         ref={playerRef}
         volume={activeAccordion?.activeAutoPlay ? 0.01 : 30}
         onVmCurrentTimeChange={onTimeUpdate}
@@ -181,13 +215,20 @@ export default function PlayerVideo() {
                   : styles.centerCenter
               }
             `}
-          >
-          {activeAccordion?.activeContinue ? <Continuar setCurrentTime={setCurrentTime} /> : ""}
+        >
+          {activeAccordion?.activeContinue ? (
+            <Continuar setCurrentTime={setCurrentTime} />
+          ) : (
+            ""
+          )}
           {activeAccordion?.activeFakeBar ? <FakeBarInVideo /> : ""}
-          {activeAccordion?.activeAutoPlay ? <AutoPlay setCurrentTime={setCurrentTime} /> : ""}
+          {activeAccordion?.activeAutoPlay ? (
+            <AutoPlay setCurrentTime={setCurrentTime} />
+          ) : (
+            ""
+          )}
           {activeAccordion?.activeThumbNails ? <Thumbnails /> : ""}
 
-          
           {isVisibleButtonInside ? (
             <>
               {watchVideoTime ? (
@@ -201,11 +242,11 @@ export default function PlayerVideo() {
                     text_color={buttonProps.text_color}
                     sizeWidth={
                       buttonProps.size === "125"
-                        ? "180px"
+                        ? "25"
                         : buttonProps.size === "150"
-                        ? "250px"
+                        ? "35"
                         : buttonProps.size === "250"
-                        ? "350px"
+                        ? "50"
                         : ""
                     }
                     sizeFont={
@@ -234,7 +275,6 @@ export default function PlayerVideo() {
           ) : (
             ""
           )}
-         
         </div>
         <Youtube videoId={videosId.currentPlayerId} />
 
@@ -244,24 +284,32 @@ export default function PlayerVideo() {
           <Spinner />
 
           <Controls fullWidth pin={"center"}>
-            <PlaybackControl hideTooltip={true} style={centeredPlayBack} onClick={getCurrentVideoTime} />
+            <PlaybackControl
+              hideTooltip={true}
+              style={centeredPlayBack}
+              onClick={getCurrentVideoTime}
+            />
           </Controls>
 
           <Controls fullWidth>
             <ControlGroup>
               <ScrubberControl
-                style={{ display: `${ progressBar?.isActive ? "flex" : "none"}` }}
+                style={{
+                  display: `${progressBar?.isActive ? "flex" : "none"}`,
+                }}
               />
             </ControlGroup>
 
-            <ControlGroup 
-               space="top" 
-              style={{ display: `${ activeAccordion?.activeAutoPlay ? "none" : "flex"}` }}
+            <ControlGroup
+              space="top"
+              style={{
+                display: `${activeAccordion?.activeAutoPlay ? "none" : "flex"}`,
+              }}
             >
               <PlaybackControl
-                style={{ display: `${ smalPlay?.isActive ? "flex" : "none"}` }}
+                style={{ display: `${smalPlay?.isActive ? "flex" : "none"}` }}
                 hideTooltip={true}
-                onClick={getCurrentVideoTime} 
+                onClick={getCurrentVideoTime}
               />
 
               <ButtonsContainer>
@@ -292,7 +340,7 @@ export default function PlayerVideo() {
               />
               <ControlSpacer />
               <FullscreenControl
-                style={{ display: `${ fullScrean?.isActive ? "flex" : "none"}` }}
+                style={{ display: `${fullScrean?.isActive ? "flex" : "none"}` }}
                 hideTooltip={true}
               />
             </ControlGroup>
@@ -301,6 +349,14 @@ export default function PlayerVideo() {
           <Poster className={styles.thumbnail} />
         </Ui>
       </Player>
+      {watchVideoTime
+        ? watchVideoTime > htmlCustomTimer?.start &&
+          watchVideoTime < htmlCustomTimer?.end
+          ? isVisibleButtonCustom
+            ? parse(htmlCustom)
+            : ""
+          : ""
+        : ""}
     </div>
   );
 }

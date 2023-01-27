@@ -6,7 +6,8 @@ import { useVideoContext } from "../../../../contexts/useContext";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
-
+import { ModalTimerStartInside } from "./timers/timerStartInside";
+import { ModalTimerEndInside } from "./timers/timerEndInside";
 
 interface ButtonUpdateProps {
   background_color: string;
@@ -37,11 +38,11 @@ export function InsideVideo() {
   const [buttonsInsideProperty, setButtonsInsideProperty] = useState(
     {} as ButtonUpdateProps
   );
-  const [showOrHideStart, setshowOrHideStart] = useState(false);
-  const [showOrHideEnd, setshowOrHideEnd] = useState(false);
+
   const {
     totalDuration,
     setResultInsideProps,
+    resultInsideProps,
     setBackgroundColor,
     backgroundColorInsideButton,
     setBackgroundColorInsideButton,
@@ -53,6 +54,12 @@ export function InsideVideo() {
     setBackgroundHoverInsideButton,
     setSizeInsideButton,
     sizeInsideButton,
+    startTimerInside,
+    endTimerInside,
+    startTimerSecondsInside,
+    endTimerSecondsInside,
+    setStartTimerInside,
+    setEndTimerInside,
   } = usePlayeContext();
 
   const formatedTotalDurationInMinutes = Math.floor(totalDuration / 60);
@@ -64,9 +71,9 @@ export function InsideVideo() {
   const [startTimer, setStartTimer] = useState(0);
   const [endTimer, setEndTimer] = useState(0);
   const [endTimerSeconds, setEndTimerSeconds] = useState(0);
-  const [currentText, setCurrentText] = useState("");
-  const [currentLink, setCurrentLink] = useState("");
-  const [currentSize, setCurrentSize] = useState("");
+  const [currentText, setCurrentText] = useState(buttonsInsideProperty?.text);
+  const [currentLink, setCurrentLink] = useState(buttonsInsideProperty?.link);
+  const [currentSize, setCurrentSize] = useState(buttonsInsideProperty?.size);
   const [currentBackgroundColor, setCurrentBackgroundColor] = useState("");
   const [currentTextColor, setCurrentTextColor] = useState("");
   const [currentBackgroundHover, setCurrentBackgroundHover] = useState("");
@@ -84,6 +91,12 @@ export function InsideVideo() {
   const backgroundColorRef = useRef<HTMLInputElement>(null);
   const colorRef = useRef<HTMLInputElement>(null);
   const backgroundHover = useRef<HTMLInputElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenEnd, setIsOpenEnd] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRefEnd = useRef<HTMLButtonElement>(null);
+  const [getFormatedStart, setGetFormatedStart] = useState("");
+  const [getFormatedEnd, setGetFormatedEnd] = useState("");
 
   useEffect(() => {
     let start: any = [];
@@ -110,104 +123,109 @@ export function InsideVideo() {
     currentVideo.currentVideoId;
   }, [currentVideo.currentVideoId]);
 
-  // async function updateButton({
-  //   text,
-  //   size,
-  //   background_color,
-  //   background_hover,
-  //   start,
-  //   end,
-  //   text_color,
-
-  //   link,
-  // }: ButtonUpdateProps) {
-  //   await api
-  //     .put(`/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`, {
-  //       text,
-  //       size,
-  //       background_color,
-  //       background_hover,
-  //       position: buttonPosition,
-  //       start: startTimer * 60 + startTimerSeconds,
-  //       end: endTimer * 60 + endTimerSeconds,
-  //       text_color,
-  //       link,
-  //       video_id: currentVideo.currentVideoId,
-  //     })
-  //     .then((res) => console.log("resposta viNda do put do inside", res.data));
-
-  //   await api(
-  //     `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`
-  //   ).then((res) => {
-  //     const data = res.data;
-  //     const insideFiltered = data.filter((e: any) => e.type === "inside");
-  //     const insideResult = insideFiltered[0];
-  //     setResultInsideProps({
-  //       start: insideResult?.start,
-  //       end: insideResult?.end,
-  //     });
-  //     setButtonProps({
-  //       background_color: insideResult.background_color,
-  //       bacgrkound_hover: insideResult.background_hover,
-  //       size: insideResult.size,
-  //       text: insideResult.text,
-  //       text_color: insideResult.text_color,
-  //       link: insideResult.link,
-  //       position: insideResult.position,
-  //       start: insideResult?.start,
-  //       end: insideResult?.end,
-  //     });
-  //   });
-  //   closeModalNewButton();
-  //   toast.success("Botão salvo");
-  // }
-
   async function updateButton() {
     if (currentBackgroundColor) {
       const newDesignData = {
         background_color: currentBackgroundColor,
       };
 
-      api
-        .put(
-          `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
-          {
-            background_color: currentBackgroundColor,
-            text_color: currentTextColor,
-            background_hover: currentBackgroundHover,
-            text: currentText,
-            link: currentLink,
-            size: currentSize,
-            start: startTimer * 60 + startTimerSeconds,
-            end: endTimer * 60 + endTimerSeconds,
-            position: buttonPosition,
-          }
-        )
-        .then((res) => console.log("funciou o put", res.data));
+      api.put(
+        `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
+        {
+          background_color: currentBackgroundColor,
+          text_color: currentTextColor,
+          background_hover: currentBackgroundHover,
+          text: currentText,
+          link: currentLink,
+          size: currentSize,
+          start: startTimerInside * 60 + startTimerSecondsInside,
+          end: endTimerInside * 60 + endTimerSecondsInside,
+          position: buttonPosition,
+        }
+      );
     } else if (!currentBackgroundColor) {
       const newDesignData = {
         background_color: newBackgroundColor,
       };
-      api
-        .put(
-          `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
-          {
-            background_color: newBackgroundColor,
-            text_color: newTextColor,
-            text: currentText,
-            link: currentLink,
-            size: currentSize,
-            background_hover: newBackgroundHover,
-            start: startTimer * 60 + startTimerSeconds,
-            end: endTimer * 60 + endTimerSeconds,
-            position: buttonPosition,
-          }
-        )
-        .then((res) => console.log("funciou o put", res.data));
+      api.put(
+        `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
+        {
+          background_color: newBackgroundColor,
+          text_color: newTextColor,
+          text: currentText,
+          link: currentLink,
+          size: currentSize,
+          background_hover: newBackgroundHover,
+          start: startTimerInside * 60 + startTimerSecondsInside,
+          end: endTimerInside * 60 + endTimerSecondsInside,
+          position: buttonPosition,
+        }
+      );
+
+      setStartTimer(0);
+      setEndTimer(0);
     }
     closeModalNewButton();
     toast.success("Botão salvo");
   }
+  const [getTimers, setGetTimers] = useState({ start: 0, end: 0 });
+
+  useEffect(() => {
+    async function getData() {
+      const res = await api
+        .get(`/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`)
+        .then((res) => {
+          const buttonInsideFiltered = res.data.find(
+            (e: any) => e.type === "inside"
+          );
+          if (buttonInsideFiltered) {
+            setGetTimers({
+              start: buttonInsideFiltered?.start,
+              end: buttonInsideFiltered?.end,
+            });
+          }
+          setResultInsideProps({
+            start: buttonInsideFiltered?.start,
+            end: buttonInsideFiltered?.end,
+          });
+        });
+    }
+
+    var minutesStart = Math.floor(Number(resultInsideProps?.start) / 60);
+    var remainingSecondsStart = Number(resultInsideProps?.start) % 60;
+
+    const formatedTimerStart =
+      minutesStart +
+      " : " +
+      (remainingSecondsStart < 10 ? "0" : "") +
+      remainingSecondsStart;
+
+    var minutesEnd = Math.floor(Number(resultInsideProps?.end) / 60);
+    var remainingSecondsEnd = Number(resultInsideProps?.end) % 60;
+
+    const formatedTimerEnd =
+      minutesEnd +
+      " : " +
+      (remainingSecondsEnd < 10 ? "0" : "") +
+      remainingSecondsEnd;
+
+    setGetFormatedStart(formatedTimerStart);
+    setGetFormatedEnd(formatedTimerEnd);
+    setEndTimerInside(0);
+    setStartTimerInside(0);
+
+    getData();
+  }, [
+    buttonsInsideProperty?.start,
+    buttonsInsideProperty?.end,
+    buttonOption,
+    resultInsideProps?.end,
+    resultInsideProps?.start,
+    setEndTimerInside,
+    setResultInsideProps,
+    setStartTimerInside,
+    videosId.currentVideoId,
+  ]);
 
   useEffect(() => {
     async function getButtonsInsideProperty() {
@@ -254,10 +272,6 @@ export function InsideVideo() {
   }
 
   function backgroundHoverHandleClick() {
-    backgroundHover.current?.click();
-  }
-
-  function textHandleClick() {
     backgroundHover.current?.click();
   }
 
@@ -333,11 +347,11 @@ export function InsideVideo() {
           <p>Posição</p>
           <div>
             <span
-              className={buttonPosition == "top-start" ? styles.active : ""}
+              className={buttonPosition == "start-top" ? styles.active : ""}
               onClick={() => setButtonPosition("start-top")}
             ></span>
             <span
-              className={buttonPosition == "top-center" ? styles.active : ""}
+              className={buttonPosition == "center-top" ? styles.active : ""}
               onClick={() => setButtonPosition("center-top")}
             ></span>
             <span
@@ -389,19 +403,23 @@ export function InsideVideo() {
               defaultValue={buttonsInsideProperty?.size}
             >
               <option
-                disabled
-                selected
-                defaultValue={buttonsInsideProperty?.size}
+                selected={buttonsInsideProperty?.size == "125"}
+                value={"125"}
               >
-                {buttonsInsideProperty?.size == "125"
-                  ? "Pequeno"
-                  : buttonsInsideProperty?.size == "150"
-                  ? "Médio"
-                  : "Grande"}
+                Pequeno
               </option>
-              <option value={"125"}>Pequeno</option>
-              <option value={"150"}>Médio</option>
-              <option value={"250"}>Grande</option>
+              <option
+                selected={buttonsInsideProperty?.size == "150"}
+                value={"150"}
+              >
+                Médio
+              </option>
+              <option
+                selected={buttonsInsideProperty?.size == "250"}
+                value={"250"}
+              >
+                Grande
+              </option>
             </select>
           </div>
         </div>
@@ -415,72 +433,48 @@ export function InsideVideo() {
           />
         </div>
         <div className={styles.divisor} />
+
         <div className={styles.timerButton}>
           <div>
             <label htmlFor="start">Início</label>
             <input
-              value={`${startTimer} : ${startTimerSeconds}`}
+              value={
+                startTimerInside
+                  ? `${startTimerInside} : ${startTimerSecondsInside}`
+                  : getFormatedStart
+              }
               placeholder="00:00"
               title="00:00"
               type="text"
               id="start"
-              onClick={() => setshowOrHideStart(!showOrHideStart)}
+              onClick={() => setIsOpen(!isOpen)}
             />
-            <div className={styles.timerStart}>
-              <div
-                style={{
-                  display: showOrHideStart == false ? "none" : "flex",
-                }}
-              >
-                <ul>
-                  {listStart.map((e) => (
-                    <li onClick={() => setStartTimer(e + 1)} key={e}>
-                      {e + 1}
-                    </li>
-                  ))}
-                </ul>
-                <ul>
-                  {startSeconds.map((e) => (
-                    <li onClick={() => setStartTimerSeconds(e + 1)} key={e}>
-                      {e + 1}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <ModalTimerStartInside
+              buttonRef={buttonRef}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+            />
           </div>
+
           <div>
             <label htmlFor="end">Término</label>
             <input
               type="text"
               id="end"
-              value={`${endTimer} : ${endTimerSeconds}`}
+              value={
+                endTimerInside
+                  ? `${endTimerInside} : ${endTimerSecondsInside}`
+                  : getFormatedEnd
+              }
               placeholder="00:00"
               title="00:00"
-              onClick={() => setshowOrHideEnd(!showOrHideEnd)}
+              onClick={() => setIsOpenEnd(!isOpenEnd)}
             />
-            <div className={styles.timerStart}>
-              <div
-                style={{
-                  display: showOrHideEnd == false ? "none" : "flex",
-                }}
-              >
-                <ul>
-                  {listEnd.map((e) => (
-                    <li onClick={() => setEndTimer(e + 1)} key={e}>
-                      {e + 1}
-                    </li>
-                  ))}
-                </ul>
-                <ul>
-                  {startSeconds.map((e) => (
-                    <li onClick={() => setEndTimerSeconds(e + 1)} key={e}>
-                      {e + 1}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <ModalTimerEndInside
+              buttonRefEnd={buttonRefEnd}
+              isOpenEnd={isOpenEnd}
+              setIsOpenEnd={setIsOpenEnd}
+            />
           </div>
         </div>
         <div className={styles.divisor} />
@@ -507,7 +501,7 @@ export function InsideVideo() {
           </div>
 
           <div className={styles.design}>
-            <label>Background hover</label>
+            <label>Background</label>
             <label
               className={styles.inputColor}
               style={{
@@ -547,33 +541,6 @@ export function InsideVideo() {
               />
             </div>
           </div>
-
-          {/* <div>
-            <label htmlFor="color">Cor do texto</label>
-            <input
-              value={watch("text_color") ? watch("text_color") : "#ffffff"}
-              type="color"
-              id="color"
-              {...register("text_color")}
-            />
-          </div>
-          <div>
-            <label htmlFor="background_color">Background</label>
-            <input
-              value={
-                watch("background_color")
-                  ? watch("background_color")
-                  : "#ff003c"
-              }
-              type="color"
-              id="background_color"
-              {...register("background_color")}
-            />
-          </div>
-          <div>
-            <label htmlFor="hover">Background hover</label>
-            <input type="color" id="hover" {...register("background_hover")} />
-          </div> */}
         </div>
         <div className={styles.divisor} />
         <div className={styles.previewButton}>
@@ -585,13 +552,21 @@ export function InsideVideo() {
               background_color={backgroundColorInsideButton}
               background_hover={backgroundHoverInsideButton}
               text_color={textColorInsideButton}
-              sizeWidth={sizeInsideButton}
+              sizeWidth={
+                sizeInsideButton === "125"
+                  ? "150"
+                  : sizeInsideButton === "150"
+                  ? "200"
+                  : sizeInsideButton === "250"
+                  ? "250"
+                  : ""
+              }
               sizeFont={
-                currentSize === "125"
+                sizeInsideButton === "125"
                   ? "100%"
-                  : currentSize === "150"
+                  : sizeInsideButton === "150"
                   ? "150%"
-                  : currentSize === "250"
+                  : sizeInsideButton === "250"
                   ? "200%"
                   : ""
               }

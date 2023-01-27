@@ -14,14 +14,6 @@ export function VideoInfo({ video }: videoInfoTypes) {
   const duration = intervalToDuration({ start: 0, end: video.duration * 1 });
   const formated_time = `${duration.minutes} : ${duration.seconds}`;
 
-  // if (duration.minutes && duration.seconds) {
-  //   const teste = duration.minutes * 60 + duration.seconds;
-  //   // setVideoTime(teste);
-  //   console.log("xpto", teste);
-  // }
-
-  // console.log("tempo de video", videoTime);
-
   return (
     <>
       <div className={styles.videoInfos}>

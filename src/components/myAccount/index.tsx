@@ -13,10 +13,9 @@ import { toast } from "react-toastify";
 export default function MyAccount() {
   const { user, updateUser } = useVideoContext();
   const [avatarUser, setAvatarUser] = useState(defaultProfileImage);
-  const { register, handleSubmit, reset, setValue, watch } = useForm<newUserDataProps>();
-  
-  console.log(user)
-  
+  const { register, handleSubmit, reset, setValue, watch } =
+    useForm<newUserDataProps>();
+
   function submitUpdate(data: newUserDataProps) {
     const formData = new FormData();
     // formData.append("avatar", data.avatar[0]);
@@ -30,7 +29,7 @@ export default function MyAccount() {
     };
 
     updateUser(dataUser);
-    console.log(dataUser);
+
     toast.success("Seus dados Foram atualizados!");
 
     reset();
@@ -146,7 +145,9 @@ export default function MyAccount() {
           </aside>
 
           <div className={style.plain}>
-            <strong>{user?.subscription.plan} - R$ {user?.subscription.price},00</strong>
+            <strong>
+              {user?.subscription.plan} - R$ {user?.subscription.price},00
+            </strong>
 
             <div className={style.statusPlan}>
               {user?.subscription.status === "ACTIVE" ? (

@@ -68,12 +68,14 @@ interface AuthContextProps {
   setThumbnailsProps: Dispatch<SetStateAction<ThumbnailTypes>>;
   setThumbnailsImages: Dispatch<SetStateAction<ThumbnailImageProps>>
   setSaveSwitch: Dispatch<SetStateAction<boolean>>;
+  setCheckFakebar: Dispatch<SetStateAction<boolean>>
   thumbnailsProps: ThumbnailTypes;
   thumbnailsImages: ThumbnailImageProps
   activeAccordion: AccordionProps;
   autoPlayerColors: AutoplayerColors;
+  saveSwitch:boolean;
   continueColors:ContinueColors;
-  saveSwitch: boolean;
+  checkFakebar:boolean;
   allVideo: VideoTypes[] | undefined,
   allThumbsnails: ThumbnailsTypes[] | undefined
 }
@@ -100,7 +102,8 @@ export default function SideBarProvider({ children }: AuthProviderProps) {
    const [thumbnailsProps, setThumbnailsProps] = useState({} as ThumbnailTypes);
    const [thumbnailsImages, setThumbnailsImages] = useState({} as ThumbnailImageProps);
    const [allThumbsnails, setAllThumbsnails] = useState<ThumbnailsTypes[] | undefined>([]);
-   const [saveSwitch, setSaveSwitch] = useState(false);
+   const [checkFakebar,setCheckFakebar] = useState<boolean>(false);
+   const [saveSwitch,setSaveSwitch] = useState(false)
 
    const { data: videos, isLoading } = useQuery(['videos', user,page],() => getAllVideos(user,page))
    const { data: thumbnails } = useQuery(["thumbnails", videosId.currentVideoId],
@@ -153,10 +156,12 @@ export default function SideBarProvider({ children }: AuthProviderProps) {
         autoPlayerColors,
         setAutoPlayerColors,
         setThumbnailsImages,
+        saveSwitch,
+        setSaveSwitch,
         thumbnailsImages,
         setContinueColors,
-        setSaveSwitch,
-        saveSwitch,
+        checkFakebar,
+        setCheckFakebar,
         continueColors,
         restartVideo,
         allVideo,

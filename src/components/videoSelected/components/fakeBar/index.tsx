@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSideBarContext } from "../../../../contexts/thirdContext";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
 import { Container } from "./fakeBar";
@@ -11,25 +10,14 @@ export function FakeBarInVideo() {
     videoTime,
     formatedTime,
     setFormatedTime,
+    pausedVideoThumb,
+    getHeight,
   } = useVideoContext();
-  const { backgroundColor } = usePlayeContext();
-  const { currentTimeVideo } = useSideBarContext()
+  const { backgroundColor, changeDuration } = usePlayeContext();
+
   setFormatedTime((currentVideoTime / videoTime) * 100);
 
-  const [counter,setCounter] = useState(10);
 
-  const conditionDelay = (videoTime * 50) / 100;
-
-  useEffect(() => {
-
-   if(currentTimeVideo === 0){
-     setCounter(0)
-   }
-   if(currentTimeVideo > 0){
-    setCounter(videoTime)
-  }
-
-  },[ currentTimeVideo, videoTime])
 
   // function reset_animation() {
   //   var el = document.getElementById('bar');
@@ -39,21 +27,16 @@ export function FakeBarInVideo() {
   // }
 
   return (
-    <>
-         <Container
+    <Container
       background_color={backgroundColor}
-      height={fakeBarData.height + "px"}
-      formatedTime={currentTimeVideo}
-      animation={counter}
-      condictionDalay={conditionDelay}
+      height={getHeight + "px"}
+      formatedTime={formatedTime}
+      animation={videoTime}
+      pausedVideo={pausedVideoThumb}
+      detailsDuration={changeDuration}
       id="bar"
     >
       <div className="barra"></div>
-
-      {/* <button onClick={() => reset_animation()}>
-        testar
-      </button> */}
     </Container>
-    </>
   );
 }

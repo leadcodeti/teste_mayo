@@ -13,6 +13,7 @@ export function Thumbnails() {
   const {pausedVideoThumb,finalVideoThumb,startVideoThumb,  setCurrentVideoTime,
     setPausedVideoThumb,setFinalVideoThumb,setStartVideoThumb, } = useVideoContext();
 
+
   const { backgroundColor } = usePlayeContext();
   const { thumbnailsProps, playerRef } = useSideBarContext()
 
@@ -29,7 +30,6 @@ export function Thumbnails() {
   
    })
   
-
   return (
     <Container
       startVideo={startVideoThumb}

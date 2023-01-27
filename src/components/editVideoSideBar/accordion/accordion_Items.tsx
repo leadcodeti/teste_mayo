@@ -24,12 +24,14 @@ export function AccordionItems({
   children,
   isLoading,
 }: AccordionProps) {
+
   const { saveSwitch, setSaveSwitch } = useSideBarContext();
 
   function UpDataSwitch() {
     upDateSwitch();
     setSaveSwitch(false);
   }
+
 
   return (
     <>
