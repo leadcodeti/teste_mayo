@@ -73,8 +73,8 @@ interface AuthContextProps {
   isVisibleButtonBelow: boolean;
   continuarProps: any;
   setContinuarProps: any;
-  fakebarProps: { height: number };
-  setfakebarProps: (value: { height: number }) => void;
+  fakebarProps: fakebarProps;
+  setfakebarProps: Dispatch<SetStateAction<fakebarProps>>;
   autoPLayProps: any;
   setAutoPlayProps: any;
   continuarIsVisible: boolean;
@@ -103,7 +103,9 @@ interface AuthContextProps {
   setPage: (value: number) => void;
   totalUserVideos: number;
   isVisibleButtonInside: boolean;
+  setIsVisibleButtonInside: (value: boolean) => void;
   isVisibleButtonCustom: boolean;
+  setIsVisibleButtonCustom: (value: boolean) => void;
   setInsideButtonProps: any;
   InsideButtonProps: any;
   getHeight: number;
@@ -435,6 +437,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         continuarIsVisible,
         setContinuarIsVisible,
         isVisibleButtonCustom,
+        setIsVisibleButtonCustom,
         isVisibleButtonInside,
         setInsideButtonProps,
         InsideButtonProps,
@@ -447,7 +450,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setVideoTime,
         currentVideoTime,
         setCurrentVideoTime,
-
+        setIsVisibleButtonInside,
         formatedTime,
         setFormatedTime,
         autoPLayProps,

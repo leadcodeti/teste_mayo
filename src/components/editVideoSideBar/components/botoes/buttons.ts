@@ -47,14 +47,15 @@ export const ButtonInsideVideo = styled.a<ButtonStyles>`
   transition: 0.3s;
   cursor: pointer;
   text-decoration: none;
-  text-align: center;
   display: flex;
+  text-align: center;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   justify-self: center;
   -webkit-box-shadow: 0px 0px 46px -18px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 46px -18px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 46px -18px rgba(0, 0, 0, 0.75);
+  z-index: 51 !important;
 
   &:hover {
     background: ${(props) => props.background_hover};

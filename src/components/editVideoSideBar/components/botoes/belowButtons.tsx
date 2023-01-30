@@ -75,7 +75,7 @@ export function BelowButon() {
               <LoadingScrean color="#ff003c" size="m" fontSize={0.9} />
             ) : (
               <ButtonBelowVideo
-                href={"#"}
+                href={buttonsBelowsProperty?.link}
                 target="_blank"
                 background_color={buttonsBelowsProperty.background_color}
                 background_hover={buttonsBelowsProperty.background_hover}
@@ -114,18 +114,18 @@ export function BelowButon() {
         <LoadingScrean color="#ff003c" size="m" fontSize={0.9} />
       ) : (
         <ButtonBelowVideo
-          href={"#"}
+          href={buttonsBelowsProperty?.link}
           target="_blank"
           background_color={buttonsBelowsProperty.background_color}
           background_hover={buttonsBelowsProperty.background_hover}
           text_color={buttonsBelowsProperty.text_color}
           sizeWidth={
             buttonsBelowsProperty.size === "125"
-              ? "180px"
+              ? "20"
               : buttonsBelowsProperty.size === "150"
-              ? "250px"
+              ? "30"
               : buttonsBelowsProperty.size === "250"
-              ? "350px"
+              ? "50"
               : ""
           }
           sizeFont={

@@ -35,6 +35,7 @@ import { useSideBarContext } from "../../contexts/thirdContext";
 import { Switch } from "../editVideoSideBar/accordion/switchFunctions";
 import { boolean } from "yup";
 import parse from "html-react-parser";
+import { InsideButton } from "../editVideoSideBar/components/botoes/InsideButtons";
 
 export default function PlayerVideo() {
   const {
@@ -183,15 +184,6 @@ export default function PlayerVideo() {
     setChangeDuration(event.detail);
   }
 
-  // useEffect(() => {
-  //   api(`/videos`).then((res) => {
-  //     const fakeBar = res.data[3].has_progress_bar;
-  //     setHasFakeBar(fakeBar);
-  //     const continuar = res.data[3].has_continue_options;
-  //     setHasContinue(continuar);
-  //   });
-  // }, [videosId.currentVideoId, setHasFakeBar, setHasContinue]);
-
   return (
     <div className={styles.player}>
       <Player
@@ -238,53 +230,7 @@ export default function PlayerVideo() {
             ""
           )}
           {activeAccordion?.activeThumbNails ? <Thumbnails /> : ""}
-
-          {isVisibleButtonInside ? (
-            <>
-              {watchVideoTime ? (
-                watchVideoTime > resultInsideProps?.start &&
-                watchVideoTime < resultInsideProps?.end ? (
-                  <ButtonInsideVideo
-                    href={"#"}
-                    target="_blank"
-                    background_color={buttonProps.background_color}
-                    background_hover={buttonProps.bacgrkound_hover}
-                    text_color={buttonProps.text_color}
-                    sizeWidth={
-                      buttonProps.size === "125"
-                        ? "25"
-                        : buttonProps.size === "150"
-                        ? "35"
-                        : buttonProps.size === "250"
-                        ? "50"
-                        : ""
-                    }
-                    sizeFont={
-                      buttonProps.size === "125"
-                        ? "100%"
-                        : buttonProps.size === "150"
-                        ? "150%"
-                        : buttonProps.size === "250"
-                        ? "200%"
-                        : ""
-                    }
-                    className={`${
-                      buttonProps.text == "" ? styles.button : ""
-                    } ${styles.buttonSize}`}
-                  >
-                    {/* zindez do botão - ver no embed */}
-                    {buttonProps.text}
-                  </ButtonInsideVideo>
-                ) : (
-                  ""
-                )
-              ) : (
-                ""
-              )}
-            </>
-          ) : (
-            ""
-          )}
+          {isVisibleButtonInside ? <InsideButton /> : ""}
         </div>
         <Youtube videoId={videosId.currentPlayerId} />
 

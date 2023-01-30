@@ -37,12 +37,19 @@ export function CustomButton() {
   const buttonRefEnd = useRef<HTMLButtonElement>(null);
 
   async function updateButton(data: any) {
+    const minutesAndSecondsTimerStart = startTimer * 60 + startTimerSeconds;
+    const getMinutesStart =
+      startTimer > 0 ? minutesAndSecondsTimerStart : htmlCustomTimer.start;
+
+    const minutesAndSecondsTimerEnd = endTimer * 60 + endTimerSeconds;
+    const getMinutesEnd =
+      endTimer > 0 ? minutesAndSecondsTimerEnd : htmlCustomTimer.end;
     await api.put(
       `/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`,
       {
         html_content: data.html_content,
-        start: startTimer * 60 + startTimerSeconds,
-        end: endTimer * 60 + endTimerSeconds,
+        start: getMinutesStart,
+        end: getMinutesEnd,
       }
     );
     closeModalNewButton();

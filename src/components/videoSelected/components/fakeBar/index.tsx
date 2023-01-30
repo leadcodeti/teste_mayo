@@ -11,7 +11,7 @@ export function FakeBarInVideo() {
     formatedTime,
     setFormatedTime,
     pausedVideoThumb,
-    getHeight,
+    fakebarProps,
   } = useVideoContext();
   const { backgroundColor, changeDuration } = usePlayeContext();
 
@@ -20,7 +20,7 @@ export function FakeBarInVideo() {
   return (
     <Container
       background_color={backgroundColor}
-      height={getHeight + "px"}
+      height={fakebarProps.height + "px"}
       formatedTime={formatedTime}
       animation={videoTime}
       pausedVideo={pausedVideoThumb}

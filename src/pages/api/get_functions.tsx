@@ -1,37 +1,43 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import moment from "moment";
-import { api } from "../../services/api"
-import { BackgroundProps, User,ControllerProps,VideoTypes, ThumbnailsTypes } from "../../types/types";
+import { api } from "../../services/api";
+import {
+  BackgroundProps,
+  User,
+  ControllerProps,
+  VideoTypes,
+  ThumbnailsTypes,
+} from "../../types/types";
 
 export const getDesign = async (currentVideoId: string) => {
-  
-  if(currentVideoId){
-    const { data } = await api.get<BackgroundProps>(`/designs/${currentVideoId}`)
+  if (currentVideoId) {
+    const { data } = await api.get<BackgroundProps>(
+      `/designs/${currentVideoId}`
+    );
     return data;
   } else {
-    return ;
+    return;
   }
-
-}
+};
 
 export const getControllers = async (currentVideoId: string) => {
-  
-  if(currentVideoId){
-    const { data } =await api.get<ControllerProps>(`/controls/${currentVideoId}`);
+  if (currentVideoId) {
+    const { data } = await api.get<ControllerProps>(
+      `/controls/${currentVideoId}`
+    );
     return data;
   } else {
-    return ;
+    return;
   }
-}
+};
 
-export const getAllVideos = async (user: User,page: number) => {
-  
-  if( user && page){
-    const { data:response } = await api.get(`/videos?limit=5&page=${page}`);
-    const totalVideo:number = response.total;
+export const getAllVideos = async (user: User, page: number) => {
+  if (user && page) {
+    const { data: response } = await api.get(`/videos?limit=5&page=${page}`);
+    const totalVideo: number = response.total;
 
-    const data = response.items.map((res:VideoTypes) => {
+    const data = response.items.map((res: VideoTypes) => {
       return {
         id: res.id,
         name: res.name,
@@ -48,25 +54,24 @@ export const getAllVideos = async (user: User,page: number) => {
         has_continue_options: res.has_continue_options,
         has_thumbnail: res.has_thumbnail,
       };
-    })
+    });
 
     return data;
-
   } else {
     return;
   }
-}
-
+};
 
 export const getThumbnails = async (currentVideoId: string) => {
-  
-  if(currentVideoId){
-    const { data } = await api.get<ThumbnailsTypes[]>(`/thumbnails/${currentVideoId}`);
+  if (currentVideoId) {
+    const { data } = await api.get<ThumbnailsTypes[]>(
+      `/thumbnails/${currentVideoId}`
+    );
     return data;
   } else {
-    return ;
+    return;
   }
-}
+};
 
 interface AutoplayTypes {
   text_color: string;
@@ -75,16 +80,31 @@ interface AutoplayTypes {
   bottom_text: string;
 }
 export const getAutoPlayProps = async (currentVideoId: string) => {
-  
-  if(currentVideoId){
-    const { data } = await api.get<AutoplayTypes>(`/autoplays/${currentVideoId}`);
+  if (currentVideoId) {
+    const { data } = await api.get<AutoplayTypes>(
+      `/autoplays/${currentVideoId}`
+    );
     return data;
   } else {
-    return ;
+    return;
   }
-}
+};
 
 export const getPropsButtonBelow = async (
+  videosId: string,
+  buttonOption: string
+) => {
+  if (videosId) {
+    const { data: response } = await api.get(
+      `/cta_buttons/${videosId}?type=${buttonOption}`
+    );
+    return response;
+  } else {
+    return;
+  }
+};
+
+export const getPropsButtonInside = async (
   videosId: string,
   buttonOption: string
 ) => {

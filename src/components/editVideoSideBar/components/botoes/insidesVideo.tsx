@@ -1,15 +1,30 @@
 import styles from "./styles.module.scss";
 import { ButtonInsideVideo } from "./buttons";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { api } from "../../../../services/api";
 import { useVideoContext } from "../../../../contexts/useContext";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
+import { useQuery } from "react-query";
+import { getPropsButtonInside } from "../../../../pages/api/get_functions";
 import { ModalTimerStartInside } from "./timers/timerStartInside";
 import { ModalTimerEndInside } from "./timers/timerEndInside";
 
 interface ButtonUpdateProps {
+  text: string;
+  size?: string;
+  background_color: string;
+  background_hover: string;
+  position?: string;
+  video_id: string;
+  start?: number;
+  end?: number;
+  text_color?: string;
+  link?: string;
+}
+
+interface ButtonInsideProps {
   background_color: string;
   background_hover: string;
   size: string;
@@ -17,12 +32,11 @@ interface ButtonUpdateProps {
   text_color: string;
   link: string;
   is_visible: boolean;
-  position?: string;
-  start?: string;
-  end?: string;
+  start: number;
+  end: number;
 }
 
-export function InsideVideo() {
+export function InsidesVideo() {
   const { register, handleSubmit, watch } = useForm<ButtonUpdateProps>();
   const {
     buttonOption,
@@ -35,49 +49,52 @@ export function InsideVideo() {
     videosId,
     setInsideButtonProps,
   } = useVideoContext();
-  const [buttonsInsideProperty, setButtonsInsideProperty] = useState(
-    {} as ButtonUpdateProps
-  );
 
   const {
     totalDuration,
-    setResultInsideProps,
-    resultInsideProps,
-    setBackgroundColor,
+    setStartTimerSeconds,
+    setEndTimerSeconds,
+    bellowButtonsValues,
+    setBellowButtonsValues,
     backgroundColorInsideButton,
     setBackgroundColorInsideButton,
     textColorInsideButton,
     setTextColorInsideButton,
     backgroundHoverInsideButton,
-    textInsideButton,
-    setTextInsideButton,
     setBackgroundHoverInsideButton,
-    setSizeInsideButton,
-    sizeInsideButton,
     startTimerInside,
     endTimerInside,
     startTimerSecondsInside,
     endTimerSecondsInside,
+    textInsideButton,
+    setTextInsideButton,
+    sizeInsideButton,
+    setSizeInsideButton,
+    setPropsButtonInside,
     setStartTimerInside,
     setEndTimerInside,
+    setStartTimerInsideButton,
+    startTimerInsideButton,
   } = usePlayeContext();
 
   const formatedTotalDurationInMinutes = Math.floor(totalDuration / 60);
+  const [buttonsInsideProperty, setbuttonsInsideProperty] = useState(
+    {} as ButtonInsideProps
+  );
 
   const [listStart, setListStart] = useState([]);
   const [listEnd, setListEnd] = useState([]);
   const [startSeconds, setStartSeconds] = useState([]);
-  const [startTimerSeconds, setStartTimerSeconds] = useState(0);
-  const [startTimer, setStartTimer] = useState(0);
-  const [endTimer, setEndTimer] = useState(0);
-  const [endTimerSeconds, setEndTimerSeconds] = useState(0);
+
   const [currentText, setCurrentText] = useState(buttonsInsideProperty?.text);
   const [currentLink, setCurrentLink] = useState(buttonsInsideProperty?.link);
   const [currentSize, setCurrentSize] = useState(buttonsInsideProperty?.size);
+  const [currentStartTimer, setCurrentStartTimer] = useState(
+    buttonsInsideProperty?.start
+  );
   const [currentBackgroundColor, setCurrentBackgroundColor] = useState("");
   const [currentTextColor, setCurrentTextColor] = useState("");
   const [currentBackgroundHover, setCurrentBackgroundHover] = useState("");
-  const [newSize, setnewSize] = useState<string | undefined>("");
   const [newBackgroundColor, setnewBackgroundColor] = useState<
     string | undefined
   >("");
@@ -86,17 +103,70 @@ export function InsideVideo() {
   const [newBackgroundHover, setnewBackgroundHover] = useState<
     string | undefined
   >("");
-  const textRef = useRef<HTMLInputElement>(null);
-  const sizeRef = useRef<HTMLInputElement>(null);
   const backgroundColorRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLInputElement>(null);
   const colorRef = useRef<HTMLInputElement>(null);
   const backgroundHover = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEnd, setIsOpenEnd] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const buttonRefEnd = useRef<HTMLButtonElement>(null);
+  const [newSize, setnewSize] = useState<string | undefined>("");
+  const [newStartTimer, setnewStartTimer] = useState<number | undefined>(0);
+
   const [getFormatedStart, setGetFormatedStart] = useState("");
   const [getFormatedEnd, setGetFormatedEnd] = useState("");
+  const [timer, setTimer] = useState({ start: 0, end: 0 });
+
+  useEffect(() => {
+    async function getData() {
+      const res = await api
+        .get(`/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`)
+        .then((res) => {
+          const buttonInsideFiltered = res.data.find(
+            (e: any) => e.type === "inside"
+          );
+          if (buttonInsideFiltered) {
+            setTimer({
+              start: buttonsInsideProperty?.start,
+              end: buttonsInsideProperty?.end,
+            });
+          }
+        });
+    }
+
+    var minutesStart = Math.floor(buttonsInsideProperty.start / 60);
+    var remainingSecondsStart = buttonsInsideProperty.start % 60;
+
+    const formatedTimerStart =
+      minutesStart +
+      " : " +
+      (remainingSecondsStart < 10 ? "0" : "") +
+      remainingSecondsStart;
+
+    var minutesEnd = Math.floor(buttonsInsideProperty.end / 60);
+    var remainingSecondsEnd = buttonsInsideProperty.end % 60;
+
+    const formatedTimerEnd =
+      minutesEnd +
+      " : " +
+      (remainingSecondsEnd < 10 ? "0" : "") +
+      remainingSecondsEnd;
+
+    setGetFormatedStart(formatedTimerStart);
+    setGetFormatedEnd(formatedTimerEnd);
+    setStartTimerInside(0);
+    setEndTimerInside(0);
+
+    getData();
+  }, [
+    buttonOption,
+    videosId.currentVideoId,
+    buttonsInsideProperty.start,
+    buttonsInsideProperty.end,
+    setStartTimerInside,
+    setEndTimerInside,
+  ]);
 
   useEffect(() => {
     let start: any = [];
@@ -119,149 +189,56 @@ export function InsideVideo() {
 
     setStartSeconds(seconds);
   }, [formatedTotalDurationInMinutes]);
-  useEffect(() => {
-    currentVideo.currentVideoId;
-  }, [currentVideo.currentVideoId]);
 
   async function updateButton() {
+    const minutesAndSecondsTimerStart =
+      startTimerInside * 60 + startTimerSecondsInside;
+    const getMinutesStart =
+      startTimerInside > 0
+        ? minutesAndSecondsTimerStart
+        : buttonsInsideProperty.start;
+
+    const minutesAndSecondsTimerEnd =
+      endTimerInside * 60 + endTimerSecondsInside;
+    const getMinutesEnd =
+      endTimerInside > 0
+        ? minutesAndSecondsTimerEnd
+        : buttonsInsideProperty.end;
+
     if (currentBackgroundColor) {
-      const newDesignData = {
+      api.put(`/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`, {
         background_color: currentBackgroundColor,
-      };
-
-      api.put(
-        `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
-        {
-          background_color: currentBackgroundColor,
-          text_color: currentTextColor,
-          background_hover: currentBackgroundHover,
-          text: currentText,
-          link: currentLink,
-          size: currentSize,
-          start: startTimerInside * 60 + startTimerSecondsInside,
-          end: endTimerInside * 60 + endTimerSecondsInside,
-          position: buttonPosition,
-        }
-      );
+        text_color: currentTextColor,
+        background_hover: currentBackgroundHover,
+        text: currentText,
+        link: currentLink,
+        size: currentSize,
+        start: getMinutesStart,
+        end: getMinutesEnd,
+        position: buttonPosition,
+      });
     } else if (!currentBackgroundColor) {
-      const newDesignData = {
+      api.put(`/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`, {
         background_color: newBackgroundColor,
-      };
-      api.put(
-        `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
-        {
-          background_color: newBackgroundColor,
-          text_color: newTextColor,
-          text: currentText,
-          link: currentLink,
-          size: currentSize,
-          background_hover: newBackgroundHover,
-          start: startTimerInside * 60 + startTimerSecondsInside,
-          end: endTimerInside * 60 + endTimerSecondsInside,
-          position: buttonPosition,
-        }
-      );
+        text_color: newTextColor,
+        background_hover: newBackgroundHover,
+        text: currentText,
+        link: currentLink,
+        size: currentSize,
+        start: getMinutesStart,
+        end: getMinutesEnd,
+        position: buttonPosition,
+      });
 
-      setStartTimer(0);
-      setEndTimer(0);
+      console.log(
+        "valor do minutesAndSecondsTimerStart",
+        minutesAndSecondsTimerStart
+      );
+      setPropsButtonInside(currentSize);
     }
     closeModalNewButton();
     toast.success("Botão salvo");
   }
-  const [getTimers, setGetTimers] = useState({ start: 0, end: 0 });
-
-  useEffect(() => {
-    async function getData() {
-      const res = await api
-        .get(`/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`)
-        .then((res) => {
-          const buttonInsideFiltered = res.data.find(
-            (e: any) => e.type === "inside"
-          );
-          if (buttonInsideFiltered) {
-            setGetTimers({
-              start: buttonInsideFiltered?.start,
-              end: buttonInsideFiltered?.end,
-            });
-          }
-          setResultInsideProps({
-            start: buttonInsideFiltered?.start,
-            end: buttonInsideFiltered?.end,
-          });
-        });
-    }
-
-    var minutesStart = Math.floor(Number(resultInsideProps?.start) / 60);
-    var remainingSecondsStart = Number(resultInsideProps?.start) % 60;
-
-    const formatedTimerStart =
-      minutesStart +
-      " : " +
-      (remainingSecondsStart < 10 ? "0" : "") +
-      remainingSecondsStart;
-
-    var minutesEnd = Math.floor(Number(resultInsideProps?.end) / 60);
-    var remainingSecondsEnd = Number(resultInsideProps?.end) % 60;
-
-    const formatedTimerEnd =
-      minutesEnd +
-      " : " +
-      (remainingSecondsEnd < 10 ? "0" : "") +
-      remainingSecondsEnd;
-
-    setGetFormatedStart(formatedTimerStart);
-    setGetFormatedEnd(formatedTimerEnd);
-    setEndTimerInside(0);
-    setStartTimerInside(0);
-
-    getData();
-  }, [
-    buttonsInsideProperty?.start,
-    buttonsInsideProperty?.end,
-    buttonOption,
-    resultInsideProps?.end,
-    resultInsideProps?.start,
-    setEndTimerInside,
-    setResultInsideProps,
-    setStartTimerInside,
-    videosId.currentVideoId,
-  ]);
-
-  useEffect(() => {
-    async function getButtonsInsideProperty() {
-      const response = await api.get(
-        `/cta_buttons/${videosId.currentVideoId}?type=${"inside"}`
-      );
-
-      const buttonsProperty = response.data.find(
-        (e: any) => e.type === "inside"
-      );
-
-      setButtonsInsideProperty({
-        background_color: buttonsProperty.background_color,
-        background_hover: buttonsProperty.background_hover,
-        size: buttonsProperty.size,
-        text: buttonsProperty.text,
-        text_color: buttonsProperty.text_color,
-        link: buttonsProperty.link,
-        is_visible: buttonsProperty.is_visible,
-        position: buttonsProperty.position,
-        start: buttonsProperty?.start,
-        end: buttonsProperty?.end,
-      });
-
-      setInsideButtonProps({
-        is_visible: buttonsInsideProperty.is_visible,
-      });
-    }
-
-    getButtonsInsideProperty();
-  }, [
-    buttonOption,
-    buttonsInsideProperty.is_visible,
-    setInsideButtonProps,
-    videosId,
-  ]);
 
   function backgroundHandleClick() {
     backgroundColorRef.current?.click();
@@ -274,6 +251,50 @@ export function InsideVideo() {
   function backgroundHoverHandleClick() {
     backgroundHover.current?.click();
   }
+
+  const { data, isLoading } = useQuery(
+    ["InsideProps", videosId.currentVideoId, buttonOption],
+    () => getPropsButtonInside(videosId.currentVideoId, buttonOption)
+  );
+
+  useEffect(() => {
+    const buttonsProperty = data?.find((e: any) => e.type === "inside");
+
+    setbuttonsInsideProperty({
+      background_color: buttonsProperty?.background_color,
+      background_hover: buttonsProperty?.background_hover,
+      size: buttonsProperty?.size,
+      text: buttonsProperty?.text,
+      text_color: buttonsProperty?.text_color,
+      link: buttonsProperty?.link,
+      is_visible: buttonsProperty?.is_visible,
+      start: buttonsProperty?.start,
+      end: buttonsProperty?.end,
+    });
+  }, [
+    buttonOption,
+    data,
+    buttonsInsideProperty.is_visible,
+    videosId,
+    setBellowButtonsValues,
+  ]);
+
+  useEffect(() => {
+    const staticValue = 300;
+    setnewStartTimer(buttonsInsideProperty?.start);
+
+    if (currentStartTimer) {
+      setStartTimerInsideButton(currentStartTimer);
+    } else {
+      setStartTimerInsideButton(newStartTimer);
+    }
+  }, [
+    currentStartTimer,
+    buttonsInsideProperty?.start,
+    newSize,
+    setStartTimerInsideButton,
+    newStartTimer,
+  ]);
 
   useEffect(() => {
     setnewSize(buttonsInsideProperty?.size);
@@ -293,7 +314,13 @@ export function InsideVideo() {
     } else {
       setTextInsideButton(newText);
     }
-  }, [currentText, buttonsInsideProperty?.text, newText, setTextInsideButton]);
+  }, [
+    currentText,
+    setNewText,
+    buttonsInsideProperty?.text,
+    newText,
+    setTextInsideButton,
+  ]);
 
   useEffect(() => {
     setnewBackgroundColor(buttonsInsideProperty?.background_color);
@@ -326,7 +353,7 @@ export function InsideVideo() {
   ]);
 
   useEffect(() => {
-    setnewBackgroundHover(buttonsInsideProperty?.text_color);
+    setnewBackgroundHover(buttonsInsideProperty?.background_hover);
 
     if (currentBackgroundHover) {
       setBackgroundHoverInsideButton(currentBackgroundHover);
@@ -335,10 +362,18 @@ export function InsideVideo() {
     }
   }, [
     currentBackgroundHover,
-    buttonsInsideProperty?.text_color,
+    buttonsInsideProperty?.background_hover,
     newBackgroundHover,
     setBackgroundHoverInsideButton,
   ]);
+
+  console.log("console do startTimerInside", startTimerInside);
+  console.log("console do startTimerSecondsInside", startTimerSecondsInside);
+  console.log("console do getFormatedStart", getFormatedStart);
+  console.log(
+    "console do buttonsInsideProperty.start",
+    buttonsInsideProperty.start
+  );
 
   return (
     <>
@@ -396,44 +431,45 @@ export function InsideVideo() {
             />
           </div>
           <div>
-            <label htmlFor="tamanho">Tamanho</label>
-            <select
-              id="tamanho"
-              onChange={(e) => setCurrentSize(e.target.value)}
-              defaultValue={buttonsInsideProperty?.size}
-            >
-              <option
-                selected={buttonsInsideProperty?.size == "125"}
-                value={"125"}
+            <div>
+              <label htmlFor="tamanho">Tamanho</label>
+              <select
+                id="tamanho"
+                onChange={(e) => setCurrentSize(e.target.value)}
+                defaultValue={buttonsInsideProperty?.size}
               >
-                Pequeno
-              </option>
-              <option
-                selected={buttonsInsideProperty?.size == "150"}
-                value={"150"}
-              >
-                Médio
-              </option>
-              <option
-                selected={buttonsInsideProperty?.size == "250"}
-                value={"250"}
-              >
-                Grande
-              </option>
-            </select>
+                <option
+                  selected={buttonsInsideProperty?.size == "125"}
+                  value={"125"}
+                >
+                  Pequeno
+                </option>
+                <option
+                  selected={buttonsInsideProperty?.size == "150"}
+                  value={"150"}
+                >
+                  Médio
+                </option>
+                <option
+                  selected={buttonsInsideProperty?.size == "250"}
+                  value={"250"}
+                >
+                  Grande
+                </option>
+              </select>
+            </div>
           </div>
         </div>
         <div className={styles.linkButton}>
           <label htmlFor="link">Link</label>
           <input
             defaultValue={buttonsInsideProperty?.link}
+            onChange={(e) => setCurrentLink(e.target.value)}
             type="text"
             id="link"
-            onChange={(e) => setCurrentLink(e.target.value)}
           />
         </div>
         <div className={styles.divisor} />
-
         <div className={styles.timerButton}>
           <div>
             <label htmlFor="start">Início</label>
@@ -443,8 +479,13 @@ export function InsideVideo() {
                   ? `${startTimerInside} : ${startTimerSecondsInside}`
                   : getFormatedStart
               }
+              defaultValue={"xxx"}
               placeholder="00:00"
-              title="00:00"
+              title={
+                startTimerInside
+                  ? `${startTimerInside} : ${startTimerSecondsInside}`
+                  : getFormatedStart
+              }
               type="text"
               id="start"
               onClick={() => setIsOpen(!isOpen)}
@@ -467,7 +508,11 @@ export function InsideVideo() {
                   : getFormatedEnd
               }
               placeholder="00:00"
-              title="00:00"
+              title={
+                endTimerInside
+                  ? `${endTimerInside} : ${endTimerSecondsInside}`
+                  : getFormatedEnd
+              }
               onClick={() => setIsOpenEnd(!isOpenEnd)}
             />
             <ModalTimerEndInside
@@ -547,18 +592,18 @@ export function InsideVideo() {
           <p>Pré-visualização</p>
           <div>
             <ButtonInsideVideo
-              href={"#"}
+              href={buttonsInsideProperty?.link}
               target="_blank"
               background_color={backgroundColorInsideButton}
               background_hover={backgroundHoverInsideButton}
               text_color={textColorInsideButton}
               sizeWidth={
                 sizeInsideButton === "125"
-                  ? "150"
+                  ? "100"
                   : sizeInsideButton === "150"
-                  ? "200"
+                  ? "110"
                   : sizeInsideButton === "250"
-                  ? "250"
+                  ? "140"
                   : ""
               }
               sizeFont={
@@ -577,7 +622,7 @@ export function InsideVideo() {
         </div>
         <div className={styles.divisor} />
         <div className={styles.saveOrCancel}>
-          <button onClick={closeModalNewButton}>Cancelar</button>
+          <button>Cancelar</button>
           <button type="submit">Salvar</button>
         </div>
       </form>

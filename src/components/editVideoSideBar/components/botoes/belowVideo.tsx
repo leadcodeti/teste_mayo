@@ -101,7 +101,7 @@ export function BelowVideo() {
 
   const [getFormatedStart, setGetFormatedStart] = useState("");
   const [getFormatedEnd, setGetFormatedEnd] = useState("");
-  const [xpto, setXpto] = useState({ start: 0, end: 0 });
+  const [getTimers, setGetTimers] = useState({ start: 0, end: 0 });
 
   useEffect(() => {
     async function getData() {
@@ -112,7 +112,7 @@ export function BelowVideo() {
             (e: any) => e.type === "below"
           );
           if (buttonBelowFiltered) {
-            setXpto({
+            setGetTimers({
               start: buttonsBelowsProperty?.start,
               end: buttonsBelowsProperty?.end,
             });
@@ -176,6 +176,16 @@ export function BelowVideo() {
   }, [formatedTotalDurationInMinutes]);
 
   async function updateButton() {
+    const minutesAndSecondsTimerStart =
+      startTimerBelow * 60 + startTimerSecondsBelow;
+    const getMinutesStart =
+      startTimerBelow > 0
+        ? minutesAndSecondsTimerStart
+        : buttonsBelowsProperty.start;
+
+    const minutesAndSecondsTimerEnd = endTimerBelow * 60 + endTimerSecondsBelow;
+    const getMinutesEnd =
+      endTimerBelow > 0 ? minutesAndSecondsTimerEnd : buttonsBelowsProperty.end;
     if (currentBackgroundColor) {
       const newDesignData = {
         background_color: currentBackgroundColor,
@@ -190,8 +200,8 @@ export function BelowVideo() {
           text: currentText,
           link: currentLink,
           size: currentSize,
-          start: startTimerBelow * 60 + startTimerSecondsBelow,
-          end: endTimerBelow * 60 + endTimerSecondsBelow,
+          start: getMinutesStart,
+          end: getMinutesEnd,
         }
       );
     } else if (!currentBackgroundColor) {
@@ -207,8 +217,8 @@ export function BelowVideo() {
           link: currentLink,
           size: currentSize,
           background_hover: newBackgroundHover,
-          start: startTimerBelow * 60 + startTimerSecondsBelow,
-          end: endTimerBelow * 60 + endTimerSecondsBelow,
+          start: getMinutesStart,
+          end: getMinutesEnd,
         }
       );
 
@@ -314,7 +324,7 @@ export function BelowVideo() {
   ]);
 
   useEffect(() => {
-    setnewBackgroundHover(buttonsBelowsProperty?.text_color);
+    setnewBackgroundHover(buttonsBelowsProperty?.background_hover);
 
     if (currentBackgroundHover) {
       setBackgroundHoverBelowButton(currentBackgroundHover);
@@ -323,7 +333,7 @@ export function BelowVideo() {
     }
   }, [
     currentBackgroundHover,
-    buttonsBelowsProperty?.text_color,
+    buttonsBelowsProperty?.background_hover,
     newBackgroundHover,
     setBackgroundHoverBelowButton,
   ]);
@@ -392,7 +402,11 @@ export function BelowVideo() {
                   : getFormatedStart
               }
               placeholder="00:00"
-              title="00:00"
+              title={
+                startTimerBelow
+                  ? `${startTimerBelow} : ${startTimerSecondsBelow}`
+                  : getFormatedStart
+              }
               type="text"
               id="start"
               onClick={() => setIsOpen(!isOpen)}
@@ -415,7 +429,11 @@ export function BelowVideo() {
                   : getFormatedEnd
               }
               placeholder="00:00"
-              title="00:00"
+              title={
+                endTimerBelow
+                  ? `${endTimerBelow} : ${endTimerSecondsBelow}`
+                  : getFormatedEnd
+              }
               onClick={() => setIsOpenEnd(!isOpenEnd)}
             />
             <ModalTimerEndBelow
@@ -495,7 +513,7 @@ export function BelowVideo() {
           <p>Pré-visualização</p>
           <div>
             <ButtonBelowVideo
-              href={"#"}
+              href={buttonsBelowsProperty?.link}
               target="_blank"
               background_color={backgroundColorBelowButton}
               background_hover={backgroundHoverBelowButton}

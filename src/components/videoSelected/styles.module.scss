@@ -45,7 +45,7 @@
         align-items: center;
         max-width: 600px;
         width: 100%;
-        
+
         input {
           width: 100%;
           background: none;
@@ -64,7 +64,7 @@
           font-size: 0.9rem;
           border-radius: 4px;
           margin: 0 0.5rem;
-          transition: all .3s ease-in-out;
+          transition: all 0.3s ease-in-out;
 
           &:hover {
             filter: brightness(0.9);
@@ -78,12 +78,12 @@
         border-radius: 4px;
         border: 1px solid var(--pink-800);
         color: var(--pink-800);
-        transition: all .3s ease-in-out;
+        transition: all 0.3s ease-in-out;
 
         &:hover {
           filter: brightness(0.9);
         }
-        svg{
+        svg {
           font-size: 1.3rem;
         }
       }
@@ -130,7 +130,6 @@
 
         .buttonSize {
           height: fit-content;
-          z-index: 99;
         }
       }
 
@@ -144,12 +143,15 @@
 
       .startTop {
         justify-content: start;
+        height: auto;
       }
       .centerTop {
         justify-content: center;
+        height: auto;
       }
       .endTop {
         justify-content: end;
+        height: auto;
       }
       .startCenter {
         align-items: center;

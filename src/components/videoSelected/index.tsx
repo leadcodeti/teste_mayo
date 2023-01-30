@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { AiFillEdit } from "react-icons/ai";
 import { useMutation, useQueryClient } from "react-query";
 import { upDateVideoName } from "../../pages/api/post_put_functions";
+import { InsideButton } from "../editVideoSideBar/components/botoes/InsideButtons";
 
 const PlayerVideo = dynamic(() => import("./player"), {
   ssr: false,

@@ -45,6 +45,8 @@ interface contextProps {
   sizeInsideButton: string | undefined;
   setSizeInsideButton: Dispatch<SetStateAction<string | undefined>>;
   textBelowButton: string | undefined;
+  startTimerInsideButton: number | undefined;
+  setStartTimerInsideButton: Dispatch<SetStateAction<number | undefined>>;
   setTextBelowButton: Dispatch<SetStateAction<string | undefined>>;
   textColorInsideButton: string | undefined;
   backgroundHoverInsideButton: string | undefined;
@@ -78,6 +80,8 @@ interface contextProps {
   setEndTimerInside: (value: number) => void;
   propsButtonBelow: string;
   setPropsButtonBelow: (value: string) => void;
+  propsButtonInside: string;
+  setPropsButtonInside: (value: string) => void;
   watchVideoTime: number | undefined;
   setWatchVideoTime: any;
   totalDuration: number;
@@ -96,6 +100,8 @@ interface contextProps {
   setEndTimerSeconds: (value: number) => void;
   bellowButtonsValues: { text: string; link: string };
   setBellowButtonsValues: any;
+  InsideButtonsValues: { text: string; link: string };
+  setInsideButtonsValues: any;
   changeDuration: number;
   setChangeDuration: Dispatch<SetStateAction<number>>;
   sizeBelowButton: string | undefined;
@@ -149,17 +155,21 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
   const [sizeInsideButton, setSizeInsideButton] = useState<string | undefined>(
     ""
   );
+  const [startTimerInsideButton, setStartTimerInsideButton] = useState<
+    number | undefined
+  >(300);
   const [textBelowButton, setTextBelowButton] = useState<string | undefined>(
     ""
   );
   const [propsButtonBelow, setPropsButtonBelow] = useState("");
+  const [propsButtonInside, setPropsButtonInside] = useState("");
   const [startTimer, setStartTimer] = useState(0);
   const [endTimer, setEndTimer] = useState(0);
   const [startTimerBelow, setStartTimerBelow] = useState(0);
   const [startTimerSecondsBelow, setStartTimerSecondsBelow] = useState(0);
   const [endTimerBelow, setEndTimerBelow] = useState(0);
   const [endTimerSecondsBelow, setEndTimerSecondsBelow] = useState(0);
-  const [startTimerInside, setStartTimerInside] = useState(0);
+  const [startTimerInside, setStartTimerInside] = useState(183);
   const [startTimerSecondsInside, setStartTimerSecondsInside] = useState(0);
   const [endTimerInside, setEndTimerInside] = useState(0);
   const [endTimerSecondsInside, setEndTimerSecondsInside] = useState(0);
@@ -177,6 +187,10 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
   const [totalDuration, setTotalDuration] = useState(0);
   const [valueInMinutes, setValueInMinutes] = useState(0);
   const [bellowButtonsValues, setBellowButtonsValues] = useState({
+    text: "",
+    link: "",
+  });
+  const [InsideButtonsValues, setInsideButtonsValues] = useState({
     text: "",
     link: "",
   });
@@ -301,6 +315,8 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
         setTextBelowButton,
         setSizeInsideButton,
         sizeInsideButton,
+        startTimerInsideButton,
+        setStartTimerInsideButton,
         startTimer,
         setStartTimer,
         endTimer,
@@ -324,6 +340,10 @@ export function ContextPlayerProvider({ children }: ProviderProps) {
         propsButtonBelow,
         setPropsButtonBelow,
         openModalTimers,
+        propsButtonInside,
+        setPropsButtonInside,
+        InsideButtonsValues,
+        setInsideButtonsValues,
       }}
     >
       {children}

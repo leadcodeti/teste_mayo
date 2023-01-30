@@ -1,13 +1,13 @@
 import styles from "./styles.module.scss";
 import Modal from "react-modal";
-import { useState } from "react";
+import { useEffect } from "react";
 import { GrFormClose } from "react-icons/gr";
 import { RiTimer2Line } from "react-icons/ri";
 import { BelowVideo } from "./belowVideo";
-import { InsideVideo } from "./insideVideo";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { customStyles } from "../../../../utils/modalConfig";
 import { CustomButton } from "./custom";
+import { InsidesVideo } from "./insidesVideo";
 
 Modal.setAppElement("body");
 
@@ -22,11 +22,28 @@ export function Botoes() {
     modalNewButtonOpen,
     isVisibleBelow,
     isVisibleButtonBelow,
+    setIsVisibleButtonBelow,
     isVisibleButtonInside,
+    setIsVisibleButtonInside,
     isVisibleInside,
     isVisibleButtonCustom,
+    setIsVisibleButtonCustom,
     isVisibleCustom,
   } = useVideoContext();
+
+  useEffect(() => {
+    setIsVisibleButtonBelow(isVisibleButtonBelow);
+    setIsVisibleButtonInside(isVisibleButtonInside);
+    setIsVisibleButtonCustom(isVisibleButtonCustom);
+  }, [
+    isVisibleButtonBelow,
+    setIsVisibleButtonBelow,
+    isVisibleButtonInside,
+    setIsVisibleButtonInside,
+    setIsVisibleButtonCustom,
+    isVisibleButtonCustom,
+    isVisibleBelow,
+  ]);
 
   return (
     <>
@@ -71,7 +88,7 @@ export function Botoes() {
             case "below":
               return <BelowVideo />;
             case "inside":
-              return <InsideVideo />;
+              return <InsidesVideo />;
             case "custom":
               return <CustomButton />;
             default:
