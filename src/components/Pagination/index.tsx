@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useSideBarContext } from "../../contexts/thirdContext";
 import { PaginationItem } from "./PaginationItem";
 import styles from "./styles.module.scss";
 
@@ -24,7 +26,17 @@ export function Pagination({
   currentPage = 1,
   onPageChange,
 }: PaginationProps) {
+
+
   const lastPage = Math.ceil(totalCountOfRegisters / registersPerPage);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1100);
+  }, []);
 
   const previousPages =
     currentPage > 1
@@ -38,6 +50,10 @@ export function Pagination({
           Math.min(currentPage + siblingsCount, lastPage)
         )
       : [];
+   
+  if(loading){
+    return(<></>)
+  }
 
   return (
     <div className={styles.container}>

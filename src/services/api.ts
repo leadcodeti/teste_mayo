@@ -10,3 +10,8 @@ export const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+// https://mayo-player-backend-production.up.railway.app/
+
+
+// https://app.mayoplayer.com/

@@ -1,3 +1,4 @@
+import { useSideBarContext } from "../../contexts/thirdContext";
 import styles from "./styles.module.scss";
 
 interface PaginationItemProps {
@@ -11,11 +12,13 @@ export function PaginationItem({
   number,
   onPageChange,
 }: PaginationItemProps) {
+
+  const { isLoading } = useSideBarContext();
   {
     if (isCurrent) {
-      return <div style={{ background: "#ff003c" }}>{number}</div>;
+      return isLoading ? <p></p> : <div style={{ background: "#ff003c" }}>{number}</div>;
     }
   }
 
-  return <div onClick={() => onPageChange(number)}>{number}</div>;
+  return isLoading ? <p></p>: <div onClick={() => onPageChange(number)}>{number}</div>;
 }

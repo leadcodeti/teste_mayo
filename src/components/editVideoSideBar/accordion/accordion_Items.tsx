@@ -1,3 +1,4 @@
+import is from "date-fns/esm/locale/is/index.js";
 import Accordion from "react-bootstrap/Accordion";
 import { useSideBarContext } from "../../../contexts/thirdContext";
 import { LoadingScrean } from "../../loading/loading";
@@ -12,6 +13,7 @@ interface AccordionProps {
   accordionKey: string;
   activeSwitch: () => void;
   upDateSwitch: () => void;
+  isSeved: boolean | undefined;
 }
 
 export function AccordionItems({
@@ -21,17 +23,10 @@ export function AccordionItems({
   accordionTitle,
   activeSwitch,
   cheacked,
+  isSeved,
   children,
   isLoading,
 }: AccordionProps) {
-
-  const { saveSwitch, setSaveSwitch } = useSideBarContext();
-
-  function UpDataSwitch() {
-    upDateSwitch();
-    setSaveSwitch(false);
-  }
-
 
   return (
     <>
@@ -52,19 +47,20 @@ export function AccordionItems({
                     type="checkbox"
                     checked={cheacked}
                   />
-                  <span
-                    className={`${stylesSwitch.slider} ${stylesSwitch.round}`}
-                  ></span>
+                 
+                  <span className={`${stylesSwitch.slider} ${stylesSwitch.round}`}></span>
                 </label>
               </>
             )}
           </div>
         </Accordion.Header>
         <Accordion.Body className="p-0">{children}</Accordion.Body>
-        {saveSwitch ? (
+        {isSeved ? (
           <>
             <div className={stylesSwitch.saveSwitch}>
-              <button onClick={UpDataSwitch}>Salvar</button>
+              <button onClick={upDateSwitch}>
+                Salvar
+              </button>
             </div>
           </>
         ) : (

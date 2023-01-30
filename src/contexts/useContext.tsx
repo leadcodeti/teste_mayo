@@ -360,13 +360,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   useEffect(() => {
-    if (currentVideo) {
+    if ("@myVideoPlayerId" in localStorage) {
+     if(currentVideo) {
       const getIds = JSON.parse(localStorage.getItem("@myVideoPlayerId") || "");
       if (getIds !== null) {
         setVideosId(getIds);
       }
+     }
     }
-  }, [currentVideo]);
+  }, [currentVideo, user]);
 
   return (
     <AuthContext.Provider

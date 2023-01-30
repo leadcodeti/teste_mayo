@@ -11,17 +11,17 @@ export function Switch() {
 
   const { allVideo, setActiveAccordion, setSaveSwitch, setCheckFakebar} = useSideBarContext() 
   const [selectedVideo, setSelectedVideo] = useState({} as VideoTypes | undefined);
-  const { currentVideo,videosId } = useVideoContext();
+  const { videosId } = useVideoContext();
+
   
   const queryClient = useQueryClient ()
-
 
   const [hasFakeBar, setHasFakeBar] = useState<boolean | undefined>();
   const [hasContinue, setHasContinue] = useState<boolean | undefined>(false);
   const [hasAutoPlay, setHasAutoPlay] = useState<boolean | undefined>(false);
   const [hasThumbNails, setHasThumbnails] = useState<boolean | undefined>(false);
 
-  const { mutateAsync: switchMutation, data } = useMutation(putSwictProps,{
+  const { mutateAsync: switchMutation, isLoading } = useMutation(putSwictProps,{
     onSuccess: () => {
       queryClient.invalidateQueries("videos");
     },
@@ -29,7 +29,10 @@ export function Switch() {
 
   useEffect(() =>{
     setHasFakeBar(selectedVideo?.has_progress_bar)
-  },[selectedVideo?.has_progress_bar])
+    setHasAutoPlay(selectedVideo?.has_autoplay)
+    setHasContinue(selectedVideo?.has_continue_options)
+    setHasThumbnails(selectedVideo?.has_thumbnail)
+  },[selectedVideo?.has_autoplay, selectedVideo?.has_continue_options, selectedVideo?.has_progress_bar, selectedVideo?.has_thumbnail, setSaveSwitch])
 
   useEffect(() => {
     setActiveAccordion ({
@@ -39,7 +42,7 @@ export function Switch() {
       activeThumbNails: hasThumbNails,
     })
 
-  },[hasAutoPlay,hasContinue, hasFakeBar, hasThumbNails,setActiveAccordion])
+  },[hasAutoPlay, hasContinue, hasFakeBar, hasThumbNails,setActiveAccordion])
 
 
   useEffect(() => {
@@ -55,27 +58,78 @@ export function Switch() {
        has_progress_bar: hasFakeBar,
       }
      })
+    
+     setSaveSwitch({
+      saveFakeBar:false,
+    });
+  }
+
+  async function upDataContinueSwitch() {
+    await switchMutation({
+      currentVideoId: videosId.currentVideoId,
+      swicthPros :{
+       has_continue_options: hasContinue,
+      }
+     })
+
+     setSaveSwitch({
+      saveContinue:false,
+    });
+  }
+
+  async function upDataThumbnailSwitch() {
+    await switchMutation({
+      currentVideoId: videosId.currentVideoId,
+      swicthPros :{
+       has_thumbnail: hasThumbNails,
+      }
+     })
+
+     setSaveSwitch({
+      saveThumbNails:false,
+    });
+  }
+  async function upDataAutoplaySwitch() {
+    await switchMutation({
+      currentVideoId: videosId.currentVideoId,
+      swicthPros :{
+      has_autoplay: hasAutoPlay,
+      }
+     })
+
+     setSaveSwitch({
+      saveAutoPlay:false,
+    });
   }
 
   async function fakeBarIsVibiles() {
     setHasFakeBar(!hasFakeBar);
-    setSaveSwitch(true)
+    setSaveSwitch({
+      saveFakeBar: true,
+    })
   }
-
-  
 
   async function continueIsVisible() {
     setHasContinue(!hasContinue);
+    setSaveSwitch({
+      saveContinue: true,
+    })
   }
 
   async function autoPlayIsVisible() {
     setHasAutoPlay(!hasAutoPlay);
+    setSaveSwitch({
+      saveAutoPlay: true,
+    })
   }
 
 
 
   async function thumbnailsIsVisible() {
-    setHasThumbnails(hasThumbNails);
+    setHasThumbnails(!hasThumbNails);
+    setSaveSwitch({
+      saveThumbNails: true,
+    })
 
   }
 
@@ -85,6 +139,9 @@ export function Switch() {
     thumbnailsIsVisible,
     autoPlayIsVisible,
 
-    upDataFakeBarSwitch
+    upDataFakeBarSwitch,
+    upDataAutoplaySwitch,
+    upDataContinueSwitch,
+    upDataThumbnailSwitch
   }
 }

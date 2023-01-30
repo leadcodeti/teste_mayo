@@ -152,35 +152,14 @@ export default function PlayerVideo() {
       });
       setButtonPosition(insideResult.position);
     });
-  }, [
-    currentVideo.currentVideoId,
-    setButtonProps,
-    setButtonPosition,
-    videosId.currentVideoId,
-    setHtmlCustom,
-  ]);
 
-
- setWatchVideoTime(playerRef.current?.currentTime);
+    setWatchVideoTime(playerRef.current?.currentTime);
+  }, [currentVideo.currentVideoId, setButtonProps, setButtonPosition,
+     videosId.currentVideoId, setHtmlCustom, setWatchVideoTime, playerRef]);
 
  function onTimeUpdate(event: CustomEvent<number>) {
   setChangeDuration(event.detail);
 }
-
-  setWatchVideoTime(playerRef.current?.currentTime);
-
-
-  // useEffect(() => {
-  //   api(`/videos`).then((res) => {
-  //     const fakeBar = res.data[3].has_progress_bar;
-  //     setHasFakeBar(fakeBar);
-  //     const continuar = res.data[3].has_continue_options;
-  //     setHasContinue(continuar);
-  //   });
-  // }, [videosId.currentVideoId, setHasFakeBar, setHasContinue]);
-
-  console.log("RESULT",resultInsideProps?.start);
-
 
   return (
     <div className={styles.player}>

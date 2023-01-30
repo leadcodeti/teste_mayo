@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import moment from "moment";
+import { useSideBarContext } from "../../contexts/thirdContext";
 import { api } from "../../services/api"
 import { BackgroundProps, User,ControllerProps,VideoTypes, ThumbnailsTypes } from "../../types/types";
 
@@ -26,9 +27,11 @@ export const getControllers = async (currentVideoId: string) => {
 }
 
 export const getAllVideos = async (user: User,page: number) => {
-  
+
   if( user && page){
-    const { data:response } = await api.get(`/videos?limit=5&page=${page}`);
+    const { data:response } = await api.get(`/videos?limit=5&page=${page}`).then(
+
+    );
     const totalVideo:number = response.total;
 
     const data = response.items.map((res:VideoTypes) => {

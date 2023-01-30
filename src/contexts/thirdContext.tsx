@@ -29,6 +29,20 @@ interface AccordionProps {
   activeThumbNails?:boolean;
 }
 
+interface SwitchProps {
+  saveContinue?:boolean;
+  saveFakeBar?:boolean;
+  saveAutoPlay?:boolean;
+  saveThumbNails?:boolean;
+
+  isLoading?: {
+    Continue?:boolean;
+    FakeBar?:boolean;
+    AutoPlay?:boolean;
+    ThumbNails?:boolean;
+  };
+}
+
 interface AutoplayerColors {
   autoplayBackgoundColor?:string | undefined;
   autoplayTextColor?:string | undefined;
@@ -67,13 +81,13 @@ interface AuthContextProps {
   setContinueColors:Dispatch<SetStateAction<ContinueColors>>,
   setThumbnailsProps: Dispatch<SetStateAction<ThumbnailTypes>>;
   setThumbnailsImages: Dispatch<SetStateAction<ThumbnailImageProps>>
-  setSaveSwitch: Dispatch<SetStateAction<boolean>>;
+  setSaveSwitch: Dispatch<SetStateAction<SwitchProps>>;
   setCheckFakebar: Dispatch<SetStateAction<boolean>>
   thumbnailsProps: ThumbnailTypes;
   thumbnailsImages: ThumbnailImageProps
   activeAccordion: AccordionProps;
   autoPlayerColors: AutoplayerColors;
-  saveSwitch:boolean;
+  saveSwitch:SwitchProps;
   continueColors:ContinueColors;
   checkFakebar:boolean;
   allVideo: VideoTypes[] | undefined,
@@ -103,7 +117,7 @@ export default function SideBarProvider({ children }: AuthProviderProps) {
    const [thumbnailsImages, setThumbnailsImages] = useState({} as ThumbnailImageProps);
    const [allThumbsnails, setAllThumbsnails] = useState<ThumbnailsTypes[] | undefined>([]);
    const [checkFakebar,setCheckFakebar] = useState<boolean>(false);
-   const [saveSwitch,setSaveSwitch] = useState(false)
+   const [saveSwitch,setSaveSwitch] = useState({} as SwitchProps)
 
    const { data: videos, isLoading } = useQuery(['videos', user,page],() => getAllVideos(user,page))
    const { data: thumbnails } = useQuery(["thumbnails", videosId.currentVideoId],
