@@ -14,7 +14,7 @@ const nextConfig = {
       // },
       {
         protocol: "https",
-        hostname: "mayo-player-backend-production.up.railway.app",
+        hostname: "app.mayoplayer.com",
       },
       {
         protocol: "https",

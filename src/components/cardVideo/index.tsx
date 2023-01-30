@@ -74,6 +74,7 @@ export function CardVideo({ Video, isSearching }: CardVideoProps) {
                     isOpen={isOpen}
                     closeOptions={closeOptions}
                     videoName={video.name}
+                    selectedVideo={video}
                   />
                 ) : null}
               </div>

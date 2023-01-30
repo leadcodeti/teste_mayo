@@ -24,7 +24,7 @@ export function embedVideo({backgroundColor, controller}:EmabedTypes) {
     theme="dark"
     style="--vm-player-theme: ${backgroundColor};"
     >
-      <vm-video
+      <vm-video-youtub
         cross-origin="true"
         poster="https://media.vimejs.com/poster.png"
       >
@@ -33,6 +33,10 @@ export function embedVideo({backgroundColor, controller}:EmabedTypes) {
           type="video/mp4"
         />
       </vm-video>
+      <>
+
+      <fake></fake>
+      </div id="">
 
       <vm-controls pin="center">
         <vm-playback-control

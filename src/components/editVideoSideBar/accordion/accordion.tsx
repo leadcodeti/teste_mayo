@@ -56,15 +56,16 @@ export function Accordions() {
     fakeBarIsVibiles,
     continueIsVisible,
     thumbnailsIsVisible,
-    autoPlayIsVisible
+    autoPlayIsVisible,
+    upDataFakeBarSwitch,
    } = Switch() 
 
 
   return (
     <Accordion>
-      <Accordion.Item eventKey="0">
+      <Accordion.Item eventKey="0" className={stylesSwitch.AccordionContainer}>
         <Accordion.Header>
-          <div className={stylesSwitch.container}>
+          <div  className={stylesSwitch.card}>
             <span className={stylesSwitch.content}>
               <BsPalette />
               Design
@@ -90,6 +91,7 @@ export function Accordions() {
         cheacked={activeAccordion.activeThumbNails}
         icon={<BsCardImage />}
         isLoading={isLoading}
+        upDateSwitch={upDataFakeBarSwitch}
       >
         <Thumbnails />
       </AccordionItems>
@@ -101,6 +103,7 @@ export function Accordions() {
         cheacked={activeAccordion.activeAutoPlay}
         icon={<BsPlayCircle />}
         isLoading={isLoading}
+        upDateSwitch={upDataFakeBarSwitch}
       >
         <AutoPlay />
       </AccordionItems>
@@ -112,6 +115,7 @@ export function Accordions() {
         cheacked={activeAccordion.activeFakeBar}
         icon={<BsHourglass />}
         isLoading={isLoading}
+        upDateSwitch={upDataFakeBarSwitch}
       >
         <FakeBar />
       </AccordionItems>
@@ -123,13 +127,14 @@ export function Accordions() {
         cheacked={activeAccordion.activeContinue}
         icon={<FiRepeat />}
         isLoading={isLoading}
+        upDateSwitch={upDataFakeBarSwitch}
       >
         <WatchAgain />
       </AccordionItems>
 
-      <Accordion.Item eventKey="5">
+      <Accordion.Item eventKey="5" className={stylesSwitch.AccordionContainer}>
         <Accordion.Header>
-          <div className={stylesSwitch.container}>
+          <div className={stylesSwitch.card}>
             <span className={stylesSwitch.content}>
               <BsHandIndexThumb />
               Botões

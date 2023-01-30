@@ -1,82 +1,90 @@
 import { use, useEffect, useState } from "react";
+import { QueryClient, useMutation, useQueryClient } from "react-query";
 import { useSideBarContext } from "../../../contexts/thirdContext";
 import { useVideoContext } from "../../../contexts/useContext";
+import { putSwictProps } from "../../../pages/api/post_put_functions";
 import { api } from "../../../services/api";
+import { VideoTypes } from "../../../types/types";
 
-interface SwitchTipy {
-  isActive: boolean;
-}
 
 export function Switch() {
-  const { allVideo, setActiveAccordion, activeAccordion, setCheckFakebar } =
-    useSideBarContext();
 
-  const { currentVideo, videosId } = useVideoContext();
+  const { allVideo, setActiveAccordion, setSaveSwitch, setCheckFakebar} = useSideBarContext() 
+  const [selectedVideo, setSelectedVideo] = useState({} as VideoTypes | undefined);
+  const { currentVideo,videosId } = useVideoContext();
+  
+  const queryClient = useQueryClient ()
 
-  const [hasFakeBar, setHasFakeBar] = useState({} as SwitchTipy);
-  const [hasContinue, setHasContinue] = useState({} as SwitchTipy);
-  const [hasAutoPlay, setHasAutoPlay] = useState({} as SwitchTipy);
-  const [hasThumbNails, setHasThumbnails] = useState({} as SwitchTipy);
+
+  const [hasFakeBar, setHasFakeBar] = useState<boolean | undefined>();
+  const [hasContinue, setHasContinue] = useState<boolean | undefined>(false);
+  const [hasAutoPlay, setHasAutoPlay] = useState<boolean | undefined>(false);
+  const [hasThumbNails, setHasThumbnails] = useState<boolean | undefined>(false);
+
+  const { mutateAsync: switchMutation, data } = useMutation(putSwictProps,{
+    onSuccess: () => {
+      queryClient.invalidateQueries("videos");
+    },
+  });
+
+  useEffect(() =>{
+    setHasFakeBar(selectedVideo?.has_progress_bar)
+  },[selectedVideo?.has_progress_bar])
 
   useEffect(() => {
-    setCheckFakebar(hasFakeBar.isActive);
-    setActiveAccordion({
-      activeContinue: hasContinue.isActive,
-      activeAutoPlay: hasAutoPlay.isActive,
-      activeFakeBar: hasFakeBar.isActive,
-      activeThumbNails: hasThumbNails.isActive,
-    });
-  }, [
-    allVideo,
-    currentVideo.currentVideoId,
-    hasAutoPlay.isActive,
-    hasContinue.isActive,
-    hasFakeBar.isActive,
-    hasThumbNails.isActive,
-    setActiveAccordion,
-    setCheckFakebar,
-  ]);
+    setActiveAccordion ({
+      activeContinue: hasContinue,
+      activeAutoPlay: hasAutoPlay,
+      activeFakeBar: hasFakeBar,
+      activeThumbNails: hasThumbNails,
+    })
+
+  },[hasAutoPlay,hasContinue, hasFakeBar, hasThumbNails,setActiveAccordion])
+
+
+  useEffect(() => {
+    const video = allVideo?.find((video) => video.id === videosId.currentVideoId)
+    setSelectedVideo(video)
+  },[allVideo, videosId.currentVideoId])
+
+
+  async function upDataFakeBarSwitch() {
+    await switchMutation({
+      currentVideoId: videosId.currentVideoId,
+      swicthPros :{
+       has_progress_bar: hasFakeBar,
+      }
+     })
+  }
 
   async function fakeBarIsVibiles() {
-    setHasFakeBar({ isActive: !hasFakeBar.isActive });
-
-    await api.put(`/videos/${videosId.currentVideoId}`, {
-      has_progress_bar: hasFakeBar.isActive,
-    });
+    setHasFakeBar(!hasFakeBar);
+    setSaveSwitch(true)
   }
-  async function continueIsVisible() {
-    setHasContinue({ isActive: !hasContinue.isActive });
 
-    await api.put(`/videos/${videosId.currentVideoId}`, {
-      has_continue_options: hasContinue.isActive,
-    });
+  
+
+  async function continueIsVisible() {
+    setHasContinue(!hasContinue);
   }
 
   async function autoPlayIsVisible() {
-    setHasAutoPlay({ isActive: !hasAutoPlay.isActive });
-
-    await api.put(`/videos/${videosId.currentVideoId}`, {
-      has_autoplay: hasAutoPlay.isActive,
-    });
+    setHasAutoPlay(!hasAutoPlay);
   }
 
-  async function thumbnailsIsVisible() {
-    setHasThumbnails({ isActive: !hasThumbNails.isActive });
 
-    await api.put(`/videos/${videosId.currentVideoId}`, {
-      has_thumbnail: hasThumbNails.isActive,
-    });
+
+  async function thumbnailsIsVisible() {
+    setHasThumbnails(hasThumbNails);
+
   }
 
   return {
-    hasContinue,
-    hasFakeBar,
-    hasAutoPlay,
-    hasThumbNails,
-
     fakeBarIsVibiles,
     continueIsVisible,
     thumbnailsIsVisible,
     autoPlayIsVisible,
-  };
+
+    upDataFakeBarSwitch
+  }
 }

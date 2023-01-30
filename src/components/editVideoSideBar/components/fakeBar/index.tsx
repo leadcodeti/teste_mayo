@@ -5,7 +5,10 @@ import { useForm } from "react-hook-form";
 import { api } from "../../../../services/api";
 import { useCallback, useEffect, useState } from "react";
 import { useSideBarContext } from "../../../../contexts/thirdContext";
+
 import { toast } from "react-toastify";
+
+import { usePlayeContext } from "../../../../contexts/usePlayerContext";
 
 export function FakeBar() {
   const {
@@ -25,7 +28,7 @@ export function FakeBar() {
   const [currentGetHeight, setCurrentGetHeight] = useState(0);
 
   async function submitFakeBar() {
-    setHeightFakeBar(getHeight);
+    // setHeightFakeBar(getHeight);
 
     await api.put(`/fakebars/${videosId.currentVideoId}`, {
       height: getHeight,

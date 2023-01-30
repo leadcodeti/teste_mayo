@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useVideoContext } from "../../../../contexts/useContext";
 import { usePlayeContext } from "../../../../contexts/usePlayerContext";
 import { Container } from "./fakeBar";

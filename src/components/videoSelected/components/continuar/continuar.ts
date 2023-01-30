@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 interface containerContinuarProps {
-  background_color: string;
-  text_color: string;
+  background_color: string | undefined;
+  text_color: string | undefined;
   isVisibleContainer: string;
 }
 
