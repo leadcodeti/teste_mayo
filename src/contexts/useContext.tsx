@@ -353,7 +353,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const headers = { "Content-Type": "multipart/form-data" };
 
-    await api.patch("/users/avatar", newDataUser.avatar, { headers: headers });
+    // await api.patch("/users/avatar", newDataUser.avatar, { headers: headers });
 
     await api("/me").then((res) => setUser(res.data));
   }
