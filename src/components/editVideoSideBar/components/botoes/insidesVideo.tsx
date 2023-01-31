@@ -367,13 +367,6 @@ export function InsidesVideo() {
     setBackgroundHoverInsideButton,
   ]);
 
-  console.log("console do startTimerInside", startTimerInside);
-  console.log("console do startTimerSecondsInside", startTimerSecondsInside);
-  console.log("console do getFormatedStart", getFormatedStart);
-  console.log(
-    "console do buttonsInsideProperty.start",
-    buttonsInsideProperty.start
-  );
 
   return (
     <>

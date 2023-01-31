@@ -25,6 +25,8 @@ const nextConfig = {
   },
 }
 
+// app.mayoplayer.com
+
 module.exports = nextConfig;
 
 

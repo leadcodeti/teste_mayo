@@ -192,7 +192,7 @@ export function BelowVideo() {
       };
 
       api.put(
-        `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
+        `/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`,
         {
           background_color: currentBackgroundColor,
           text_color: currentTextColor,
@@ -209,7 +209,7 @@ export function BelowVideo() {
         background_color: newBackgroundColor,
       };
       api.put(
-        `/cta_buttons/${currentVideo.currentVideoId}?type=${buttonOption}`,
+        `/cta_buttons/${videosId.currentVideoId}?type=${buttonOption}`,
         {
           background_color: newBackgroundColor,
           text_color: newTextColor,

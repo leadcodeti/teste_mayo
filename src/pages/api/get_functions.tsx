@@ -1,14 +1,10 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import moment from "moment";
-import { api } from "../../services/api";
-import {
-  BackgroundProps,
-  User,
-  ControllerProps,
-  VideoTypes,
-  ThumbnailsTypes,
-} from "../../types/types";
+
+import { useSideBarContext } from "../../contexts/thirdContext";
+import { api } from "../../services/api"
+import { BackgroundProps, User,ControllerProps,VideoTypes, ThumbnailsTypes } from "../../types/types";
 
 export const getDesign = async (currentVideoId: string) => {
   if (currentVideoId) {

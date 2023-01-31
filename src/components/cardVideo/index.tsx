@@ -59,9 +59,7 @@ export function CardVideo({ Video, isSearching }: CardVideoProps) {
                   <button onClick={closeOptions}>{"..."}</button>
                 ) : (
                   <button
-                    onClick={() =>
-                      openOptions(video.id, video.youtube_video_id)
-                    }
+                    onClick={() =>openOptions(video.id, video.youtube_video_id)}
                   >
                     {"..."}
                   </button>
@@ -76,7 +74,7 @@ export function CardVideo({ Video, isSearching }: CardVideoProps) {
                     videoName={video.name}
                     selectedVideo={video}
                   />
-                ) : null}
+                ) : ''}
               </div>
             </div>
           ))}

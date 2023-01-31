@@ -30,7 +30,7 @@ export function Accordions() {
 
   const queryClient = useQueryClient();
   const { videosId } = useVideoContext();
-  const { activeAccordion } = useSideBarContext() 
+  const { activeAccordion, saveSwitch } = useSideBarContext() 
 
   const { data: design, isLoading } = useQuery( ["design", videosId.currentVideoId],
     () => getDesign(videosId.currentVideoId)
@@ -48,18 +48,17 @@ export function Accordions() {
     },
   });
 
-  function teste () {
-    alert("");
-  }
-
   const { 
     fakeBarIsVibiles,
     continueIsVisible,
     thumbnailsIsVisible,
     autoPlayIsVisible,
     upDataFakeBarSwitch,
+    
+    upDataAutoplaySwitch,
+    upDataContinueSwitch,
+    upDataThumbnailSwitch
    } = Switch() 
-
 
   return (
     <Accordion>
@@ -91,7 +90,8 @@ export function Accordions() {
         cheacked={activeAccordion.activeThumbNails}
         icon={<BsCardImage />}
         isLoading={isLoading}
-        upDateSwitch={upDataFakeBarSwitch}
+        upDateSwitch={upDataThumbnailSwitch}
+        isSeved={saveSwitch.saveThumbNails}
       >
         <Thumbnails />
       </AccordionItems>
@@ -103,7 +103,8 @@ export function Accordions() {
         cheacked={activeAccordion.activeAutoPlay}
         icon={<BsPlayCircle />}
         isLoading={isLoading}
-        upDateSwitch={upDataFakeBarSwitch}
+        upDateSwitch={upDataAutoplaySwitch}
+        isSeved={saveSwitch.saveAutoPlay}
       >
         <AutoPlay />
       </AccordionItems>
@@ -116,6 +117,7 @@ export function Accordions() {
         icon={<BsHourglass />}
         isLoading={isLoading}
         upDateSwitch={upDataFakeBarSwitch}
+        isSeved={saveSwitch.saveFakeBar}
       >
         <FakeBar />
       </AccordionItems>
@@ -127,7 +129,8 @@ export function Accordions() {
         cheacked={activeAccordion.activeContinue}
         icon={<FiRepeat />}
         isLoading={isLoading}
-        upDateSwitch={upDataFakeBarSwitch}
+        upDateSwitch={upDataContinueSwitch}
+        isSeved={saveSwitch.saveContinue}
       >
         <WatchAgain />
       </AccordionItems>

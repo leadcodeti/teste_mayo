@@ -152,21 +152,19 @@ export default function PlayerVideo() {
       });
       setButtonPosition(insideResult.position);
     });
-  }, [
-    currentVideo.currentVideoId,
-    setButtonProps,
-    setButtonPosition,
-    videosId.currentVideoId,
-    setHtmlCustom,
-  ]);
+
+
 
   setWatchVideoTime(playerRef.current?.currentTime);
 
-  function onTimeUpdate(event: CustomEvent<number>) {
-    setChangeDuration(event.detail);
-  }
+    setWatchVideoTime(playerRef.current?.currentTime);
+  }, [currentVideo.currentVideoId, setButtonProps, setButtonPosition,
+     videosId.currentVideoId, setHtmlCustom, setWatchVideoTime, playerRef]);
 
-  setWatchVideoTime(playerRef.current?.currentTime);
+ function onTimeUpdate(event: CustomEvent<number>) {
+  setChangeDuration(event.detail);
+}
+
 
   return (
     <div className={styles.player}>

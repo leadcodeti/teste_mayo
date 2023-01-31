@@ -17,6 +17,7 @@ interface EmabedTypes {
 export function embedVideo({backgroundColor, controller}:EmabedTypes) {
 
   const jsIframe = document.createElement("div");
+  
 
   jsIframe.innerHTML = `
   <div id="container" style="max-width: 900px; width:100%;">
