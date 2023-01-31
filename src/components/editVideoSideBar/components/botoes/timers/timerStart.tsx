@@ -61,7 +61,7 @@ export function ModalTimerStart(props: {
     return () => {
       document.removeEventListener("mousedown", handler);
     };
-  }, []);
+  }, [buttonRef, setIsOpen]);
 
   if (!isOpen) return null;
 

@@ -62,7 +62,7 @@ export function ModalTimerEndBelow(props: {
     return () => {
       document.removeEventListener("mousedown", handler);
     };
-  }, []);
+  }, [buttonRefEnd, setIsOpenEnd]);
 
   if (!isOpenEnd) return null;
 
